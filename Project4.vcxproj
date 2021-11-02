@@ -139,10 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="roy.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="square.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="roy.cpp" />
+    <ClCompile Include="board.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="square.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
