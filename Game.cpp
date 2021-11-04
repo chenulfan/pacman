@@ -1,32 +1,27 @@
 #include "Game.h"
 #include "square.h"
 #include "board.h"
-int Game::getKey()
-{
-	char KeyStroke = _getch();
-	if (KeyStroke == 0 || KeyStroke == -32)
-		KeyStroke = _getch();
-	return (KeyStroke);
-}
+
 void Game::startGame() {
 	_board.initBoard();
 	_board.printBoard();
 	_pacMan.print();
 	Square _blank;
-	_blank.setSquare(_pacMan._x, _pacMan._y, 0);
+	_blank.setSquare(_pacMan._x, _pacMan._y, 0); //square to delete the trace of pacman
 	while (_playerKey != ESC)
 	{
 	
 		// sleeps for half a second before continuing to the next command
-		Sleep(300);
+		Sleep(600);
 
 		// only if a key was hit we read what key code it was
 		if (_kbhit()) // if any key was hit
 			_playerKey = getKey();  // change direction
 		// make a move in current direction if no change
-		_blank.print();
+		_blank.print(); // deletes trace
 		switch (_playerKey)
 		{
+			// each case update pacman and blank to the new position according to the key pressed
 		case RIGHT:
 			_pacMan.setX((_pacMan._x)+1);
 			_blank.setX((_blank._x) + 1);
@@ -45,19 +40,20 @@ void Game::startGame() {
 			_blank.setY((_blank._y) - 1);
 			break;
 		}
-		if (hitWall(_pacMan._position)) {
+		if (hitWall(_pacMan._position)) //checks if the new move hit a wall
+		{
 			gameOver();
 			break;
 		}
-		_pacMan.print();
+		_pacMan.print(); //new print
 		
 		}
 
 	}
 
 
-bool Game::hitWall(Square position) {
-	//if (_board.hitWall(position._x,position._y)){
+bool Game::hitWall(Square position) //return true if pacman's new position is a wall
+{
 	if (_board.squares[position._y][position._x]._sqrType == WALL){
 		return true;
 	}
@@ -65,7 +61,7 @@ bool Game::hitWall(Square position) {
 
 }
 void Game::gameOver() {
-	clear();
+	clear(); // clears the console;
 	cout << "GAME OVER LOSER";
 
 }
@@ -84,4 +80,11 @@ void Game::clear() {
 		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
 	);
 	SetConsoleCursorPosition(console, topLeft);
+}
+int Game::getKey() 
+{
+	char KeyStroke = _getch();
+	if (KeyStroke == 0 || KeyStroke == -32)
+		KeyStroke = _getch();
+	return (KeyStroke);
 }
