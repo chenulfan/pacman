@@ -27,6 +27,11 @@ void Square::print() {
         cout << "O";
         break;
     }
+    case 4: {
+        goToXY(_x, _y);
+        cout << "@";
+        break;
+    }
     }
 }
 
@@ -35,7 +40,11 @@ void Square::setSquare(int x, int y, int sqrType) {
     this->setY(y);
     this->setSqrType(sqrType);
 }
-
+void Square::setSquare(Square sqr) {
+    this->setX(sqr._x);
+    this->setY(sqr._y);
+    this->setSqrType(sqr._sqrType);
+}
 
 void goToXY(int x, int y)
 {

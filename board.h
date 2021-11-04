@@ -7,8 +7,8 @@ const int TABLE_SIZE = 10;
 class Board {
 private:
     int _length;
-    Square squares[21][39];
 public:
+    Square squares[21][77];
     // void getLength();
     // void getSquares();
     void printBoard();

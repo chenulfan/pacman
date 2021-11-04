@@ -1,8 +1,8 @@
 #include "board.h"
 #include "square.h"
+#include "Game.h"
 
 int main() {
-	Board b;
-	b.initBoard();
-	b.printBoard();
+	Game game;
+	game.startGame();
 }

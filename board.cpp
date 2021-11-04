@@ -1,8 +1,8 @@
 
 #include "board.h"
 
-const int row_length = 39;
-const int col_length = 11;
+const int row_length = 77;
+const int col_length = 21;
 
 bool isWall(const int* arr, int j);
 
@@ -16,84 +16,99 @@ void Board::printBoard() {
 
 void Board::initBoard() {
 
-    const int row1And9[3] = { 10,28,-1 };
-    const int row2And8[19] = { 1,2,3,7, 8,9,11, 12, 13, 25, 26, 27, 29, 30, 31, 35, 36, 37,-1 };
-    const int row3And7[3] = { 4,34,-1 };
-    const int row4[15] = { 4, 8, 9, 10, 14, 15, 16, 22, 23, 24, 28, 29, 30, 34,-1 };
-    const int row5[3] = { 14,24,-1 };
-    const int row6[20] = { 4, 8, 9, 10, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 28, 29, 30, 34,-1 };
+
+    //walls arrays for row
+    const int row1And9[3] = { 20,56,-1 };
+    const int row2And8[] = { 8,10,12,20,28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48,56,64,66,68,-1 };
+    const int row3And7[3] = { 8,68,-1 };
+    const int row4[15] = { 8, 16, 18, 20, 28, 30, 32, 44, 46, 48, 56, 58, 60, 68,-1 };
+    const int row5[3] = { 28,48,-1 };
+    const int row6[20] = { 8, 16, 18, 20, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 56, 58, 60, 68,-1 };
 
 
     for (int i = 0; i < col_length; i++) {
         for (int j = 0; j < row_length; j++) {
             //row 1 enums
-            if (i == 1 || i == 9) {
+            if (i == 2 || i == 18) {
                 if (isWall(row1And9, j))
                     squares[i][j].setSquare(j, i, 3);
                 else {
-                    if (j % 2 == 0)
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 2 enums
-            if (i == 2 || i == 8) {
+            if (i == 4 || i == 16) {
                 if (isWall(row2And8, j)) {
-                    if (j % 2 == 0)
+                    squares[i][j].setSquare(j, i, 3);
+                }
+                else
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
-                }
-                else
-                    squares[i][j].setSquare(j, i, 3);
             }
             //row 3 enums
-            if (i == 3 || i == 7) {
+            if (i == 6 || i == 14) {
                 if (isWall(row3And7, j))
                     squares[i][j].setSquare(j, i, 3);
                 else {
-                    if (j % 2 == 0)
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 4 enums
-            if (i == 4) {
+            if (i == 8) {
                 if (isWall(row4, j))
                     squares[i][j].setSquare(j, i, 3);
                 else {
-                    if (j % 2 == 0)
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 5 enums
-            if (i == 5) {
+            if (i == 10) {
                 if (isWall(row5, j))
                     squares[i][j].setSquare(j, i, 3);
                 else {
-                    if (j % 2 == 0)
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 6 enums
-            if (i == 6) {
+            if (i == 12) {
                 if (isWall(row6, j))
                     squares[i][j].setSquare(j, i, 3);
                 else {
-                    if (j % 2 == 0)
+                    if (j % 4 == 0)
                         squares[i][j].setSquare(j, i, 1);
                     else
                         squares[i][j].setSquare(j, i, 0);
                 }
             }
+            //FILLERS
+            if (i == 1 || i == 3 || i == 19 || i == 17) {
+                if (isWall(row1And9, j))
+                    squares[i][j].setSquare(j, i, 3);
+            }
 
-            if (i == 0 || i == 10 || j == 0 || j == 38) {
+            if (i == 5 || i == 7 || i == 13  || i == 15) {
+                if (isWall(row3And7, j))
+                    squares[i][j].setSquare(j, i, 3);
+            }
+            if (i == 9 || i == 11) {
+                if (isWall(row5, j))
+                    squares[i][j].setSquare(j, i, 3);
+            }
+            if (i == 0 || i == 20 || j == 0 || j == 76) {
                 squares[i][j].setSquare(j, i, 3);
 
             }
