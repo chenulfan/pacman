@@ -2,13 +2,13 @@
 #include "square.h"
 #include <string>
 
-class GameObject {
+class PacMan {
 
 	Square _position;
 	string color;
 
 public:
-	GameObject() { _position.setSquare(38, 10, 4), color = "b"; }
+	PacMan() { _position.setSquare(38, 10, 4), color = "b"; }
 	void print() { _position.print(); }
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }
