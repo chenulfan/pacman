@@ -13,5 +13,6 @@ public:
     Square getSquare(int x, int y);
     void printBoard();
     void initBoard();
+    void setTunnels();
 };
 

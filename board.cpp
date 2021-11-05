@@ -26,7 +26,6 @@ void Board::initBoard() {
     const int row5[3] = { 28,48,-1 };
     const int row6[20] = { 8, 16, 18, 20, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 56, 58, 60, 68,-1 };
 
-
     for (int i = 0; i < col_length; i++) {
         for (int j = 0; j < row_length; j++) {
             //row 1 enums
@@ -115,6 +114,7 @@ void Board::initBoard() {
             }
         }
     }
+    setTunnels();
 }
 
 bool isWall(const int* arr, int j) {
@@ -130,3 +130,12 @@ bool isWall(const int* arr, int j) {
 Square Board::getSquare(int x, int y) { 
     return _squares[x][y]; 
 };
+
+void Board::setTunnels() {
+    _squares[0][38].setSqrType(2);
+    _squares[20][38].setSqrType(2);
+    _squares[10][0].setSqrType(2);
+    _squares[10][76].setSqrType(2);
+
+}
+

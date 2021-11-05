@@ -22,20 +22,23 @@ void Game::startGame() {
 		switch (_playerKey)
 		{
 			// each case update pacman and blank to the new position according to the key pressed
-		case RIGHT:
-			_pacMan.setX((_pacMan.getX()) + 1);
-			_blank.setX((_blank.getX()) + 1);
+		case RIGHT1:
+		case RIGHT2:
+			_pacMan.setX((_pacMan.getX()) + 2);
+			_blank.setX((_blank.getX()) + 2);
 			break;
-		case DOWN:
+		case DOWN1:
+		case DOWN2:
 			_pacMan.setY((_pacMan.getY()) + 1);
 			_blank.setY((_blank.getY()) + 1);
-
 			break;
-		case LEFT:
-			_pacMan.setX((_pacMan.getX()) - 1);
-			_blank.setX((_blank.getX()) - 1);
+		case LEFT1:
+		case LEFT2:
+			_pacMan.setX((_pacMan.getX()) - 2);
+			_blank.setX((_blank.getX()) - 2);
 			break;
-		case UP:
+		case UP1:
+		case UP2:
 			_pacMan.setY((_pacMan.getY()) - 1);
 			_blank.setY((_blank.getY()) - 1);
 			break;
@@ -46,11 +49,8 @@ void Game::startGame() {
 			break;
 		}
 		_pacMan.print(); //new print
-
 	}
-
 }
-
 
 
 bool Game::hitWall(Square position) //return true if pacman's new position is a wall

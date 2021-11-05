@@ -19,7 +19,7 @@ void Square::print() {
     }
     case 2: {
         goToXY(_x, _y);
-        cout << "@";
+        cout << " ";
         break;
     }
     case 3: {

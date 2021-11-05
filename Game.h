@@ -6,10 +6,14 @@
 #include <conio.h>
 #include <windows.h>
 #include <stdbool.h>
-#define UP 72  // Up Arrow 
-#define DOWN 80 // Down Arrow 
-#define LEFT 75  // Left Arrow 
-#define RIGHT 77  // Right Arrow 
+#define UP1 119 // Up Arrow 
+#define UP2 87 // Up Arrow 
+#define DOWN1 120 // Down Arrow 
+#define DOWN2 88 // Down Arrow 
+#define LEFT1 97  // Left Arrow 
+#define LEFT2 65  // Left Arrow 
+#define RIGHT1 100 // Right Arrow 
+#define RIGHT2 68  // Right Arrow 
 #define ESC 27  // Escape Key
 #define SPEED 400
 
