@@ -7,10 +7,10 @@ const int TABLE_SIZE = 10;
 class Board {
 private:
     int _length;
+    Square _squares[21][77];
 public:
-    Square squares[21][77];
     // void getLength();
-    // void getSquares();
+    Square getSquare(int x, int y);
     void printBoard();
     void initBoard();
 };

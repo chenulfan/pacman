@@ -1,14 +1,19 @@
 #pragma once
 #include "square.h"
+#include <string>
 
 class GameObject {
 
-public:
 	Square _position;
-	int _x;
-	int _y;
-	GameObject() { _x = 38;_y = 10; _position.setSquare(38, 10, 4); }
+	string color;
+
+public:
+	GameObject() { _position.setSquare(38, 10, 4), color = "b"; }
 	void print() { _position.print(); }
-	void setX(int x) { _x = x;_position.setX(x); }
-	void setY(int y) { _y = y;_position.setY(y); }
+	int getX() { return _position.getX(); }
+	int getY() { return _position.getY(); }
+	void setX(int x) { _position.setX(x); }
+	void setY(int y) { _position.setY(y); }
+	Square getPosition() { return _position; };
+	
 };

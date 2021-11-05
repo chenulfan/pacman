@@ -6,10 +6,11 @@ const int col_length = 21;
 
 bool isWall(const int* arr, int j);
 
+
 void Board::printBoard() {
     for (int i = 0; i < col_length; i++) {
         for (int j = 0; j < row_length; j++) {
-            squares[i][j].print();
+            _squares[i][j].print();
         }
     }
 }
@@ -31,85 +32,85 @@ void Board::initBoard() {
             //row 1 enums
             if (i == 2 || i == 18) {
                 if (isWall(row1And9, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 else {
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 2 enums
             if (i == 4 || i == 16) {
                 if (isWall(row2And8, j)) {
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 }
                 else
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
             }
             //row 3 enums
             if (i == 6 || i == 14) {
                 if (isWall(row3And7, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 else {
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 4 enums
             if (i == 8) {
                 if (isWall(row4, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 else {
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 5 enums
             if (i == 10) {
                 if (isWall(row5, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 else {
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
                 }
             }
             //row 6 enums
             if (i == 12) {
                 if (isWall(row6, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
                 else {
                     if (j % 4 == 0)
-                        squares[i][j].setSquare(j, i, 1);
+                        _squares[i][j].setSquare(j, i, 1);
                     else
-                        squares[i][j].setSquare(j, i, 0);
+                        _squares[i][j].setSquare(j, i, 0);
                 }
             }
             //FILLERS
             if (i == 1 || i == 3 || i == 19 || i == 17) {
                 if (isWall(row1And9, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
             }
 
-            if (i == 5 || i == 7 || i == 13  || i == 15) {
+            if (i == 5 || i == 7 || i == 13 || i == 15) {
                 if (isWall(row3And7, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
             }
             if (i == 9 || i == 11) {
                 if (isWall(row5, j))
-                    squares[i][j].setSquare(j, i, 3);
+                    _squares[i][j].setSquare(j, i, 3);
             }
             if (i == 0 || i == 20 || j == 0 || j == 76) {
-                squares[i][j].setSquare(j, i, 3);
+                _squares[i][j].setSquare(j, i, 3);
 
             }
         }
@@ -125,3 +126,7 @@ bool isWall(const int* arr, int j) {
     }
     return false;
 }
+
+Square Board::getSquare(int x, int y) { 
+    return _squares[x][y]; 
+};

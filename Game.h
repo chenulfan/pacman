@@ -11,7 +11,7 @@
 #define LEFT 75  // Left Arrow 
 #define RIGHT 77  // Right Arrow 
 #define ESC 27  // Escape Key
-
+#define SPEED 400
 
 class Game {
 private:
