@@ -1,6 +1,6 @@
 #pragma once
 #include "board.h"
-#include "GameObject.h"
+#include "pacman.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <conio.h>
@@ -21,7 +21,7 @@ class Game {
 private:
 	Board _board;
     char _playerKey;
-	GameObject _pacMan;
+	PacMan _pacMan;
 
 
 public:
