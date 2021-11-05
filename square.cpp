@@ -32,6 +32,11 @@ void Square::print() {
         cout << "@";
         break;
     }
+    case 5: {
+        goToXY(_x, _y);
+        cout << "&";
+        break;
+    }
     }
 }
 

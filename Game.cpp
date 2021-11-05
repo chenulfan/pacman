@@ -1,8 +1,9 @@
 #include "Game.h"
 #include "square.h"
 #include "board.h"
-
+#include "Ghost.h"
 void Game::startGame() {
+	Ghost ghost1(40, 10), ghost2(36, 10);
 	_board.initBoard();
 	_board.printBoard();
 	_pacMan.print();
@@ -48,6 +49,7 @@ void Game::startGame() {
 			gameOver();
 			break;
 		}
+		printGhosts(ghost1, ghost2);
 		_pacMan.print(); //new print
 	}
 }
@@ -90,4 +92,20 @@ int Game::getKey()
 	if (KeyStroke == 0 || KeyStroke == -32)
 		KeyStroke = _getch();
 	return (KeyStroke);
+}
+
+ void Game::printGhosts(Ghost &ghost1, Ghost &ghost2) {
+	 ghost1.trailDelete();
+	 ghost2.trailDelete();
+	 int dirGhost1 = ghost1.randomMove();
+	 int dirGhost2 = ghost2.randomMove();
+	 while (hitWall(ghost1.getPosition()))
+	 {
+		 ghost1.randomMove();
+	 }
+	 ghost1.print();
+	 while (hitWall(ghost2.getPosition())) {
+		 ghost2.randomMove();
+	 }
+	 ghost2.print();
 }
