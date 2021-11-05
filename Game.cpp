@@ -1,7 +1,12 @@
 #include "Game.h"
 #include "square.h"
 #include "board.h"
+
 #include "Ghost.h"
+
+int calcMoveX(int x, int y, int direction);
+int calcMoveY(int x, int y, int direction);
+
 void Game::startGame() {
 	Ghost ghost1(40, 10), ghost2(36, 10);
 	_board.initBoard();
@@ -12,40 +17,35 @@ void Game::startGame() {
 	while (_playerKey != ESC)
 	{
 
-		// sleeps for half a second before continuing to the next command
 		Sleep(SPEED);
 
-		// only if a key was hit we read what key code it was
 		if (_kbhit()) // if any key was hit
 			_playerKey = getKey();  // change direction
-		// make a move in current direction if no change
 		_blank.print(); // deletes trace
 		switch (_playerKey)
 		{
-			// each case update pacman and blank to the new position according to the key pressed
 		case RIGHT1:
 		case RIGHT2:
-			_pacMan.setX((_pacMan.getX()) + 2);
-			_blank.setX((_blank.getX()) + 2);
-			break;
-		case DOWN1:
-		case DOWN2:
-			_pacMan.setY((_pacMan.getY()) + 1);
-			_blank.setY((_blank.getY()) + 1);
+			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 1));
+			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
 			break;
 		case LEFT1:
 		case LEFT2:
-			_pacMan.setX((_pacMan.getX()) - 2);
-			_blank.setX((_blank.getX()) - 2);
+			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 0));
+			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
 			break;
 		case UP1:
 		case UP2:
-			_pacMan.setY((_pacMan.getY()) - 1);
-			_blank.setY((_blank.getY()) - 1);
+			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 1));
+			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
+			break;
+		case DOWN1:
+		case DOWN2:
+			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 0));
+			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
 			break;
 		}
-		if (hitWall(_pacMan.getPosition())) //checks if the new move hit a wall
-		{
+		if (hitWall(_pacMan.getPosition())) { //checks if the new move hit a wall
 			gameOver();
 			break;
 		}
@@ -53,6 +53,29 @@ void Game::startGame() {
 		_pacMan.print(); //new print
 	}
 }
+
+// directon: 1 = RIGHT , 0 = LEFT
+int calcMoveX(int x, int y, int direction) {
+	if (x == 0 && y == COL_SIZE / 2)
+		return ROW_SIZE - 2;
+	else if (x == ROW_SIZE && y == COL_SIZE / 2)
+		return 2;
+	else if (direction == 1)
+		return x + 2;
+	return x - 2;
+}
+
+// directon: 1 = UP , 0 = DOWN
+int calcMoveY(int x, int y, int direction) {
+	if (x == ROW_SIZE / 2 && y == 0)
+		return COL_SIZE - 1;
+	else if (x == ROW_SIZE / 2 && y == COL_SIZE)
+		return 1;
+	else if (direction)
+		return y - 1;
+	return y + 1;
+}
+
 
 
 bool Game::hitWall(Square position) //return true if pacman's new position is a wall
