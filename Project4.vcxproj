@@ -141,12 +141,14 @@
   <ItemGroup>
     <ClInclude Include="board.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Ghost.h" />
     <ClInclude Include="pacman.h" />
     <ClInclude Include="square.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="board.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Ghost.cpp" />
     <ClCompile Include="pacman.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="square.cpp" />

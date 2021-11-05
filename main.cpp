@@ -1,8 +1,10 @@
 #include "board.h"
 #include "square.h"
 #include "Game.h"
+#include <cstdlib>
+#include <time.h> 
 int main() {
-
+	srand(time(NULL));
 	Game game;
 	game.startGame();
 
