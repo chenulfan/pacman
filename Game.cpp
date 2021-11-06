@@ -8,51 +8,73 @@ int calcMoveX(int x, int y, int direction);
 int calcMoveY(int x, int y, int direction);
 
 void Game::startGame() {
-	Ghost ghost1(40, 10), ghost2(36, 10);
+	char prevKey;
+	bool STAY = false;
+	Ghost ghost1(0,40, 10), ghost2(2,36, 10);
 	_board.initBoard();
 	_board.printBoard();
 	_pacMan.print();
-	Square _blank;
+	ghost1.print();
+	ghost2.print();
+	Square _blank,currPosition;
 	_blank.setSquare(_pacMan.getX(), _pacMan.getY(), 0); //square to delete the trace of pacman
-	while (_playerKey != ESC)
-	{
-
-		Sleep(SPEED);
-
-		if (_kbhit()) // if any key was hit
-			_playerKey = getKey();  // change direction
-		_blank.print(); // deletes trace
-		switch (_playerKey)
-		{
-		case RIGHT1:
-		case RIGHT2:
-			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 1));
-			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
-			break;
-		case LEFT1:
-		case LEFT2:
-			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 0));
-			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
-			break;
-		case UP1:
-		case UP2:
-			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 1));
-			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
-			break;
-		case DOWN1:
-		case DOWN2:
-			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 0));
-			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
-			break;
-		}
-		if (hitWall(_pacMan.getPosition())) { //checks if the new move hit a wall
-			gameOver();
-			break;
-		}
-		printGhosts(ghost1, ghost2);
-		_pacMan.print(); //new print
+	while (!(_kbhit())) {
 	}
-}
+	while (_playerKey != ESC)
+		{
+		if (_kbhit()) {
+			_playerKey = getKey();
+		}
+		     Sleep(SPEED);
+			_blank.print(); // deletes trace
+			if (STAY) {
+				if (_playerKey != prevKey) {
+					STAY = false;
+				}
+			}
+			if (!STAY) {
+				switch (_playerKey)
+				{
+				case RIGHT1:
+				case RIGHT2:
+					_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 1));
+					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
+					break;
+				case LEFT1:
+				case LEFT2:
+					_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 0));
+					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
+					break;
+				case UP1:
+				case UP2:
+					_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 1));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
+					break;
+				case DOWN1:
+				case DOWN2:
+					_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 0));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
+					break;
+				}
+			}
+			if (hitWall(_pacMan.getPosition())) { //checks if the new move hit a wall
+				pacmanStay(_blank);
+				STAY = true;
+				prevKey = _playerKey;
+				continue;
+			}
+			if (hitGhost(_pacMan.getPosition(), ghost1,ghost2)){
+				gameOver();
+				break;
+			}
+			printGhosts(ghost1, ghost2);
+			if (hitGhost(_pacMan.getPosition(), ghost1, ghost2)) {
+				gameOver();
+				break;
+			}
+			_pacMan.print(); //new print
+		}
+	}
 
 // directon: 1 = RIGHT , 0 = LEFT
 int calcMoveX(int x, int y, int direction) {
@@ -78,7 +100,7 @@ int calcMoveY(int x, int y, int direction) {
 
 
 
-bool Game::hitWall(Square position) //return true if pacman's new position is a wall
+bool Game::hitWall( Square position) //return true if pacman's new position is a wall
 {
 	int xPos = position.getX();
 	int yPos = position.getY();
@@ -117,18 +139,52 @@ int Game::getKey()
 	return (KeyStroke);
 }
 
- void Game::printGhosts(Ghost &ghost1, Ghost &ghost2) {
+ void Game::printGhosts(Ghost &ghost1,Ghost &ghost2) {
 	 ghost1.trailDelete();
 	 ghost2.trailDelete();
-	 int dirGhost1 = ghost1.randomMove();
-	 int dirGhost2 = ghost2.randomMove();
-	 while (hitWall(ghost1.getPosition()))
-	 {
-		 ghost1.randomMove();
+	 ghost1.Move();
+	 while (hitWall(ghost1.getPosition())) {
+		 ghost1.changeDir();
 	 }
 	 ghost1.print();
+	 ghost2.Move();
 	 while (hitWall(ghost2.getPosition())) {
-		 ghost2.randomMove();
+		 ghost2.changeDir();
 	 }
 	 ghost2.print();
+}
+bool Game::hitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
+	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY()) {
+		 return true;
+	 }
+	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY()) {
+		 return true;
+	 }
+	 return false;
+ }
+
+void Game::pacmanStay(Square &_blank) {
+	switch(_playerKey)
+	{
+			case RIGHT1:
+			case RIGHT2:
+				_pacMan.setX((_pacMan.getX()) - 2);
+				_blank.setX((_blank.getX()) -2);
+				break;
+			case LEFT1:
+			case LEFT2:
+				_pacMan.setX((_pacMan.getX()) + 2);
+				_blank.setX((_blank.getX()) + 2);
+				break;
+			case UP1:
+			case UP2:
+				_pacMan.setY((_pacMan.getY()) + 1);
+				_blank.setY((_blank.getY()) + 1);
+				break;
+			case DOWN1:
+			case DOWN2:
+				_pacMan.setY((_pacMan.getY()) - 1);
+				_blank.setY((_blank.getY()) - 1);
+				break;
+	}
 }
