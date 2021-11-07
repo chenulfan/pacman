@@ -2,52 +2,91 @@
 #include "square.h"
 #include "board.h"
 
-int calcMoveX(int x, int y, int direction);
-int calcMoveY(int x, int y, int direction);
+void Game::printBanner() {
+	goToXY(0,COL_SIZE + 2);
+	clearConsoleRow();
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, 10);
+	cout << "[ life: " << getHealth() << " | points: " << getPoints() << " ]";
+	SetConsoleTextAttribute(hConsole,12);
+	goToXY(_pacman.getX(), _pacman.getY());
+}
+
+void clearConsoleRow() {
+	printf("%c[2K", 27);
+}
 
 void Game::startGame() {
+	Square _blank;
+
 	_board.initBoard();
 	_board.printBoard();
-	_pacMan.print();
-	Square _blank;
-	_blank.setSquare(_pacMan.getX(), _pacMan.getY(), 0); //square to delete the trace of pacman
-	while (_playerKey != ESC)
-	{
+	printBanner();
+	_pacman.print();
 
+	_blank.setSquare(_pacman.getX(), _pacman.getY(), 0); //square to delete the trace of pacman
+	
+	while (_playerKey != ESC){
 		Sleep(SPEED);
 
 		if (_kbhit()) // if any key was hit
 			_playerKey = getKey();  // change direction
 		_blank.print(); // deletes trace
-		switch (_playerKey)
-		{
-		case RIGHT1:
-		case RIGHT2:
-			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 1));
-			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
-			break;
-		case LEFT1:
-		case LEFT2:
-			_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 0));
-			_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
-			break;
-		case UP1:
-		case UP2:
-			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 1));
-			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
-			break;
-		case DOWN1:
-		case DOWN2:
-			_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 0));
-			_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
-			break;
+
+		switch (_playerKey){
+			case RIGHT1:
+			case RIGHT2:
+				if (!isNextMoveIsAWall(_pacman.getX() + 2, _pacman.getY(), _board)) {
+					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 1));
+					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
+				}
+				break;
+			case LEFT1:
+			case LEFT2:
+				if (!isNextMoveIsAWall(_pacman.getX() - 2, _pacman.getY(), _board)) {
+					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 0));
+					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
+				}
+				break;
+			case UP1:
+			case UP2:
+				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() - 1, _board)) {
+					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 1));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
+				}
+				break;
+			case DOWN1:
+			case DOWN2:
+				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() + 1, _board)) {
+					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 0));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
+				}
+				break;
 		}
-		if (hitWall(_pacMan.getPosition())) { //checks if the new move hit a wall
-			gameOver();
-			break;
+
+		switch (whatPacmanMet(_pacman)) {
+			case FOOD:
+				setPoints();
+				printBanner();
+				break;
 		}
-		_pacMan.print(); //new print
+		_pacman.print(); //new print
 	}
+	int deleteTHIS = 0;
+}
+
+
+bool isNextMoveIsAWall(int x, int y,  Board b) {
+	Square pos = b.getSquare(y, x);
+	return pos.getSqrType() == WALL;
+}
+
+eSqrType Game::whatPacmanMet(Pacman pacman) {
+	int xPos = pacman.getPosition().getX();
+	int yPos = pacman.getPosition().getY();
+	Square s = _board.getSquare(yPos, xPos);
+	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	return (eSqrType)sqrType;
 }
 
 // directon: 1 = RIGHT , 0 = LEFT
@@ -72,17 +111,6 @@ int calcMoveY(int x, int y, int direction) {
 	return y + 1;
 }
 
-
-
-bool Game::hitWall(Square position) //return true if pacman's new position is a wall
-{
-	int xPos = position.getX();
-	int yPos = position.getY();
-	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
-	if (sqrType == WALL)
-		return true;
-	return false;
-}
 
 void Game::gameOver() {
 	clear(); // clears the console;
@@ -111,4 +139,13 @@ int Game::getKey()
 	if (KeyStroke == 0 || KeyStroke == -32)
 		KeyStroke = _getch();
 	return (KeyStroke);
+}
+
+void Game::printMenu() {
+	cout << endl << " (1) Start a new game" << endl
+		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
+}
+
+void Game::printInstructions() {
+	cout << "The instructions are: " << endl;
 }

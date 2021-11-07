@@ -17,18 +17,33 @@
 #define ESC 27  // Escape Key
 #define SPEED 400
 
+int calcMoveX(int x, int y, int direction);
+int calcMoveY(int x, int y, int direction);
+void clearConsoleRow();
+bool isNextMoveIsAWall(int x, int y, Board b);
+
 class Game {
 private:
 	Board _board;
     char _playerKey;
-	PacMan _pacMan;
-
+	Pacman _pacman;
+	int _health=3;
+	int _points=0;
 
 public:
 	int getKey();
 	void startGame();
-	bool hitWall(Square position);
 	void gameOver();
 	void clear();
+	void printMenu();
+	void printBanner();
+	void printInstructions();
+	int getPoints() { return _points; };
+	int getHealth() { return _health; };
+	void setPoints() { _points = getPoints() + 1; };
+	void setHealth() { _health = getHealth() - 1; };
+	eSqrType whatPacmanMet(Pacman pacman);
+	Board getBoard() { return _board; };
+
 };
 

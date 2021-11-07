@@ -1,22 +1,38 @@
 #include "board.h"
 #include "square.h"
 #include "Game.h"
+
+void printMenu();
+int getOption();
+
+
 int main() {
-
+	int option;
 	Game game;
-	game.startGame();
-
-
-
 	
+	game.printMenu();
+	option = getOption();
+	game.clear();
+
+	switch (option) {
+		case 1:
+			game.startGame();
+			break;
+		case 8:
+			game.printInstructions();
+			break;
+	}
+	game.clear();
+}
+
+int getOption() {
+	int option;
+	cin >> option;
+	while (option != 1 && option != 8 && option != 9) {
+		cin >> option;
+	}
+	return option;
 }
 
 
-//HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-//SetConsoleTextAttribute(hConsole, 10);
-//cout << "CHEn" << endl;
-//SetConsoleTextAttribute(hConsole, 13);
-//cout << "DAN" << endl;
-//
-//SetConsoleTextAttribute(hConsole, 9);
-//cout << "TALLLLL" << endl;
+
