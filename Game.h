@@ -4,9 +4,10 @@
 #include "pacman.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
+//#include <conio.h>
 #include <windows.h>
 #include <stdbool.h>
+
 #define UP1 119 // Up Arrow 
 #define UP2 87 // Up Arrow 
 #define DOWN1 120 // Down Arrow 
@@ -16,7 +17,7 @@
 #define RIGHT1 100 // Right Arrow 
 #define RIGHT2 68  // Right Arrow 
 #define ESC 27  // Escape Key
-#define SPEED 800
+#define SPEED 300
 
 int calcMoveX(int x, int y, int direction);
 int calcMoveY(int x, int y, int direction);
@@ -34,6 +35,11 @@ private:
 public:
 	int getKey();
 	void startGame();
+	bool hitWall( Square position);
+	void printGhosts(Ghost &ghost1, Ghost &ghost2);
+	bool hitGhost(Square position, Ghost &ghost1, Ghost &ghost2);
+	void pacmanStay(Square &_blank);
+
 	void gameOver();
 	void clear();
 	void printMenu();

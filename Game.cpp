@@ -17,8 +17,11 @@ void clearConsoleRow() {
 }
 
 void Game::startGame() {
-	Square _blank;
-
+	Square _blank, currPosition;
+  
+  Ghost ghost1(0,40, 10), ghost2(2,36, 10);
+	ghost1.print();
+	ghost2.print();
 	_board.initBoard();
 	_board.printBoard();
 	printBanner();
@@ -70,9 +73,18 @@ void Game::startGame() {
 				printBanner();
 				break;
 		}
+    
+    if (hitGhost(_pacMan.getPosition(), ghost1,ghost2)){
+				gameOver();
+				break;
+			}
+			printGhosts(ghost1, ghost2);
+			if (hitGhost(_pacMan.getPosition(), ghost1, ghost2)) {
+				gameOver();
+				break;
+			}
 		_pacman.print(); //new print
 	}
-	int deleteTHIS = 0;
 }
 
 
@@ -112,6 +124,17 @@ int calcMoveY(int x, int y, int direction) {
 }
 
 
+
+bool Game::hitWall( Square position) //return true if pacman's new position is a wall
+{
+	int xPos = position.getX();
+	int yPos = position.getY();
+	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	if (sqrType == WALL)
+		return true;
+	return false;
+}
+
 void Game::gameOver() {
 	clear(); // clears the console;
 	cout << "GAME OVER LOSER";
@@ -141,6 +164,54 @@ int Game::getKey()
 	return (KeyStroke);
 }
 
+ void Game::printGhosts(Ghost &ghost1,Ghost &ghost2) {
+	 ghost1.trailDelete();
+	 ghost2.trailDelete();
+	 ghost1.Move();
+	 while (hitWall(ghost1.getPosition())) {
+		 ghost1.changeDir();
+	 }
+	 ghost1.print();
+	 ghost2.Move();
+	 while (hitWall(ghost2.getPosition())) {
+		 ghost2.changeDir();
+	 }
+	 ghost2.print();
+}
+bool Game::hitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
+	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY()) {
+		 return true;
+	 }
+	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY()) {
+		 return true;
+	 }
+	 return false;
+ }
+
+void Game::pacmanStay(Square &_blank) {
+	switch(_playerKey)
+	{
+			case RIGHT1:
+			case RIGHT2:
+				_pacMan.setX((_pacMan.getX()) - 2);
+				_blank.setX((_blank.getX()) -2);
+				break;
+			case LEFT1:
+			case LEFT2:
+				_pacMan.setX((_pacMan.getX()) + 2);
+				_blank.setX((_blank.getX()) + 2);
+				break;
+			case UP1:
+			case UP2:
+				_pacMan.setY((_pacMan.getY()) + 1);
+				_blank.setY((_blank.getY()) + 1);
+				break;
+			case DOWN1:
+			case DOWN2:
+				_pacMan.setY((_pacMan.getY()) - 1);
+				_blank.setY((_blank.getY()) - 1);
+				break;
+	}
 void Game::printMenu() {
 	cout << endl << " (1) Start a new game" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
