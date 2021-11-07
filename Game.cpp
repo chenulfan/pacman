@@ -2,68 +2,79 @@
 #include "square.h"
 #include "board.h"
 
-#include "Ghost.h"
+void Game::printBanner() {
+	goToXY(0,COL_SIZE + 2);
+	clearConsoleRow();
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, 10);
+	cout << "[ life: " << getHealth() << " | points: " << getPoints() << " ]";
+	SetConsoleTextAttribute(hConsole,12);
+	goToXY(_pacman.getX(), _pacman.getY());
+}
 
-int calcMoveX(int x, int y, int direction);
-int calcMoveY(int x, int y, int direction);
+void clearConsoleRow() {
+	printf("%c[2K", 27);
+}
 
 void Game::startGame() {
-	char prevKey;
-	bool STAY = false;
-	Ghost ghost1(0,40, 10), ghost2(2,36, 10);
-	_board.initBoard();
-	_board.printBoard();
-	_pacMan.print();
+	Square _blank, currPosition;
+  
+  Ghost ghost1(0,40, 10), ghost2(2,36, 10);
 	ghost1.print();
 	ghost2.print();
-	Square _blank,currPosition;
-	_blank.setSquare(_pacMan.getX(), _pacMan.getY(), 0); //square to delete the trace of pacman
-	while (!(_kbhit())) {
-	}
-	while (_playerKey != ESC)
-		{
-		if (_kbhit()) {
-			_playerKey = getKey();
-		}
-		     Sleep(SPEED);
-			_blank.print(); // deletes trace
-			if (STAY) {
-				if (_playerKey != prevKey) {
-					STAY = false;
-				}
-			}
-			if (!STAY) {
-				switch (_playerKey)
-				{
-				case RIGHT1:
-				case RIGHT2:
-					_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 1));
+	_board.initBoard();
+	_board.printBoard();
+	printBanner();
+	_pacman.print();
+
+	_blank.setSquare(_pacman.getX(), _pacman.getY(), 0); //square to delete the trace of pacman
+	
+	while (_playerKey != ESC){
+		Sleep(SPEED);
+
+		if (_kbhit()) // if any key was hit
+			_playerKey = getKey();  // change direction
+		_blank.print(); // deletes trace
+
+		switch (_playerKey){
+			case RIGHT1:
+			case RIGHT2:
+				if (!isNextMoveIsAWall(_pacman.getX() + 2, _pacman.getY(), _board)) {
+					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 1));
 					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 1));
-					break;
-				case LEFT1:
-				case LEFT2:
-					_pacMan.setX(calcMoveX(_pacMan.getX(), _pacMan.getY(), 0));
-					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
-					break;
-				case UP1:
-				case UP2:
-					_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 1));
-					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
-					break;
-				case DOWN1:
-				case DOWN2:
-					_pacMan.setY(calcMoveY(_pacMan.getX(), _pacMan.getY(), 0));
-					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
-					break;
 				}
-			}
-			if (hitWall(_pacMan.getPosition())) { //checks if the new move hit a wall
-				pacmanStay(_blank);
-				STAY = true;
-				prevKey = _playerKey;
-				continue;
-			}
-			if (hitGhost(_pacMan.getPosition(), ghost1,ghost2)){
+				break;
+			case LEFT1:
+			case LEFT2:
+				if (!isNextMoveIsAWall(_pacman.getX() - 2, _pacman.getY(), _board)) {
+					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 0));
+					_blank.setX(calcMoveX(_blank.getX(), _blank.getY(), 0));
+				}
+				break;
+			case UP1:
+			case UP2:
+				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() - 1, _board)) {
+					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 1));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 1));
+				}
+				break;
+			case DOWN1:
+			case DOWN2:
+				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() + 1, _board)) {
+					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 0));
+					_blank.setY(calcMoveY(_blank.getX(), _blank.getY(), 0));
+				}
+				break;
+		}
+
+		switch (whatPacmanMet(_pacman)) {
+			case FOOD:
+				setPoints();
+				printBanner();
+				break;
+		}
+    
+    if (hitGhost(_pacMan.getPosition(), ghost1,ghost2)){
 				gameOver();
 				break;
 			}
@@ -72,9 +83,23 @@ void Game::startGame() {
 				gameOver();
 				break;
 			}
-			_pacMan.print(); //new print
-		}
+		_pacman.print(); //new print
 	}
+}
+
+
+bool isNextMoveIsAWall(int x, int y,  Board b) {
+	Square pos = b.getSquare(y, x);
+	return pos.getSqrType() == WALL;
+}
+
+eSqrType Game::whatPacmanMet(Pacman pacman) {
+	int xPos = pacman.getPosition().getX();
+	int yPos = pacman.getPosition().getY();
+	Square s = _board.getSquare(yPos, xPos);
+	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	return (eSqrType)sqrType;
+}
 
 // directon: 1 = RIGHT , 0 = LEFT
 int calcMoveX(int x, int y, int direction) {
@@ -187,4 +212,11 @@ void Game::pacmanStay(Square &_blank) {
 				_blank.setY((_blank.getY()) - 1);
 				break;
 	}
+void Game::printMenu() {
+	cout << endl << " (1) Start a new game" << endl
+		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
+}
+
+void Game::printInstructions() {
+	cout << "The instructions are: " << endl;
 }

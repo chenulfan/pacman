@@ -2,7 +2,6 @@
 
 
 
-void goToXY(int x, int y);
 
 void Square::print() {
 
