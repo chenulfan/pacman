@@ -74,12 +74,12 @@ void Game::startGame() {
 				break;
 		}
     
-    if (hitGhost(_pacMan.getPosition(), ghost1,ghost2)){
+    if (hitGhost(_pacman.getPosition(), ghost1,ghost2)){
 				gameOver();
 				break;
 			}
 			printGhosts(ghost1, ghost2);
-			if (hitGhost(_pacMan.getPosition(), ghost1, ghost2)) {
+			if (hitGhost(_pacman.getPosition(), ghost1, ghost2)) {
 				gameOver();
 				break;
 			}
@@ -188,30 +188,32 @@ bool Game::hitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
 	 return false;
  }
 
-void Game::pacmanStay(Square &_blank) {
-	switch(_playerKey)
-	{
-			case RIGHT1:
-			case RIGHT2:
-				_pacMan.setX((_pacMan.getX()) - 2);
-				_blank.setX((_blank.getX()) -2);
-				break;
-			case LEFT1:
-			case LEFT2:
-				_pacMan.setX((_pacMan.getX()) + 2);
-				_blank.setX((_blank.getX()) + 2);
-				break;
-			case UP1:
-			case UP2:
-				_pacMan.setY((_pacMan.getY()) + 1);
-				_blank.setY((_blank.getY()) + 1);
-				break;
-			case DOWN1:
-			case DOWN2:
-				_pacMan.setY((_pacMan.getY()) - 1);
-				_blank.setY((_blank.getY()) - 1);
-				break;
-	}
+void Game::pacmanStay(Square& _blank) {
+	//switch (_playerKey)
+	//{
+	//case RIGHT1:
+	//case RIGHT2:
+	//	_pacman.setX((_pacman.getX()) - 2);
+	//	_blank.setX((_blank.getX()) - 2);
+	//	break;
+	//case LEFT1:
+	//case LEFT2:
+	//	_pacman.setX((_pacman.getX()) + 2);
+	//	_blank.setX((_blank.getX()) + 2);
+	//	break;
+	//case UP1:
+	//case UP2:
+	//	_pacman.setY((_pacman.getY()) + 1);
+	//	_blank.setY((_blank.getY()) + 1);
+	//	break;
+	//case DOWN1:
+	//case DOWN2:
+	//	_pacman.setY((_pacman.getY()) - 1);
+	//	_blank.setY((_blank.getY()) - 1);
+	//	break;
+	//}
+}
+
 void Game::printMenu() {
 	cout << endl << " (1) Start a new game" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;

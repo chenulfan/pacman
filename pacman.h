@@ -13,7 +13,7 @@ class Pacman {
 
 
 public:
-	PacMan() { _position.setSquare(2, 18,4), color = 0; }
+	Pacman() { _position.setSquare(2, 18,4), color = 0; }
 	void print() { _position.print(); }
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }

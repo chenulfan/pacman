@@ -23,6 +23,7 @@ public:
 	int getY() { return _position.getY(); }
 	void setX(int x) { _position.setX(x); }
 	void setY(int y) { _position.setY(y); }
+
 	Square getPosition() { return _position; };
 	void changeDir();
 	void trailDelete() { _blank.print(); };
