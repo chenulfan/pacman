@@ -10,7 +10,6 @@
 using namespace std;
 
 enum eSqrType { EMPTY, FOOD, TUNNEL, WALL ,PACMAN};
-void goToXY(int x, int y);
 
 class Square {
     private:

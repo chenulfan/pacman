@@ -1,5 +1,6 @@
 #pragma once
 #include "board.h"
+#include "Ghost.h"
 #include "pacman.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +16,7 @@
 #define RIGHT1 100 // Right Arrow 
 #define RIGHT2 68  // Right Arrow 
 #define ESC 27  // Escape Key
-#define SPEED 400
+#define SPEED 800
 
 int calcMoveX(int x, int y, int direction);
 int calcMoveY(int x, int y, int direction);
