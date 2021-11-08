@@ -6,13 +6,14 @@
 #define ROW_SIZE 76
 #define COL_SIZE 20
 
-class PacMan {
+class Pacman {
 
 	Square _position;
 	int color;
 
+
 public:
-	PacMan() { _position.setSquare(38, 10, 4), color = 0; }
+	Pacman() { _position.setSquare(2, 18,4), color = 0; }
 	void print() { _position.print(); }
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }
