@@ -51,6 +51,7 @@ public:
 	void setHealth() { _health = getHealth() - 1; };
 	eSqrType whatPacmanMet(Pacman pacman);
 	Board getBoard() { return _board; };
+	void resetGameAfterGhostHit(Ghost &ghost1, Ghost &ghost2);
 
 };
 

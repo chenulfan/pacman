@@ -14,5 +14,6 @@ public:
     void printBoard();
     void initBoard();
     void setTunnels();
+    void setSqrType(int y, int x, eSqrType sqr) { _squares[y][x].setSqrType(sqr); }
 };
 

@@ -20,6 +20,7 @@ public:
 	void setX(int x) { _position.setX(x); };
 	void setY(int y) { _position.setY(y); };
 	Square getPosition() { return _position; };
+	void startPosition() { _position.setSquare(2, 18, 4); }
 
 	
 };
