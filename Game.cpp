@@ -13,6 +13,7 @@ void Game::printBanner() {
 }
 
 void clearConsoleRow() {
+
 	printf("%c[2K", 27);
 }
 
