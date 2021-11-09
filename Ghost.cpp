@@ -77,3 +77,10 @@ void Ghost::oneMoveBack() {
 		break;
 	}
 	}
+
+void Ghost::changePosition(int y, int x) {
+	setX(x);
+	setY(y);
+	_blank.setX(x);
+	_blank.setY(y);
+}

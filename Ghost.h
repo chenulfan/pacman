@@ -29,4 +29,5 @@ public:
 	void trailDelete() { _blank.print(); };
 	void startMoving();
 	void Move();
+	void changePosition(int y, int x);
 };
