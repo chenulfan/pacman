@@ -7,7 +7,6 @@ int getOption();
 
 
 int main() {
-
 	int option;
 	Game game;
 	
