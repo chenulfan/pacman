@@ -12,6 +12,7 @@ void Game::changeColor(int color) {
 	SetConsoleTextAttribute(hConsole, color);
 }
 
+
 void Game::printBanner() {
 	goToXY(0,COL_SIZE + 2);
 	clearConsoleRow();
@@ -36,7 +37,7 @@ void Game::startGame() {
 	ghost1.print();
 	ghost2.print();
 	_pacman.print();
-
+	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;
 	
 	while (_health != 0 || _points != MAX_POINTS){
@@ -81,24 +82,7 @@ void Game::startGame() {
 		}
 		_pacman.print(); 
 
-		if (isTunnel(_pacman)) {
-			deletePacmanLastMove();
-			movePacmanThruTunnel(_pacman);
-		}
-
-		if (isPacmanAteFood()) {
-			_board.setSqrType(_pacman.getY(), _pacman.getX(), EMPTY);
-			setPoints();
-		}
-
-		if (printGhostFlag) {
-			printGhosts(ghost1, ghost2);
-			printGhostFlag = 0;
-		}
-		else
-			printGhostFlag = 1;
-    
-        if (hitGhost(_pacman.getPosition(), ghost1,ghost2)){
+		if (isPacmanHitGhost(_pacman.getPosition(), ghost1, ghost2)) {
 			setHealth();
 			if (getHealth() == 0) {
 				gameOver();
@@ -106,8 +90,30 @@ void Game::startGame() {
 			}
 			resetGameAfterGhostHit(ghost1, ghost2);
 		}
+		if (isTunnel(_pacman)) {
+			deletePacmanLastMove();
+			movePacmanThruTunnel(_pacman);
+		}
+		if (isPacmanAteFood()) {
+			_board.setSqrType(_pacman.getY(), _pacman.getX(), EMPTY);
+			setPoints();
+		}
+		if (printGhostFlag) {
+			if (counterGhostsMoves == 20) {
+				ghost1.changeDirection();
+				ghost2.changeDirection();
+				counterGhostsMoves = 0;
+			}
+			else {
+				counterGhostsMoves++;
+			}
+			MoveAndPrintGhost(ghost1);
+			MoveAndPrintGhost(ghost2);
+			printGhostFlag = 0;
+		}
+		else
+			printGhostFlag = 1;   
 	}
-	int x = 0;
 
 }
 
@@ -142,12 +148,17 @@ void Game::deletePacmanLastMove() {
 	cout << " ";
 }
 
+void Game::deleteGhostLastMove(Ghost& ghost) {
+	goToXY(ghost.getX(), ghost.getY());
+	cout << " ";
+}
+
 bool isNextMoveIsAWall(int x, int y,  Board b) {
 	Square pos = b.getSquare(y, x);
 	return pos.getSqrType() == WALL;
 }
 
-bool Game::hitWall( Square position) //return true if pacman's new position is a wall
+bool Game::isGhostHitWall( Square position) //return true if pacman's new position is a wall
 {
 	int xPos = position.getX();
 	int yPos = position.getY();
@@ -187,43 +198,36 @@ int Game::getKey()
 	return (KeyStroke);
 }
 
- void Game::printGhosts(Ghost &ghost1,Ghost &ghost2) {
-	 int previousXGhost1 = ghost1.getX(), previousXGhost2 = ghost2.getX();
-	 int previousYGhost1 = ghost1.getY(), previousYGhost2 = ghost2.getY();
-	 Square boardPositionGhost1 = _board.getSquare(previousYGhost1, previousXGhost1);
-	 Square boardPositionGhost2 = _board.getSquare(previousYGhost2, previousXGhost2);
-	 if (boardPositionGhost1.getSqrType() == FOOD) {
-		 ghost1.trailDelete();
-		 boardPositionGhost1.print();
-	 }
-	 else
-		 ghost1.trailDelete();
-	 if (boardPositionGhost2.getSqrType() == FOOD) {
-		 ghost2.trailDelete();
-		 boardPositionGhost2.print();
-	 }
-	 else
-		 ghost2.trailDelete();
+void Game::MoveAndPrintGhost(Ghost& ghost) {
+	Square boardPositionOfGhost = _board.getSquare(ghost.getY(), ghost.getX());
+	deleteGhostLastMove(ghost);
+	boardPositionOfGhost.print();
+	
 
-	 ghost1.Move();
-	 while (hitWall(ghost1.getPosition())) {
-		 ghost1.changeDir();
-	 }
-	 ghost1.print();
-	 ghost2.Move();
-	 while (hitWall(ghost2.getPosition())) {
-		 ghost2.changeDir();
-	 }
-	 ghost2.print();
+	ghost.Move();
+	while (isGhostHitWall(ghost.getPosition())) {
+		ghost.oneMoveBack();
+		ghost.changeDirection();
+		ghost.Move();
+	}
+	ghost.print();
 }
 
-bool Game::hitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
+bool Game::isPacmanHitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
 	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY())
 		 return true;
 	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY())
 		 return true;
 	 return false;
  }
+
+void Game::resetGameAfterGhostHit(Ghost& ghost1, Ghost& ghost2) {
+	_pacman.startPosition();
+	deleteGhostLastMove(ghost1);
+	deleteGhostLastMove(ghost2);
+	ghost1.changePosition(9, 34);
+	ghost2.changePosition(11, 34);
+}
 
 void Game::setPoints() { 
 	_points = getPoints() + 1; 
@@ -235,7 +239,6 @@ void Game::setHealth() {
 	printBanner();
 };
 
-
 void Game::printMenu() {
 	cout << endl << " (1) Start a new game" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
@@ -245,33 +248,3 @@ void Game::printInstructions() {
 	cout << "The instructions are: " << endl << endl;
 }
 
-void Game::resetGameAfterGhostHit(Ghost &ghost1,Ghost &ghost2) {
-	_pacman.startPosition();
-	ghost1.trailDelete();
-	ghost2.trailDelete();
-	ghost1.changePosition(10, 36);
-	ghost2.changePosition(10, 40);
-}
-
-
-//// directon: 1 = RIGHT , 0 = LEFT
-//int calcMoveX(int x, int y, int direction) {
-//	if (x == 0 && y == COL_SIZE / 2)
-//		return ROW_SIZE - 2;
-//	else if (x == ROW_SIZE && y == COL_SIZE / 2)
-//		return 2;
-//	else if (direction == 1)
-//		return x + 1;
-//	return x - 1;
-//}
-//
-//// directon: 1 = UP , 0 = DOWN
-//int calcMoveY(int x, int y, int direction) {
-//	if (x == ROW_SIZE / 2 && y == 0)
-//		return COL_SIZE - 1;
-//	else if (x == ROW_SIZE / 2 && y == COL_SIZE)
-//		return 1;
-//	else if (direction)
-//		return y - 1;
-//	return y + 1;
-//}

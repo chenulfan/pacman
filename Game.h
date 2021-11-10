@@ -12,7 +12,7 @@
 #define LEFT 97  // Left Arrow 
 #define RIGHT 100 // Right Arrow 
 #define ESC 27  // Escape Key
-#define SPEED 300
+#define SPEED 200
 #define STAY 115
 
 int calcMoveX(int x, int y, int direction);
@@ -31,9 +31,8 @@ private:
 public:
 	int getKey();
 	void startGame();
-	bool hitWall( Square position);
-	void printGhosts(Ghost &ghost1, Ghost &ghost2);
-	bool hitGhost(Square position, Ghost &ghost1, Ghost &ghost2);
+	bool isGhostHitWall( Square position);
+	bool isPacmanHitGhost(Square position, Ghost &ghost1, Ghost &ghost2);
 
 	void gameOver();
 	void clear();
@@ -51,5 +50,7 @@ public:
 	void changeColor(int color);
 	bool isTunnel(Pacman& pacman);
 	void movePacmanThruTunnel(Pacman& pacman);
+	void MoveAndPrintGhost(Ghost& ghost);
+	void deleteGhostLastMove(Ghost& ghost);
 };
 
