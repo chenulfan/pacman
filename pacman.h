@@ -3,24 +3,20 @@
 #include <string>
 #include "square.h"
 
-#define ROW_SIZE 76
-#define COL_SIZE 20
 
 class Pacman {
-
+private:
 	Square _position;
-	int color;
-
 
 public:
-	Pacman() { _position.setSquare(2, 18,4), color = 0; }
+	Pacman() { _position.setSquare(1, 17, PACMAN); };
 	void print() { _position.print(); }
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }
 	void setX(int x) { _position.setX(x); };
 	void setY(int y) { _position.setY(y); };
 	Square getPosition() { return _position; };
-	void startPosition() { _position.setSquare(2, 18, 4); }
+	void startPosition() { _position.setSquare(1, 17, PACMAN); }
 
 	
 };

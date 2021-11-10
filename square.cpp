@@ -1,8 +1,5 @@
 #include "square.h"
 
-
-
-
 void Square::print() {
 
     switch (_sqrType) {
@@ -13,27 +10,22 @@ void Square::print() {
     }
     case 1: {
         goToXY(_x, _y);
-        cout << "*";
+        cout << char(250);
         break;
     }
     case 2: {
         goToXY(_x, _y);
-        cout << " ";
+        cout << char(219);
         break;
     }
     case 3: {
         goToXY(_x, _y);
-        cout << "O";
+        cout << "@";
         break;
     }
     case 4: {
         goToXY(_x, _y);
-        cout << "@";
-        break;
-    }
-    case 5: {
-        goToXY(_x, _y);
-        cout << "&";
+        cout << "$";
         break;
     }
     }

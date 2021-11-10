@@ -142,6 +142,7 @@
     <ClInclude Include="board.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Ghost.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="pacman.h" />
     <ClInclude Include="square.h" />
   </ItemGroup>

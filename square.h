@@ -9,7 +9,7 @@
 
 using namespace std;
 
-enum eSqrType { EMPTY, FOOD, TUNNEL, WALL ,PACMAN};
+enum eSqrType { EMPTY, FOOD, WALL, PACMAN, GHOST };
 void goToXY(int x, int y);
 
 class Square {
