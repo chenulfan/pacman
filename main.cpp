@@ -12,9 +12,11 @@ int main() {
 
 	char ch;
 
-		game.printMenu();
-		option = getOption();
-		game.clear();
+		do {
+			game.printMenu();
+			option = getOption();
+			game.clear();
+
 		switch (option) {
 			case 1:
 				game.startGame();
@@ -22,14 +24,12 @@ int main() {
 				break;
 			case 8:
 				game.printInstructions();
-				cout << "press any key to return to them menu" << endl;
+				cout << "press any key to return to the menu..." << endl;
 				cin >> ch;
-				game.clear();
-				game.printMenu();
-				option = getOption();
 				game.clear();
 				break;
 			}
+		}while (option != 9);
 }
 
 

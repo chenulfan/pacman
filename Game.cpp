@@ -5,6 +5,7 @@
 
 const int COL_SIZE = 19;
 const int ROW_SIZE = 70;
+const int MAX_POINTS = 100;
 
 void Game::changeColor(int color) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -38,47 +39,52 @@ void Game::startGame() {
 
 	bool printGhostFlag = 1;
 	
-	while (_playerKey != ESC){
+	while (_health != 0 || _points != MAX_POINTS){
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
 		if (_kbhit()) { // if any key was hit
 			_playerKey = getKey();  // change direction
-			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY ) {
+			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
 		}
-
+		if (_playerKey == ESC) continue;
 
 		switch (tolower(_playerKey)){
 			case RIGHT:
 				if (!isNextMoveIsAWall(_pacman.getX() + 1, _pacman.getY(), _board)) {
 					deletePacmanLastMove();
-					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 1));
+					_pacman.setX(_pacman.getX() + 1);
 				}
 				break;
 			case LEFT:
 				if (!isNextMoveIsAWall(_pacman.getX() - 1, _pacman.getY(), _board)) {
 					deletePacmanLastMove();
-					_pacman.setX(calcMoveX(_pacman.getX(), _pacman.getY(), 0));
+					_pacman.setX(_pacman.getX() - 1);
 				}
 				break;
 			case UP:
 				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() - 1, _board)) {
 					deletePacmanLastMove();
-					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 1));
+					_pacman.setY(_pacman.getY() - 1);
 				}
 				break;
 			case DOWN:
 				if (!isNextMoveIsAWall(_pacman.getX(), _pacman.getY() + 1, _board)) {
 					deletePacmanLastMove();
-					_pacman.setY(calcMoveY(_pacman.getX(), _pacman.getY(), 0));
+					_pacman.setY(_pacman.getY() + 1);
 				}
 				break;
 			case STAY:
 				break;
 		}
 		_pacman.print(); 
+
+		if (isTunnel(_pacman)) {
+			deletePacmanLastMove();
+			movePacmanThruTunnel(_pacman);
+		}
 
 		if (isPacmanAteFood()) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), EMPTY);
@@ -101,7 +107,26 @@ void Game::startGame() {
 			resetGameAfterGhostHit(ghost1, ghost2);
 		}
 	}
+	int x = 0;
 
+}
+
+void Game::movePacmanThruTunnel(Pacman& pacman) {
+	int xPos = _pacman.getPosition().getX();
+	int yPos = _pacman.getPosition().getY();
+	if (xPos == 0) _pacman.setX(ROW_SIZE);
+	else if (xPos == ROW_SIZE) _pacman.setX(0);
+	else if (yPos == 0) _pacman.setY(COL_SIZE);
+	else if (yPos == COL_SIZE) _pacman.setY(0);
+	
+}
+
+bool Game::isTunnel(Pacman& pacman) {
+	int xPos = pacman.getPosition().getX();
+	int yPos = pacman.getPosition().getY();
+	if (xPos == 0 || xPos == ROW_SIZE || yPos == 0 || yPos == COL_SIZE)
+		return true;
+	return false;
 }
 
 bool Game::isPacmanAteFood() {
@@ -120,28 +145,6 @@ void Game::deletePacmanLastMove() {
 bool isNextMoveIsAWall(int x, int y,  Board b) {
 	Square pos = b.getSquare(y, x);
 	return pos.getSqrType() == WALL;
-}
-
-// directon: 1 = RIGHT , 0 = LEFT
-int calcMoveX(int x, int y, int direction) {
-	if (x == 0 && y == COL_SIZE / 2)
-		return ROW_SIZE - 2;
-	else if (x == ROW_SIZE && y == COL_SIZE / 2)
-		return 2;
-	else if (direction == 1)
-		return x + 1;
-	return x - 1;
-}
-
-// directon: 1 = UP , 0 = DOWN
-int calcMoveY(int x, int y, int direction) {
-	if (x == ROW_SIZE / 2 && y == 0)
-		return COL_SIZE - 1;
-	else if (x == ROW_SIZE / 2 && y == COL_SIZE)
-		return 1;
-	else if (direction)
-		return y - 1;
-	return y + 1;
 }
 
 bool Game::hitWall( Square position) //return true if pacman's new position is a wall
@@ -239,7 +242,7 @@ void Game::printMenu() {
 }
 
 void Game::printInstructions() {
-	cout << "The instructions are: " << endl;
+	cout << "The instructions are: " << endl << endl;
 }
 
 void Game::resetGameAfterGhostHit(Ghost &ghost1,Ghost &ghost2) {
@@ -249,3 +252,26 @@ void Game::resetGameAfterGhostHit(Ghost &ghost1,Ghost &ghost2) {
 	ghost1.changePosition(10, 36);
 	ghost2.changePosition(10, 40);
 }
+
+
+//// directon: 1 = RIGHT , 0 = LEFT
+//int calcMoveX(int x, int y, int direction) {
+//	if (x == 0 && y == COL_SIZE / 2)
+//		return ROW_SIZE - 2;
+//	else if (x == ROW_SIZE && y == COL_SIZE / 2)
+//		return 2;
+//	else if (direction == 1)
+//		return x + 1;
+//	return x - 1;
+//}
+//
+//// directon: 1 = UP , 0 = DOWN
+//int calcMoveY(int x, int y, int direction) {
+//	if (x == ROW_SIZE / 2 && y == 0)
+//		return COL_SIZE - 1;
+//	else if (x == ROW_SIZE / 2 && y == COL_SIZE)
+//		return 1;
+//	else if (direction)
+//		return y - 1;
+//	return y + 1;
+//}

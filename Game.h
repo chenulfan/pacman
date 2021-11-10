@@ -49,5 +49,7 @@ public:
 	void deletePacmanLastMove();
 	bool isPacmanAteFood();
 	void changeColor(int color);
+	bool isTunnel(Pacman& pacman);
+	void movePacmanThruTunnel(Pacman& pacman);
 };
 
