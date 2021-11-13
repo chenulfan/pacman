@@ -6,20 +6,27 @@
 bool isWall(const int* arr, int j);
 int convertType(char type);
 
-void Board::printBoard() {
+void Board::printBoard(bool isWithColor) {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
-            _squares[i][j].print();
+            _squares[i][j].print(isWithColor);
         }
     }
 }
 
-void Board::initBoard() {
+int Board::initBoard() {
+    int foodCounter = 0;
+    int type;
+
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
-            _squares[i][j].setSquare(j, i, convertType(map[i][j]));
+            type = convertType(map[i][j]);
+            if (type == FOOD)
+                ++foodCounter;
+            _squares[i][j].setSquare(j, i, type );
         }
     }
+    return foodCounter;
 }
 
 int convertType(char type) {

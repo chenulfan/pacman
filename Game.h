@@ -27,10 +27,12 @@ private:
 	Pacman _pacman;
 	int _health=3;
 	int _points=0;
+	bool _isWithColor= false;
+	int _maxPoints = 0;
 
 public:
 	int getKey();
-	void startGame();
+	void startGame(bool withColor);
 	bool isGhostHitWall( Square position);
 	bool isPacmanHitGhost(Square position, Ghost &ghost1, Ghost &ghost2);
 
@@ -41,16 +43,19 @@ public:
 	void printInstructions();
 	int getPoints() { return _points; };
 	int getHealth() { return _health; };
+	int getMaxPoints() { return _maxPoints; };
+
+	void setMaxPoints(int num) { _maxPoints = num; };
 	void setPoints();
 	void setHealth();
 	Board getBoard() { return _board; };
 	void resetGameAfterGhostHit(Ghost &ghost1, Ghost &ghost2);
 	void deletePacmanLastMove();
 	bool isPacmanAteFood();
-	void changeColor(int color);
 	bool isTunnel(Pacman& pacman);
 	void movePacmanThruTunnel(Pacman& pacman);
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
+	void setWithColor(bool isWithColor) { _isWithColor = isWithColor; };
 };
 

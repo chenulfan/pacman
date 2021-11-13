@@ -10,7 +10,7 @@ private:
 
 public:
 	Pacman() { _position.setSquare(1, 17, PACMAN); };
-	void print() { _position.print(); }
+	void print(bool isWithColor) { _position.print(isWithColor); }
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }
 	void setX(int x) { _position.setX(x); };

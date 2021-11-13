@@ -5,21 +5,13 @@
 
 const int COL_SIZE = 19;
 const int ROW_SIZE = 70;
-const int MAX_POINTS = 100;
-
-void Game::changeColor(int color) {
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, color);
-}
 
 
 void Game::printBanner() {
 	goToXY(0,COL_SIZE + 2);
 	clearConsoleRow();
-	changeColor(10);
-	cout << "[ life: " << getHealth() << " | points: " << getPoints() << " ]";
-	changeColor(12);
-
+	if(_isWithColor) changeColor(10);
+	cout << "[ life: " << getHealth() << " | points: " << getPoints() << " | max points: " << getMaxPoints() << " ]"; //TODO: DELETE MAX POINTS
 	goToXY(_pacman.getX(), _pacman.getY());
 }
 
@@ -27,20 +19,25 @@ void clearConsoleRow() {
 	printf("%c[2K", 27);
 }
 
-void Game::startGame() {
+void Game::startGame(bool isWithColor) {
 
     Ghost ghost1(0,34, 9), ghost2(2,34, 11);
 	char prevKey = RIGHT;
-	_board.initBoard();
-	_board.printBoard();
+
+	setWithColor(isWithColor);
+	
+	setMaxPoints(_board.initBoard());
+	_board.printBoard(isWithColor);
 	printBanner();
-	ghost1.print();
-	ghost2.print();
-	_pacman.print();
+
+	_pacman.print(isWithColor);
+	ghost1.print(isWithColor);
+	ghost2.print(isWithColor);
+
 	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;
 	
-	while (_health != 0 || _points != MAX_POINTS){
+	while (_health != 0 || _points != _maxPoints){
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
@@ -80,7 +77,7 @@ void Game::startGame() {
 			case STAY:
 				break;
 		}
-		_pacman.print(); 
+		_pacman.print(isWithColor);
 
 		if (isPacmanHitGhost(_pacman.getPosition(), ghost1, ghost2)) {
 			setHealth();
@@ -201,16 +198,15 @@ int Game::getKey()
 void Game::MoveAndPrintGhost(Ghost& ghost) {
 	Square boardPositionOfGhost = _board.getSquare(ghost.getY(), ghost.getX());
 	deleteGhostLastMove(ghost);
-	boardPositionOfGhost.print();
+	boardPositionOfGhost.print(_isWithColor);
 	
-
 	ghost.Move();
 	while (isGhostHitWall(ghost.getPosition())) {
 		ghost.oneMoveBack();
 		ghost.changeDirection();
 		ghost.Move();
 	}
-	ghost.print();
+	ghost.print(_isWithColor);
 }
 
 bool Game::isPacmanHitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
@@ -240,7 +236,7 @@ void Game::setHealth() {
 };
 
 void Game::printMenu() {
-	cout << endl << " (1) Start a new game" << endl
+	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
 }
 

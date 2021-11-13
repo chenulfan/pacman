@@ -10,7 +10,6 @@ void Ghost::changeDirection() {
 Ghost::Ghost(int direction,int x, int y)
 {
 	_position.setSquare(x, y, GHOST);
-	color = 0;
 	this->direction = direction;
 }
 void Ghost::Move() {

@@ -12,11 +12,10 @@
 class Ghost {
 
 	Square _position;
-	int color;
 	int direction; 
 public:
-	Ghost(int dir,int x = 38, int y = 10);
-	void print() { _position.print(); };
+	Ghost(int direction ,int x = 38, int y = 10);
+	void print(bool isWithColor) { _position.print(isWithColor); };
 	int getX() { return _position.getX(); }
 	int getY() { return _position.getY(); }
 	void setX(int x) { _position.setX(x); }
