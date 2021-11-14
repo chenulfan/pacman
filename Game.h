@@ -57,5 +57,6 @@ public:
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
 	void setWithColor(bool isWithColor) { _isWithColor = isWithColor; };
+	bool isGhostHitPacman(Square position);
 };
 

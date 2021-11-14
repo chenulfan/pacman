@@ -81,7 +81,7 @@ void Game::startGame(bool isWithColor) {
 
 		if (isPacmanHitGhost(_pacman.getPosition(), ghost1, ghost2)) {
 			setHealth();
-			if (getHealth() == 0) {
+			if (getHealth() == 0) {	
 				gameOver();
 				return;
 			}
@@ -105,7 +105,23 @@ void Game::startGame(bool isWithColor) {
 				counterGhostsMoves++;
 			}
 			MoveAndPrintGhost(ghost1);
+			if (isGhostHitPacman(ghost1.getPosition())) {
+				setHealth();
+				if (getHealth() == 0) {
+					gameOver();
+					return;
+				}
+				resetGameAfterGhostHit(ghost1, ghost2);
+			}
 			MoveAndPrintGhost(ghost2);
+			if (isGhostHitPacman(ghost2.getPosition())) {
+				setHealth();
+				if (getHealth() == 0) {
+					gameOver();
+					return;
+				}
+				resetGameAfterGhostHit(ghost1, ghost2);
+			}
 			printGhostFlag = 0;
 		}
 		else
@@ -155,13 +171,20 @@ bool isNextMoveIsAWall(int x, int y,  Board b) {
 	return pos.getSqrType() == WALL;
 }
 
-bool Game::isGhostHitWall( Square position) //return true if pacman's new position is a wall
+bool Game::isGhostHitWall( Square position) 
 {
 	int xPos = position.getX();
 	int yPos = position.getY();
 	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
 	if (sqrType == WALL)
 		return true;
+	return false;
+}
+bool Game::isGhostHitPacman(Square position) 
+{
+	if (position.getX() == _pacman.getX() && position.getY() == _pacman.getY()) {
+		return true;
+	}
 	return false;
 }
 
