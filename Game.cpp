@@ -11,7 +11,7 @@ void Game::printBanner() {
 	goToXY(0,COL_SIZE + 2);
 	clearConsoleRow();
 	if(_isWithColor) changeColor(10);
-	cout << "[ life: " << getHealth() << " | points: " << getPoints() << " | max points: " << getMaxPoints() << " ]"; //TODO: DELETE MAX POINTS
+	cout << "[ Life: " << getHealth() << " | Score: " << getPoints() << " ]";
 	goToXY(_pacman.getX(), _pacman.getY());
 }
 
@@ -37,19 +37,19 @@ void Game::startGame(bool isWithColor) {
 	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;
 	
-	while (_health != 0 || _points != _maxPoints){
+	while (_health != 0 && _points != _maxPoints){
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
 		if (_kbhit()) { // if any key was hit
-			_playerKey = getKey();  // change direction
+			_playerKey = tolower(getKey());  // change direction
 			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
 		}
 		if (_playerKey == ESC) continue;
 
-		switch (tolower(_playerKey)){
+		switch (_playerKey){
 			case RIGHT:
 				if (!isNextMoveIsAWall(_pacman.getX() + 1, _pacman.getY(), _board)) {
 					deletePacmanLastMove();
@@ -87,13 +87,15 @@ void Game::startGame(bool isWithColor) {
 			}
 			resetGameAfterGhostHit(ghost1, ghost2);
 		}
-		if (isTunnel(_pacman)) {
-			deletePacmanLastMove();
-			movePacmanThruTunnel(_pacman);
-		}
 		if (isPacmanAteFood()) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), EMPTY);
 			setPoints();
+		}
+
+		if (isTunnel(_pacman)) {
+			deletePacmanLastMove();
+			movePacmanThruTunnel(_pacman);
+			if (isPacmanAteFood()) setPoints();
 		}
 		if (printGhostFlag) {
 			if (counterGhostsMoves == 20) {
@@ -121,7 +123,6 @@ void Game::movePacmanThruTunnel(Pacman& pacman) {
 	else if (xPos == ROW_SIZE) _pacman.setX(0);
 	else if (yPos == 0) _pacman.setY(COL_SIZE);
 	else if (yPos == COL_SIZE) _pacman.setY(0);
-	
 }
 
 bool Game::isTunnel(Pacman& pacman) {
