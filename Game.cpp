@@ -135,16 +135,16 @@ void Game::startGame(bool isWithColor) {
 void Game::movePacmanThruTunnel(Pacman& pacman) {
 	int xPos = _pacman.getPosition().getX();
 	int yPos = _pacman.getPosition().getY();
-	if (xPos == 0) _pacman.setX(ROW_SIZE);
-	else if (xPos == ROW_SIZE) _pacman.setX(0);
-	else if (yPos == 0) _pacman.setY(COL_SIZE);
-	else if (yPos == COL_SIZE) _pacman.setY(0);
+	if (xPos == 0) _pacman.setX(ROW_SIZE-1);
+	else if (xPos == ROW_SIZE-1) _pacman.setX(0);
+	else if (yPos == 0) _pacman.setY(COL_SIZE-1);
+	else if (yPos == COL_SIZE-1) _pacman.setY(0);
 }
 
 bool Game::isTunnel(Pacman& pacman) {
 	int xPos = pacman.getPosition().getX();
 	int yPos = pacman.getPosition().getY();
-	if (xPos == 0 || xPos == ROW_SIZE || yPos == 0 || yPos == COL_SIZE)
+	if (xPos == 0 || xPos == ROW_SIZE-1 || yPos == 0 || yPos == COL_SIZE-1)
 		return true;
 	return false;
 }
