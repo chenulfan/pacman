@@ -20,15 +20,15 @@ class Square {
 
     public:
         enum eSqrType { EMPTY, FOOD, WALL, PACMAN, GHOST };
-        int getX() { return _x; };
-        int getY() { return _y; };
-        int getSqrType() { return _sqrType; };
-        void setX(int x) { _x = x; };
-        void setY(int y) { _y = y; };
-        void setSqrType(int sqrType) { _sqrType = (eSqrType)sqrType; };
-        void setSquare(int x, int y, int sqrType);
-        void setSquare(Square b);
-        void print(bool isWithColor);
+        const int getX() { return _x; };
+        const int getY() { return _y; };
+        const int getSqrType() { return _sqrType; };
+        void setX(const int x) { _x = x; };
+        void setY(const int y) { _y = y; };
+        void setSqrType(const int sqrType) { _sqrType = (eSqrType)sqrType; };
+        void setSquare(const int x, const int y, const int sqrType);
+        void setSquare(const Square& b);
+        void print(const bool isWithColor);
 
     private:
         eSqrType _sqrType;

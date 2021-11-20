@@ -7,7 +7,7 @@ void Ghost::changeDirection() {
 	}
 	direction = randomdirection;
 }
-Ghost::Ghost(int direction,int x, int y)
+Ghost::Ghost(const int direction, const int x, const int y)
 {
 	_position.setSquare(x, y, Square::GHOST);
 	this->direction = direction;
@@ -45,7 +45,7 @@ void Ghost::oneMoveBack() {
 		break;
 	}
 	}
-void Ghost::changePosition(int y, int x) {
+void Ghost::changePosition(const int y, const int x) {
 	setX(x);
 	setY(y);
 }

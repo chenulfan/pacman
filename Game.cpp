@@ -133,26 +133,26 @@ void Game::startGame(bool isWithColor) {
 }
 
 void Game::movePacmanThruTunnel(Pacman& pacman) {
-	int xPos = _pacman.getPosition().getX();
-	int yPos = _pacman.getPosition().getY();
+	const int xPos = _pacman.getPosition().getX();
+	const int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) _pacman.setX(ROW_SIZE-1);
 	else if (xPos == ROW_SIZE-1) _pacman.setX(0);
 	else if (yPos == 0) _pacman.setY(COL_SIZE-1);
 	else if (yPos == COL_SIZE-1) _pacman.setY(0);
 }
 
-bool Game::isTunnel(Pacman& pacman) {
-	int xPos = pacman.getPosition().getX();
-	int yPos = pacman.getPosition().getY();
+const bool Game::isTunnel(Pacman& pacman) {
+	const int xPos = pacman.getPosition().getX();
+	const int yPos = pacman.getPosition().getY();
 	if (xPos == 0 || xPos == ROW_SIZE-1 || yPos == 0 || yPos == COL_SIZE-1)
 		return true;
 	return false;
 }
 
-bool Game::isPacmanAteFood() {
-	int xPos = _pacman.getPosition().getX();
-	int yPos = _pacman.getPosition().getY();
-	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
+const bool Game::isPacmanAteFood() {
+	const int xPos = _pacman.getPosition().getX();
+	const int yPos = _pacman.getPosition().getY();
+	const int sqrType = _board.getSquare(yPos, xPos).getSqrType();
 	return sqrType == Square::FOOD;
 }
 
@@ -167,21 +167,22 @@ void Game::deleteGhostLastMove(Ghost& ghost) {
 	cout << " ";
 }
 
-bool isNextMoveIsAWall(int x, int y,  Board b) {
+const bool Game::isNextMoveIsAWall(const int x, const int y,  Board b) {
 	Square pos = b.getSquare(y, x);
 	return pos.getSqrType() == Square::WALL;
 }
 
-bool Game::isGhostHitWall( Square position) 
+const bool Game::isGhostHitWall(Square position) 
 {
-	int xPos = position.getX();
-	int yPos = position.getY();
-	int sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	const int xPos = position.getX();
+	const int yPos = position.getY();
+	const int sqrType = _board.getSquare(yPos, xPos).getSqrType();
 	if (sqrType == Square::WALL)
 		return true;
 	return false;
 }
-bool Game::isGhostHitPacman(Square position) 
+
+const bool Game::isGhostHitPacman(Square position) 
 {
 	if (position.getX() == _pacman.getX() && position.getY() == _pacman.getY()) {
 		return true;
@@ -233,7 +234,7 @@ void Game::MoveAndPrintGhost(Ghost& ghost) {
 	ghost.print(_isWithColor);
 }
 
-bool Game::isPacmanHitGhost(Square position, Ghost& ghost1, Ghost& ghost2) {
+const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost1,  Ghost& ghost2) {
 	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY())
 		 return true;
 	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY())
@@ -265,6 +266,16 @@ void Game::printMenu() {
 }
 
 void Game::printInstructions() {
-	cout << "The instructions are: " << endl << endl;
+	cout << "The instructions are: " << endl;
+	cout << "Press W to move up" << endl;
+	cout << "Press D to move right" << endl;
+	cout << "Press A to move left" << endl;
+	cout << "Press X to move down" << endl;
+	cout << "Press S to stay in your place" << endl;
+	cout << "You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
+	cout << "Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
+	cout << "You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
+	cout << "The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
+	cout << "Have FUN" << endl;
 }
 

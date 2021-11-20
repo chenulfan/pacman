@@ -9,20 +9,24 @@
 #define ONE 1
 #define TWO 2
 #define THREE 3
+
+static const int GHOST_START_X = 38;
+static const int GHOST_START_Y = 10;
+
 class Ghost {
 
 	Square _position;
 	int direction; 
 public:
-	Ghost(int direction ,int x = 38, int y = 10);
-	void print(bool isWithColor) { _position.print(isWithColor); };
-	int getX() { return _position.getX(); }
-	int getY() { return _position.getY(); }
-	void setX(int x) { _position.setX(x); }
-	void setY(int y) { _position.setY(y); }
+	Ghost(const int direction ,const int x = GHOST_START_X,const int y = GHOST_START_Y);
+	void print(const bool isWithColor) { _position.print(isWithColor); };
+	const int getX() { return _position.getX(); }
+	const int getY() { return _position.getY(); }
+	void setX(const int x) { _position.setX(x); }
+	void setY(const int y) { _position.setY(y); }
 	Square getPosition() { return _position; };
 	void changeDirection();
 	void Move();
-	void changePosition(int y, int x);
+	void changePosition(const int y,const int x);
 	void oneMoveBack();
 };

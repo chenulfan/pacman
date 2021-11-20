@@ -1,6 +1,6 @@
 #include "square.h"
 
-void Square::print(bool isWithColor) {
+void Square::print(const bool isWithColor) {
     switch (_sqrType) {
         case 0: {
             goToXY(_x, _y);
@@ -43,12 +43,12 @@ void changeColor(int color) {
     SetConsoleTextAttribute(hConsole, color);
 }
 
-void Square::setSquare(int x, int y, int sqrType) {
+void Square::setSquare(const int x, const int y, const int sqrType) {
     this->setX(x);
     this->setY(y);
     this->setSqrType(sqrType);
 }
-void Square::setSquare(Square sqr) {
+void Square::setSquare(const Square& sqr) {
     this->setX(sqr._x);
     this->setY(sqr._y);
     this->setSqrType(sqr._sqrType);

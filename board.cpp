@@ -3,10 +3,10 @@
 #include "map.h"
 
 
-bool isWall(const int* arr, int j);
-int convertType(char type);
+bool isWall(const int* arr,const int j);
+const int convertType(char type);
 
-void Board::printBoard(bool isWithColor) {
+void Board::printBoard(const bool isWithColor) {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
             _squares[i][j].print(isWithColor);
@@ -29,7 +29,7 @@ int Board::initBoard() {
     return foodCounter;
 }
 
-int convertType(char type) {
+const int convertType(const char type) {
     if (type == ' ') return 0;
     if (type == '&') return 1;
     if (type == '#') return 2;
@@ -38,7 +38,7 @@ int convertType(char type) {
 }
 
 
-bool isWall(const int* arr, int j) {
+bool isWall(const int* arr,const int j) {
     const int* p = arr;
     while (*p != -1) {
         if (j == *p)
@@ -48,6 +48,6 @@ bool isWall(const int* arr, int j) {
     return false;
 }
 
-Square Board::getSquare(int x, int y) { 
+Square Board::getSquare(const int x,const int y) {
     return _squares[x][y]; 
 };
