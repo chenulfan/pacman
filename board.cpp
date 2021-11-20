@@ -21,7 +21,7 @@ int Board::initBoard() {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
             type = convertType(map[i][j]);
-            if (type == FOOD)
+            if (type == Square::FOOD)
                 ++foodCounter;
             _squares[i][j].setSquare(j, i, type );
         }

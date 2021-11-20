@@ -5,10 +5,10 @@
 #include <time.h>
 #include <stdbool.h>
 
-#define LEFT 0
-#define DOWN 1
-#define RIGHT 2
-#define UP 3
+#define ZERO 0
+#define ONE 1
+#define TWO 2
+#define THREE 3
 class Ghost {
 
 	Square _position;

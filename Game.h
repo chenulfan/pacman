@@ -7,13 +7,13 @@
 #include <windows.h>
 #include <stdbool.h>
 
-#define UP 119 // Up Arrow 
-#define DOWN 120 // Down Arrow 
-#define LEFT 97  // Left Arrow 
-#define RIGHT 100 // Right Arrow 
-#define ESC 27  // Escape Key
-#define SPEED 200
-#define STAY 115
+static const int UP = 119; // Up Arrow 
+static const int DOWN = 120; // Down Arrow 
+static const int LEFT = 97; // Left Arrow 
+static const int RIGHT = 100; // Right Arrow 
+static const int ESC = 27;  // Escape Key
+static const int SPEED = 80;
+static const int STAY = 115;
 
 int calcMoveX(int x, int y, int direction);
 int calcMoveY(int x, int y, int direction);

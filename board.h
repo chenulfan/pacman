@@ -11,6 +11,6 @@ public:
     void printBoard(bool isWithColor);
     int initBoard();
     void setTunnels();
-    void setSqrType(int y, int x, eSqrType sqr) { _squares[y][x].setSqrType(sqr); }
+    void setSqrType(int y, int x, Square::eSqrType sqr) { _squares[y][x].setSqrType(sqr); }
 };
 

@@ -9,38 +9,38 @@ void Ghost::changeDirection() {
 }
 Ghost::Ghost(int direction,int x, int y)
 {
-	_position.setSquare(x, y, GHOST);
+	_position.setSquare(x, y, Square::GHOST);
 	this->direction = direction;
 }
 void Ghost::Move() {
 	switch (direction)
 	{
-	case LEFT:
+	case ZERO:
 		_position.setX((_position.getX()) + 1);
 		break;
-	case DOWN:
+	case ONE:
 		_position.setY((_position.getY()) + 1);
 		break;
-	case RIGHT:
+	case TWO:
 		_position.setX((_position.getX()) - 1);
 		break;
-	case UP:
+	case THREE:
 		_position.setY((_position.getY()) - 1);
 		break;
 	}
 }
 void Ghost::oneMoveBack() {
 	switch (direction) {
-	case LEFT:
+	case ZERO:
 		_position.setX((_position.getX()) - 1);
 		break;
-	case DOWN:
+	case ONE:
 		_position.setY((_position.getY()) - 1);
 		break;
-	case RIGHT:
+	case TWO:
 		_position.setX((_position.getX()) + 1);
 		break;
-	case UP:
+	case THREE:
 		_position.setY((_position.getY()) + 1);
 		break;
 	}
