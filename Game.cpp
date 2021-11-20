@@ -82,7 +82,7 @@ void Game::startGame(bool isWithColor) {
 		if (isPacmanHitGhost(_pacman.getPosition(), ghost1, ghost2)) {
 			setHealth();
 			if (getHealth() == 0) {	
-				gameOver();
+				gameOver(false);
 				return;
 			}
 			resetGameAfterGhostHit(ghost1, ghost2);
@@ -110,7 +110,7 @@ void Game::startGame(bool isWithColor) {
 			if (isGhostHitPacman(ghost1.getPosition())) {
 				setHealth();
 				if (getHealth() == 0) {
-					gameOver();
+					gameOver(false);
 					return;
 				}
 				resetGameAfterGhostHit(ghost1, ghost2);
@@ -119,7 +119,7 @@ void Game::startGame(bool isWithColor) {
 			if (isGhostHitPacman(ghost2.getPosition())) {
 				setHealth();
 				if (getHealth() == 0) {
-					gameOver();
+					gameOver(false);
 					return;
 				}
 				resetGameAfterGhostHit(ghost1, ghost2);
@@ -129,6 +129,7 @@ void Game::startGame(bool isWithColor) {
 		else
 			printGhostFlag = 1;   
 	}
+	gameOver(true);
 
 }
 
@@ -190,9 +191,15 @@ const bool Game::isGhostHitPacman(Square position)
 	return false;
 }
 
-void Game::gameOver() {
+void Game::gameOver(const bool isWon) {
 	clear(); // clears the console;
-	cout << "GAME OVER LOSER";
+	char ch;
+	if(isWon)
+		cout << "You WON!!" << endl;
+	else
+		cout << "GAME OVER" << endl;
+	cout << "press any key to return to the menu..." << endl;
+	cin >> ch;
 }
 
 void Game::clear() {
@@ -266,16 +273,16 @@ void Game::printMenu() {
 }
 
 void Game::printInstructions() {
-	cout << "The instructions are: " << endl;
-	cout << "Press W to move up" << endl;
-	cout << "Press D to move right" << endl;
-	cout << "Press A to move left" << endl;
-	cout << "Press X to move down" << endl;
-	cout << "Press S to stay in your place" << endl;
-	cout << "You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
-	cout << "Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
-	cout << "You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
-	cout << "The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
-	cout << "Have FUN" << endl;
+	cout << endl << "The instructions are: " << endl;
+	cout << "  Press W to move up" << endl;
+	cout << "  Press D to move right" << endl;
+	cout << "  Press A to move left" << endl;
+	cout << "  Press X to move down" << endl;
+	cout << "  Press S to stay in your place" << endl;
+	cout << "  You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
+	cout << "  Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
+	cout << "  You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
+	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
+	cout << "  Have FUN" << endl << endl;
 }
 

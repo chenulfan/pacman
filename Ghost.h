@@ -16,9 +16,9 @@ static const int GHOST_START_Y = 10;
 class Ghost {
 
 	Square _position;
-	int direction; 
+	int direction;
 public:
-	Ghost(const int direction ,const int x = GHOST_START_X,const int y = GHOST_START_Y);
+	Ghost(const int direction, const int x = GHOST_START_X, const int y = GHOST_START_Y);
 	void print(const bool isWithColor) { _position.print(isWithColor); };
 	const int getX() { return _position.getX(); }
 	const int getY() { return _position.getY(); }
@@ -27,6 +27,6 @@ public:
 	Square getPosition() { return _position; };
 	void changeDirection();
 	void Move();
-	void changePosition(const int y,const int x);
+	void changePosition(const int y, const int x);
 	void oneMoveBack();
 };

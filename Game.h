@@ -56,5 +56,6 @@ public:
 	void deleteGhostLastMove(Ghost& ghost);
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	const bool isGhostHitPacman(Square position);
+	void gameOver(const bool isWon);
 };
 
