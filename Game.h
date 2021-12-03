@@ -29,32 +29,32 @@ private:
 	int _maxPoints = 0;
 
 public:
-	int getKey();
+	int getKey()const;
 	void startGame(const bool withColor);
-	const bool isGhostHitWall(Square position);
-	const bool isPacmanHitGhost(Square position, Ghost &ghost1, Ghost &ghost2);
-	const bool isNextMoveIsAWall(const int x, const int y, Board b);
+	const bool isGhostHitWall(Square position) const;
+	const bool isPacmanHitGhost(Square position, Ghost &ghost1, Ghost &ghost2) const ;
+	const bool isNextMoveIsAWall(const int x, const int y, Board b) const;
 	void gameOver();
 	void clear();
-	void printMenu();
-	void printBanner();
-	void printInstructions();
-	const int getPoints() { return _points; };
-	const int getHealth() { return _health; };
-	const int getMaxPoints() { return _maxPoints; };
+	void printMenu()const;
+	void printBanner()const;
+	void printInstructions()const;
+	const int getPoints() const { return _points; };
+	const int getHealth() const { return _health; };
+	const int getMaxPoints() const { return _maxPoints; };
+	Board getBoard() const { return _board; };
 
 	void setMaxPoints(const int num) { _maxPoints = num; };
 	void setPoints();
 	void setHealth();
-	Board getBoard() { return _board; };
+	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	void resetGameAfterGhostHit(Ghost &ghost1, Ghost &ghost2);
 	void deletePacmanLastMove();
-	const bool isPacmanAteFood();
-	const bool isTunnel(Pacman& pacman);
+	const bool isPacmanAteFood() const;
+	const bool isTunnel(Pacman& pacman) const;
 	void movePacmanThruTunnel(Pacman& pacman);
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
-	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	const bool isGhostHitPacman(Square position);
 	void gameOver(const bool isWon);
 };

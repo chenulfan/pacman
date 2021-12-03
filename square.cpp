@@ -2,33 +2,33 @@
 
 void Square::print(const bool isWithColor) {
     switch (_sqrType) {
-        case 0: {
+    case SqrType::EMPTY: {
             goToXY(_x, _y);
             cout << " ";
             break;
         }
-        case 1: {
+        case SqrType::FOOD: {
             goToXY(_x, _y);
             if(isWithColor)
                 changeColor(9);
             cout << char(250);
             break;
         }
-        case 2: {
+        case SqrType::WALL: {
             goToXY(_x, _y);
             if (isWithColor)
                 changeColor(5);
             cout << char(219);
             break;
         }
-        case 3: {
+        case SqrType::PACMAN: {
             goToXY(_x, _y);
             if (isWithColor)
                 changeColor(6);
             cout << "@";
             break;
         }
-        case 4: {
+        case SqrType::GHOST: {
             goToXY(_x, _y);
             if (isWithColor)
                 changeColor(12);
@@ -43,7 +43,7 @@ void changeColor(int color) {
     SetConsoleTextAttribute(hConsole, color);
 }
 
-void Square::setSquare(const int x, const int y, const int sqrType) {
+void Square::setSquare(const int x, const int y, const SqrType sqrType) {
     this->setX(x);
     this->setY(y);
     this->setSqrType(sqrType);

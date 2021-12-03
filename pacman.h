@@ -11,14 +11,14 @@ private:
 	Square _position;
 
 public:
-	Pacman() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, Square::PACMAN); };
+	Pacman() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, SqrType::PACMAN); };
 	void print(const bool isWithColor) { _position.print(isWithColor); }
-	const int getX() { return _position.getX(); }
-	const int getY() { return _position.getY(); }
+	const int getX() const { return _position.getX(); }
+	const int getY() const { return _position.getY(); }
+	Square getPosition() const { return _position; };
 	void setX(const int x) { _position.setX(x); };
 	void setY(const int y) { _position.setY(y); };
-	Square getPosition() { return _position; };
-	void startPosition() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, Square::PACMAN); }
+	void startPosition() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, SqrType::PACMAN); }
 
 	
 };

@@ -24,7 +24,7 @@ public:
 	const int getY() { return _position.getY(); }
 	void setX(const int x) { _position.setX(x); }
 	void setY(const int y) { _position.setY(y); }
-	Square getPosition() { return _position; };
+	Square& getPosition() { return _position; };
 	void changeDirection();
 	void Move();
 	void changePosition(const int y, const int x);

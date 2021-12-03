@@ -7,7 +7,7 @@ const int COL_SIZE = 19;
 const int ROW_SIZE = 70;
 
 
-void Game::printBanner() {
+void Game::printBanner()const {
 	goToXY(0,COL_SIZE + 2);
 	clearConsoleRow();
 	if(_isWithColor) changeColor(10);
@@ -88,7 +88,7 @@ void Game::startGame(bool isWithColor) {
 			resetGameAfterGhostHit(ghost1, ghost2);
 		}
 		if (isPacmanAteFood()) {
-			_board.setSqrType(_pacman.getY(), _pacman.getX(), Square::EMPTY);
+			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 			setPoints();
 		}
 
@@ -142,7 +142,7 @@ void Game::movePacmanThruTunnel(Pacman& pacman) {
 	else if (yPos == COL_SIZE-1) _pacman.setY(0);
 }
 
-const bool Game::isTunnel(Pacman& pacman) {
+const bool Game::isTunnel(Pacman& pacman) const {
 	const int xPos = pacman.getPosition().getX();
 	const int yPos = pacman.getPosition().getY();
 	if (xPos == 0 || xPos == ROW_SIZE-1 || yPos == 0 || yPos == COL_SIZE-1)
@@ -150,15 +150,15 @@ const bool Game::isTunnel(Pacman& pacman) {
 	return false;
 }
 
-const bool Game::isPacmanAteFood() {
+const bool Game::isPacmanAteFood() const {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
-	const int sqrType = _board.getSquare(yPos, xPos).getSqrType();
-	return sqrType == Square::FOOD;
+	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	return sqrType == SqrType::FOOD;
 }
 
 void Game::deletePacmanLastMove() {
-	_board.setSqrType(_pacman.getY(), _pacman.getX(), Square::EMPTY);
+	_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 	goToXY(_pacman.getX(), _pacman.getY());
 	cout << " ";
 }
@@ -168,17 +168,17 @@ void Game::deleteGhostLastMove(Ghost& ghost) {
 	cout << " ";
 }
 
-const bool Game::isNextMoveIsAWall(const int x, const int y,  Board b) {
+const bool Game::isNextMoveIsAWall(const int x, const int y,  Board b) const {
 	Square pos = b.getSquare(y, x);
-	return pos.getSqrType() == Square::WALL;
+	return pos.getSqrType() == SqrType::WALL;
 }
 
-const bool Game::isGhostHitWall(Square position) 
+const bool Game::isGhostHitWall(Square position) const
 {
 	const int xPos = position.getX();
 	const int yPos = position.getY();
-	const int sqrType = _board.getSquare(yPos, xPos).getSqrType();
-	if (sqrType == Square::WALL)
+	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	if (sqrType == SqrType::WALL)
 		return true;
 	return false;
 }
@@ -219,7 +219,7 @@ void Game::clear() {
 	SetConsoleCursorPosition(console, topLeft);
 }
 
-int Game::getKey()
+int Game::getKey()const
 {
 	char KeyStroke = _getch();
 	if (KeyStroke == 0 || KeyStroke == -32)
@@ -241,7 +241,7 @@ void Game::MoveAndPrintGhost(Ghost& ghost) {
 	ghost.print(_isWithColor);
 }
 
-const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost1,  Ghost& ghost2) {
+const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost1,  Ghost& ghost2) const {
 	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY())
 		 return true;
 	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY())
@@ -253,7 +253,7 @@ void Game::resetGameAfterGhostHit(Ghost& ghost1, Ghost& ghost2) {
 	_pacman.startPosition();
 	deleteGhostLastMove(ghost1);
 	deleteGhostLastMove(ghost2);
-	ghost1.changePosition(9, 34);
+	ghost1.changePosition(9, 34); // TODO: CHNAGE INIT VALUE
 	ghost2.changePosition(11, 34);
 }
 
@@ -267,12 +267,12 @@ void Game::setHealth() {
 	printBanner();
 };
 
-void Game::printMenu() {
+void Game::printMenu()const {
 	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
 }
 
-void Game::printInstructions() {
+void Game::printInstructions()const {
 	cout << endl << "The instructions are: " << endl;
 	cout << "  Press W to move up" << endl;
 	cout << "  Press D to move right" << endl;

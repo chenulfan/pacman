@@ -21,9 +21,9 @@ int Board::initBoard() {
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
             type = convertType(map[i][j]);
-            if (type == Square::FOOD)
+            if ((SqrType)type == SqrType::FOOD)
                 ++foodCounter;
-            _squares[i][j].setSquare(j, i, type );
+            _squares[i][j].setSquare(j, i, (SqrType)type );
         }
     }
     return foodCounter;
@@ -47,7 +47,3 @@ bool isWall(const int* arr,const int j) {
     }
     return false;
 }
-
-Square Board::getSquare(const int x,const int y) {
-    return _squares[x][y]; 
-};
