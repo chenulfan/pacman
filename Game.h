@@ -43,6 +43,7 @@ public:
 	const int getHealth() const { return _health; };
 	const int getMaxPoints() const { return _maxPoints; };
 	Board getBoard() const { return _board; };
+	Pacman getPacman() const { return _pacman; }
 
 	void setMaxPoints(const int num) { _maxPoints = num; };
 	void setPoints();

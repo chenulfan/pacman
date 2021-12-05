@@ -100,12 +100,12 @@ void Game::startGame(bool isWithColor) {
 		if (printGhostFlag) {
 			if (counterGhostsMoves == 20) {
 				ghost1.changeDirection();
-				ghost2.changeDirection();
 				counterGhostsMoves = 0;
 			}
 			else {
 				counterGhostsMoves++;
 			}
+			ghost2.SmartMove(getPacman(), getBoard());
 			MoveAndPrintGhost(ghost1);
 			if (isGhostHitPacman(ghost1.getPosition())) {
 				setHealth();

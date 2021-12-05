@@ -1,22 +1,21 @@
 #include "Ghost.h"
 
-enum class DIRECTIONS {RIGHT, DOWN, LEFT, UP};
 
 
 void Ghost::changeDirection() {
 	int randomdirection = rand() % 4;
-	while (randomdirection == direction) {
+	while (randomdirection == _direction) {
 		randomdirection = rand() % 4;
 	}
-	direction = randomdirection;
+	_direction = randomdirection;
 }
 Ghost::Ghost(const int direction, const int x, const int y)
 {
 	_position.setSquare(x, y, SqrType::GHOST);
-	this->direction = direction;
+	_direction = direction;
 }
 void Ghost::Move() {
-	switch ((DIRECTIONS)direction)
+	switch ((DIRECTIONS)_direction)
 	{
 	case DIRECTIONS::RIGHT:
 		_position.setX((_position.getX()) + 1);
@@ -33,7 +32,7 @@ void Ghost::Move() {
 	}
 }
 void Ghost::oneMoveBack() {
-	switch (direction) {
+	switch (_direction) {
 	case ZERO:
 		_position.setX((_position.getX()) - 1);
 		break;
@@ -51,4 +50,55 @@ void Ghost::oneMoveBack() {
 void Ghost::changePosition(const int y, const int x) {
 	setX(x);
 	setY(y);
+}
+void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
+	queSquare tempNode,nodeFront;
+	int x, y,counter,firstIteration = 0;;
+	bool visited[19][70] = {};
+	std::queue<queSquare> queue;
+	Square arr[4] = {};
+	queSquare start = { _position };
+	queue.push(start);
+	while (!queue.empty()) {
+		nodeFront = queue.front();
+		queue.pop();
+		x = nodeFront.currSquare.getX();
+		y = nodeFront.currSquare.getY();
+		visited[y][x] = true;
+		if (x == pacman.getX() && y == pacman.getY()) {
+			break;
+		}
+		else {
+			arr[0] = b.getSquare(y, x+1);
+			arr[1] = b.getSquare(y, x-1);
+			arr[2] = b.getSquare(y+1, x);
+			arr[3] = b.getSquare(y-1, x);
+			counter = 0;
+			for (Square i : arr) { 
+				x = i.getX();
+				y = i.getY();
+				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
+					if (!firstIteration) {
+						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
+						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
+						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
+						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
+					}
+					else { tempNode = { i,nodeFront.move };}
+					queue.push(tempNode);
+				}
+				counter++;
+			}
+		}
+		firstIteration++;
+	}
+	
+	_direction = (int)nodeFront.move;
+}
+const bool Ghost::isTunnel(Square& position) const {
+	const int xPos = position.getX();
+	const int yPos = position.getY();
+	if (xPos == 0 || xPos == WIDTH - 1 || yPos == 0 || yPos == HEIGHT - 1)
+		return true;
+	return false;
 }

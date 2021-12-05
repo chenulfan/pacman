@@ -7,7 +7,7 @@ private:
     int _length;
     Square _squares[19][70];
 public:
-    const Square getSquare(const int x, const int y) const { return _squares[x][y]; };
+    const Square getSquare(const int y, const int x) const { return _squares[y][x]; };
     void printBoard(const bool isWithColor);
     int initBoard();
     void setTunnels();
