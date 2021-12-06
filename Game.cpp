@@ -3,12 +3,10 @@
 #include "board.h"
 #include <cctype>
 
-const int COL_SIZE = 19;
-const int ROW_SIZE = 70;
 
 
 void Game::printBanner()const {
-	goToXY(0,COL_SIZE + 2);
+	goToXY(0,getHeight() + 2);
 	clearConsoleRow();
 	if(_isWithColor) changeColor(10);
 	cout << "[ Life: " << getHealth() << " | Score: " << getPoints() << " ]";
@@ -20,23 +18,16 @@ void clearConsoleRow() {
 }
 
 void Game::startGame(bool isWithColor) {
-
-    Ghost ghost1(0,34, 9), ghost2(2,34, 11);
 	char prevKey = RIGHT;
 
 	setWithColor(isWithColor);
-	
-	setMaxPoints(_board.initBoard());
+	setMaxPoints(_board.initBoard(&_numOfGhosts));
 	_board.printBoard(isWithColor);
-	printBanner();
-
 	_pacman.print(isWithColor);
-	ghost1.print(isWithColor);
-	ghost2.print(isWithColor);
-
+	createGhosts();
 	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;
-	
+	for (int i = 0; i < _numOfGhosts; i++) { _ghosts[i].print(isWithColor); }
 	while (_health != 0 && _points != _maxPoints){
 		prevKey = _playerKey;
 		Sleep(SPEED);
@@ -78,14 +69,37 @@ void Game::startGame(bool isWithColor) {
 				break;
 		}
 		_pacman.print(isWithColor);
-
-		if (isPacmanHitGhost(_pacman.getPosition(), ghost1, ghost2)) {
-			setHealth();
-			if (getHealth() == 0) {	
-				gameOver(false);
-				return;
+		if (printGhostFlag){
+			for (int i = 0; i < _numOfGhosts; i++) {
+				if (isPacmanHitGhost(_pacman.getPosition(), _ghosts[i])) {
+					setHealth();
+					if (getHealth() == 0) {
+						gameOver(false);
+						return;
+					}
+					resetGameAfterGhostHit();
+				}
+				if (counterGhostsMoves == 20) {
+						counterGhostsMoves = 0;
+					}
+				else {
+						counterGhostsMoves++;
+					}
+				_ghosts[i].SmartMove(getPacman(), getBoard());
+				MoveAndPrintGhost(_ghosts[i]);
+				if (isGhostHitPacman(_ghosts[i].getPosition())) {
+						setHealth();
+						if (getHealth() == 0) {
+							gameOver(false);
+							return;
+						}
+						resetGameAfterGhostHit();
+					}
+					printGhostFlag = 0;
+				}
 			}
-			resetGameAfterGhostHit(ghost1, ghost2);
+		else {
+			printGhostFlag = 1;
 		}
 		if (isPacmanAteFood()) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
@@ -97,37 +111,7 @@ void Game::startGame(bool isWithColor) {
 			movePacmanThruTunnel(_pacman);
 			if (isPacmanAteFood()) setPoints();
 		}
-		if (printGhostFlag) {
-			if (counterGhostsMoves == 20) {
-				ghost1.changeDirection();
-				counterGhostsMoves = 0;
-			}
-			else {
-				counterGhostsMoves++;
-			}
-			ghost2.SmartMove(getPacman(), getBoard());
-			MoveAndPrintGhost(ghost1);
-			if (isGhostHitPacman(ghost1.getPosition())) {
-				setHealth();
-				if (getHealth() == 0) {
-					gameOver(false);
-					return;
-				}
-				resetGameAfterGhostHit(ghost1, ghost2);
-			}
-			MoveAndPrintGhost(ghost2);
-			if (isGhostHitPacman(ghost2.getPosition())) {
-				setHealth();
-				if (getHealth() == 0) {
-					gameOver(false);
-					return;
-				}
-				resetGameAfterGhostHit(ghost1, ghost2);
-			}
-			printGhostFlag = 0;
-		}
-		else
-			printGhostFlag = 1;   
+
 	}
 	gameOver(true);
 
@@ -136,16 +120,16 @@ void Game::startGame(bool isWithColor) {
 void Game::movePacmanThruTunnel(Pacman& pacman) {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
-	if (xPos == 0) _pacman.setX(ROW_SIZE-1);
-	else if (xPos == ROW_SIZE-1) _pacman.setX(0);
-	else if (yPos == 0) _pacman.setY(COL_SIZE-1);
-	else if (yPos == COL_SIZE-1) _pacman.setY(0);
+	if (xPos == 0) _pacman.setX(getWidth()-1);
+	else if (xPos == getWidth()-1) _pacman.setX(0);
+	else if (yPos == 0) _pacman.setY(getHeight()-1);
+	else if (yPos == getHeight()-1) _pacman.setY(0);
 }
 
 const bool Game::isTunnel(Pacman& pacman) const {
 	const int xPos = pacman.getPosition().getX();
 	const int yPos = pacman.getPosition().getY();
-	if (xPos == 0 || xPos == ROW_SIZE-1 || yPos == 0 || yPos == COL_SIZE-1)
+	if (xPos == 0 || xPos == getWidth()-1 || yPos == 0 || yPos == getHeight()-1)
 		return true;
 	return false;
 }
@@ -241,20 +225,18 @@ void Game::MoveAndPrintGhost(Ghost& ghost) {
 	ghost.print(_isWithColor);
 }
 
-const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost1,  Ghost& ghost2) const {
-	 if (position.getX() == ghost1.getX() && position.getY() == ghost1.getY())
-		 return true;
-	 if (position.getX() == ghost2.getX() && position.getY() == ghost2.getY())
-		 return true;
+const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost) const {
+	if (position.getX() == ghost.getX() && position.getY() == ghost.getY())
+		return true;
 	 return false;
  }
 
-void Game::resetGameAfterGhostHit(Ghost& ghost1, Ghost& ghost2) {
+void Game::resetGameAfterGhostHit() {
 	_pacman.startPosition();
-	deleteGhostLastMove(ghost1);
-	deleteGhostLastMove(ghost2);
-	ghost1.changePosition(9, 34); // TODO: CHNAGE INIT VALUE
-	ghost2.changePosition(11, 34);
+	for (int i = 0; i < _numOfGhosts; i++) {
+		deleteGhostLastMove(_ghosts[i]);
+		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
+	}
 }
 
 void Game::setPoints() { 
@@ -285,4 +267,20 @@ void Game::printInstructions()const {
 	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
 	cout << "  Have FUN" << endl << endl;
 }
+
+void Game::createGhosts(){
+	Square* arr = new Square[_numOfGhosts];
+	_board.getGhosts(arr);
+	for (int i = 0; i < _numOfGhosts; i++) {
+		if (i % 2 == 0) {
+			Ghost g1((int)DIRECTIONS::RIGHT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
+			_ghosts[i] = g1;
+		}
+		else {
+			Ghost g2((int)DIRECTIONS::LEFT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
+			_ghosts[i] = g2;
+		}
+	}
+}
+
 

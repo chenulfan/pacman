@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <windows.h>
+#include <fstream>
+#include <sstream>
 using namespace std;
 
 
@@ -16,7 +18,7 @@ using std::endl;
 void goToXY(int x, int y);
 void changeColor(int color);
 
-enum class SqrType { EMPTY, FOOD, WALL, PACMAN, GHOST };
+enum class SqrType { EMPTY, FOOD, WALL, PACMAN, GHOST,LEGEND };
 
 class Square {
 

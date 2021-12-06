@@ -9,10 +9,14 @@ void Ghost::changeDirection() {
 	}
 	_direction = randomdirection;
 }
-Ghost::Ghost(const int direction, const int x, const int y)
+Ghost::Ghost(const int direction, const int height, const int width, const int x, const int y)
 {
+	_height = height;
+	_width = width;
 	_position.setSquare(x, y, SqrType::GHOST);
 	_direction = direction;
+	_startX = x;
+	_startY = y;
 }
 void Ghost::Move() {
 	switch ((DIRECTIONS)_direction)
@@ -98,7 +102,7 @@ void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
 const bool Ghost::isTunnel(Square& position) const {
 	const int xPos = position.getX();
 	const int yPos = position.getY();
-	if (xPos == 0 || xPos == WIDTH - 1 || yPos == 0 || yPos == HEIGHT - 1)
+	if (xPos == 0 || xPos == _width - 1 || yPos == 0 || yPos == _height - 1)
 		return true;
 	return false;
 }

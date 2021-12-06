@@ -150,6 +150,7 @@
     <ClCompile Include="board.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Ghost.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="pacman.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="square.cpp" />

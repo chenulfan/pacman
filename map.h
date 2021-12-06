@@ -1,31 +1,17 @@
 #pragma once
 
-#pragma once
-
-static const int HEIGHT = 19;
-static const int WIDTH = 70;
-
-
-static const char w = '#'; //wall      
-static const char b = '&'; // breadcrumbw
-
-char map[HEIGHT][WIDTH] =
-{ {w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w},
- {w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, w, w, w, w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, w, w, w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, w},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, b, b, b, b, b, b, b, b, b, b, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, w, w, b, w, b, b, b, b, b, b, b, b, b, b, w, b, w, b, w, w, w, b, b, b, b, b, b, w, w, b, b, b, b, b, b, b, b, b, b, w, w, w, w, b, b},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, w, w, w, w, w, w, w, w, b, w, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, b, b, b, b, b, b, b, b, b, w, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {w, b, w, w, w, w, b, w, w, w, w, w, w, b, w, w, w, w, b, w, w, w, w, b, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w},
- {w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, b, b, b, b, b, b, b, b, b, b, b, w, b, b, b, b, b, w, b, b, b, b, b, w, w, w, w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, b, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, b, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w},
- {w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, b, w},
- {w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, b, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w, w} };
+#include "square.h"
+using std::ifstream;
+class Map {
+private:
+	int _height;
+	int _width;
+	int _screenHeigh;
+	int _screenWidth;
+public:
+	Square** readMapFromFile(int* foodCounter,int* ghostCounter);
+	Square** initArr();
+	void CheckBoardSize();
+	const int getHeight() const { return _height; }
+	const int getWidth() const { return _width; }
+};

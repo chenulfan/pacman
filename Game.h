@@ -27,14 +27,15 @@ private:
 	int _points=0;
 	bool _isWithColor= false;
 	int _maxPoints = 0;
-
+	int _numOfGhosts = 0;
+	Ghost _ghosts[4];
+	//GHOST DESTRACTOR!
 public:
 	int getKey()const;
 	void startGame(const bool withColor);
 	const bool isGhostHitWall(Square position) const;
-	const bool isPacmanHitGhost(Square position, Ghost &ghost1, Ghost &ghost2) const ;
+	const bool isPacmanHitGhost(Square position, Ghost &ghost) const ;
 	const bool isNextMoveIsAWall(const int x, const int y, Board b) const;
-	void gameOver();
 	void clear();
 	void printMenu()const;
 	void printBanner()const;
@@ -44,12 +45,13 @@ public:
 	const int getMaxPoints() const { return _maxPoints; };
 	Board getBoard() const { return _board; };
 	Pacman getPacman() const { return _pacman; }
-
+	const int getHeight() const { return _board.getHeight(); }
+	const int getWidth() const { return _board.getWidth(); }
 	void setMaxPoints(const int num) { _maxPoints = num; };
 	void setPoints();
 	void setHealth();
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
-	void resetGameAfterGhostHit(Ghost &ghost1, Ghost &ghost2);
+	void resetGameAfterGhostHit();
 	void deletePacmanLastMove();
 	const bool isPacmanAteFood() const;
 	const bool isTunnel(Pacman& pacman) const;
@@ -58,5 +60,6 @@ public:
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
 	void gameOver(const bool isWon);
+	void createGhosts();
 };
 
