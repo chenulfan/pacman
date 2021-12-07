@@ -11,6 +11,10 @@ private:
 	Square _position;
 
 public:
+	Pacman& operator=(Square& s) {
+		_position = s;
+		return *this;
+	}
 	Pacman() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, SqrType::PACMAN); };
 	void print(const bool isWithColor) { _position.print(isWithColor); }
 	const int getX() const { return _position.getX(); }

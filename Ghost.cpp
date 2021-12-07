@@ -55,10 +55,18 @@ void Ghost::changePosition(const int y, const int x) {
 	setX(x);
 	setY(y);
 }
+bool** Ghost::initArr() {
+	bool** arr = new bool * [_height];
+	for (int i = 0; i < _height; ++i) {
+		arr[i] = new bool[_width];
+	}
+	return arr;
+}
+
 void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
 	queSquare tempNode,nodeFront;
 	int x, y,counter,firstIteration = 0;;
-	bool visited[19][70] = {};
+	bool** visited = initArr();
 	std::queue<queSquare> queue;
 	Square arr[4] = {};
 	queSquare start = { _position };

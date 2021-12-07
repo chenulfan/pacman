@@ -29,7 +29,7 @@ private:
 	int _maxPoints = 0;
 	int _numOfGhosts = 0;
 	Ghost _ghosts[4];
-	//GHOST DESTRACTOR!
+	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;
 	void startGame(const bool withColor);

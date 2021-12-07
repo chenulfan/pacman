@@ -57,4 +57,5 @@ public:
 	void oneMoveBack();
 	void SmartMove(const Pacman& pacman, const Board& b);
 	const bool isTunnel(Square& position) const;
+	bool** initArr();
 };

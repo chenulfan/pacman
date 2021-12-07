@@ -19,11 +19,13 @@ void clearConsoleRow() {
 
 void Game::startGame(bool isWithColor) {
 	char prevKey = RIGHT;
-
+	Square pacmanStart;
 	setWithColor(isWithColor);
-	setMaxPoints(_board.initBoard(&_numOfGhosts));
+	setMaxPoints(_board.initBoard(_numOfGhosts,pacmanStart));
 	_board.printBoard(isWithColor);
+	_pacman = pacmanStart;
 	_pacman.print(isWithColor);
+	_board.updateActualGameBoardHeight();
 	createGhosts();
 	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;

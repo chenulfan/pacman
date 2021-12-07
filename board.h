@@ -9,6 +9,7 @@ private:
     int _height;
     int _width;
     int _amountOfGhosts;
+    int _distanceFromFirstRow;
     Map _screen;
     //DESTRUCTOR FRO SQUARES
 public:
@@ -16,9 +17,11 @@ public:
     const int getWidth() const { return _width; }
     const Square getSquare(const int y, const int x) const { return _squares[y][x]; };
     void printBoard(const bool isWithColor);
-    int initBoard(int* amountOfGhosts);
+    int initBoard(int& amountOfGhosts, Square& pacmanStart);
     void setTunnels();
     void setSqrType(const int y, const int x, const SqrType sqr) { _squares[y][x].setSqrType(sqr); }
     void getGhosts(Square* ghosts) const;
+    void printBanner(bool isWithColor)const;
+    void updateActualGameBoardHeight();
 };
 

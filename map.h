@@ -9,9 +9,11 @@ private:
 	int _screenHeigh;
 	int _screenWidth;
 public:
-	Square** readMapFromFile(int* foodCounter,int* ghostCounter);
+	Square** readMapFromFile(int& foodCounter,int& ghostCounter, Square& pacmanStart);
 	Square** initArr();
-	void CheckBoardSize();
 	const int getHeight() const { return _height; }
 	const int getWidth() const { return _width; }
+	int getFirstRowSize();
+	int getColSize();
+	void checkBoardSize();
 };

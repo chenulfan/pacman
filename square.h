@@ -36,6 +36,7 @@ class Square {
         void setSquare(const int x, const int y, const SqrType sqrType);
         void setSquare(const Square& b);
         void print(const bool isWithColor);
+        void printBanner(bool isWithColor);
 
 };
 
