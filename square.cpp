@@ -51,6 +51,7 @@ void changeColor(int color) {
     SetConsoleTextAttribute(hConsole, color);
 }
 
+
 void Square::setSquare(const int x, const int y, const SqrType sqrType) {
     this->setX(x);
     this->setY(y);

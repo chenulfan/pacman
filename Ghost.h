@@ -1,7 +1,7 @@
 #pragma once
 #include "square.h"
 #include "pacman.h"
-#include "board.h"
+//#include "board.h"
 #include <string>
 #include <cstdlib>
 #include <time.h>
@@ -25,23 +25,16 @@ class Ghost {
 
 	Square _position;
 	int _direction = 0;
-	int _height = 0;
-	int _width = 0;
 	int _startX = 0;
 	int _startY = 0;
+	//int _height = 0;
+	//int _width = 0;
 
 public:
 	Ghost() {};
-	Ghost(const int direction , const int height, const int width , const int , const int y );
-	Ghost& operator=(Ghost& s) {
-		_position = s._position;
-		_direction = s._direction;
-		_height = s._height;
-		_width = s._width;
-		_startX = s._startX;
-		_startY = s._startY;
-		return *this; 
-	}
+	Ghost(int direction, int x, int y);
+	Ghost& operator=(Ghost& s);
+
 
 	void print(const bool isWithColor) { _position.print(isWithColor); };
 	int getX() { return _position.getX(); }
@@ -55,7 +48,7 @@ public:
 	void Move();
 	void changePosition(const int y, const int x);
 	void oneMoveBack();
-	void SmartMove(const Pacman& pacman, const Board& b);
-	const bool isTunnel(Square& position) const;
-	bool** initArr();
+	//const bool isTunnel(Square& position) const;
+	//void SmartMove(const Pacman& pacman, const Board& b);
+	//bool** initArr();
 };

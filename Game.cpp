@@ -21,14 +21,24 @@ void Game::startGame(bool isWithColor) {
 	char prevKey = RIGHT;
 	Square pacmanStart;
 	setWithColor(isWithColor);
-	setMaxPoints(_board.initBoard(_numOfGhosts,pacmanStart));
+	
+	int maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend);
+
+	setMaxPoints(maxPoints);
+
 	_board.printBoard(isWithColor);
+
 	_pacman = pacmanStart;
+
 	_pacman.print(isWithColor);
-	_board.updateActualGameBoardHeight();
-	createGhosts();
+
+	//createGhosts();
+	
+	
 	int counterGhostsMoves = 0;
 	bool printGhostFlag = 1;
+
+
 	for (int i = 0; i < _numOfGhosts; i++) { _ghosts[i].print(isWithColor); }
 	while (_health != 0 && _points != _maxPoints){
 		prevKey = _playerKey;
@@ -70,7 +80,9 @@ void Game::startGame(bool isWithColor) {
 			case STAY:
 				break;
 		}
+		
 		_pacman.print(isWithColor);
+
 		if (printGhostFlag){
 			for (int i = 0; i < _numOfGhosts; i++) {
 				if (isPacmanHitGhost(_pacman.getPosition(), _ghosts[i])) {
@@ -87,7 +99,11 @@ void Game::startGame(bool isWithColor) {
 				else {
 						counterGhostsMoves++;
 					}
-				_ghosts[i].SmartMove(getPacman(), getBoard());
+
+				//-------------------------------------------
+				//_ghosts[i].SmartMove(getPacman(), getBoard());
+				//-------------------------------------------
+
 				MoveAndPrintGhost(_ghosts[i]);
 				if (isGhostHitPacman(_ghosts[i].getPosition())) {
 						setHealth();
@@ -107,16 +123,13 @@ void Game::startGame(bool isWithColor) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 			setPoints();
 		}
-
 		if (isTunnel(_pacman)) {
 			deletePacmanLastMove();
 			movePacmanThruTunnel(_pacman);
 			if (isPacmanAteFood()) setPoints();
 		}
-
 	}
 	gameOver(true);
-
 }
 
 void Game::movePacmanThruTunnel(Pacman& pacman) {
@@ -269,20 +282,20 @@ void Game::printInstructions()const {
 	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
 	cout << "  Have FUN" << endl << endl;
 }
-
-void Game::createGhosts(){
-	Square* arr = new Square[_numOfGhosts];
-	_board.getGhosts(arr);
-	for (int i = 0; i < _numOfGhosts; i++) {
-		if (i % 2 == 0) {
-			Ghost g1((int)DIRECTIONS::RIGHT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
-			_ghosts[i] = g1;
-		}
-		else {
-			Ghost g2((int)DIRECTIONS::LEFT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
-			_ghosts[i] = g2;
-		}
-	}
-}
+//
+//void Game::createGhosts(){
+//	Square* arr = new Square[_numOfGhosts];
+//	_board.getGhosts(arr);
+//	for (int i = 0; i < _numOfGhosts; i++) {
+//		if (i % 2 == 0) {
+//			Ghost g1((int)DIRECTIONS::RIGHT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
+//			_ghosts[i] = g1;
+//		}
+//		else {
+//			Ghost g2((int)DIRECTIONS::LEFT, getHeight(), getWidth(), arr[i].getX(), arr[i].getY());
+//			_ghosts[i] = g2;
+//		}
+//	}
+//}
 
 

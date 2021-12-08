@@ -29,6 +29,7 @@ private:
 	int _maxPoints = 0;
 	int _numOfGhosts = 0;
 	Ghost _ghosts[4];
+	Square _legend;
 	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;

@@ -1,42 +1,51 @@
 #include "map.h"
-#include <iostream>
-#include <stdlib.h>
-#include <stdio.h>
-#include <conio.h>
-#include <windows.h>
-using namespace std; 
 
-const static std::string dafuq = "mapa2.txt";
-using std::cout;
-using std::cin;
-using std::endl;
 
-const int convertType(const char type);
 
-Square** Map::readMapFromFile(int& foodCounter,int& ghostCounter, Square& pacmanStart) {
-	std::ifstream file(dafuq);
-	std::string str;
-	_width = getFirstRowSize();
+string* Map::getFromFile() {
+	ifstream f(FILENAME);
+	string str;
 	_height = getColSize();
-	int type;
-	Square** a = nullptr;
-	a = initArr();
-	for (int i = 0; i < _height; i++) {
-		getline(file, str);
-		for (int j = 0; j < _width; j++) {
-			type = convertType(str[j]);
-			if ((SqrType)type == SqrType::FOOD){foodCounter++;}
-			if ((SqrType)type == SqrType::GHOST){ghostCounter++;}
-			if ((SqrType)type == SqrType::PACMAN) { 
-				pacmanStart.setX(j); 
-				pacmanStart.setY(i); 
-				pacmanStart.setSqrType(SqrType::PACMAN); 
-			}
-			a[i][j].setSquare(j, i, (SqrType)type);
-		}
+	int index = 0;
+	string* arrOfStr = new string[_height];
+
+	while (getline(f, str)) {
+		arrOfStr[index++] = str;
 	}
-	return a;
+
+	return arrOfStr;
 }
+
+
+//
+//Square** Map::readMapFromFile(int& foodCounter,int& ghostCounter, Square& pacmanStart) {
+//
+//	int type;
+//	Square** arr = nullptr;
+//	ifstream file(dafuq);
+//	string str;
+//
+//	_width = getFirstRowSize();
+//	_height = getColSize();
+//
+//	arr = initArr();
+//	
+//	for (int i = 0; i < _height; i++) {
+//		getline(file, str);
+//		for (int j = 0; j < _width; j++) {
+//			type = convertType(str[j]);
+//			if ((SqrType)type == SqrType::FOOD){foodCounter++;}
+//			if ((SqrType)type == SqrType::GHOST){ghostCounter++;}
+//			if ((SqrType)type == SqrType::PACMAN) { 
+//				pacmanStart.setX(j); 
+//				pacmanStart.setY(i); 
+//				pacmanStart.setSqrType(SqrType::PACMAN); 
+//			}
+//			arr[i][j].setSquare(j, i, (SqrType)type);
+//		}
+//	}
+//	return arr;
+//}
 
 Square** Map::initArr() {
 	Square** arr = new Square * [_height];
@@ -47,9 +56,9 @@ Square** Map::initArr() {
 }
 
 int Map::getFirstRowSize() {
-	std::ifstream file(dafuq);
-	std::string str;
-	std::getline(file, str);
+	ifstream file(FILENAME);
+	string str;
+	getline(file, str);
 	int firstRowSize = str.size();
 	if (firstRowSize > 79) { firstRowSize = 79; }
 	file.clear();
@@ -58,8 +67,8 @@ int Map::getFirstRowSize() {
 }
 
 int Map::getColSize() {
-	std::ifstream file(dafuq);
-	std::string str;
+	ifstream file(FILENAME);
+	string str;
 	int colSize = 0;
 	while (std::getline(file, str)) {
 		colSize++;
