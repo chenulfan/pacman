@@ -5,9 +5,9 @@
 bool isWall(const int* arr,const int j);
 
 void Board::printBoard(const bool isWithColor) {
-    for (int i = 0; i < _height + _distanceFromStart; i++) {
+    for (int i = _distanceFromStart; i < _height + _distanceFromStart; i++) {
         for (int j = 0; j < _width; j++) {
-             _squares[i][j].print(isWithColor);
+             _squares[i - _distanceFromStart][j].print(isWithColor, _distanceFromStart);
         }
     }
 }
@@ -16,9 +16,10 @@ void Board::initBoardWidth(string firstRow) {
      _width = firstRow.size();
 }
 
-int Board::initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Square& legend) {
-    int foodCounter = 0, ghostCounter = 0, type = 0;
-    
+int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Square& legend) {
+    int foodCounter = 0, type = 0;
+    ghostCounter = 0;
+
     string* map = _screen.getFromFile();
     
     initBoardWidth(map[0]);
@@ -28,17 +29,7 @@ int Board::initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Sq
 
     legend = getLegendPos(map, _screen.getHeight());
 
-    analyzeBoard(map, _screen.getHeight(), ghosts, amountOfGhosts, pacmanStart, foodCounter);
-    int z =5;
-
-
-  //  _squares = _screen.readMapFromFile(foodCounter,ghostCounter,pacmanStart);
-
-
-    //updateActualGameBoardHeight();
-
-    //_height = _screen.getHeight();
-    amountOfGhosts = ghostCounter;
+    analyzeBoard(map, _screen.getHeight(), ghosts, ghostCounter, pacmanStart, foodCounter);
 
     return foodCounter;
 }
@@ -79,7 +70,7 @@ void Board::analyzeBoard( string* map, int len, Ghost* ghosts, int& ghostCounter
                 pacmanStart.setX(j);
                 pacmanStart.setY(i - _distanceFromStart);
                 pacmanStart.setSqrType(SqrType::PACMAN);
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::EMPTY); // TODO : CHECK IF PACMAN TYPE
+                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::PACMAN); // TODO : CHECK IF PACMAN TYPE
             }
 
             else {
@@ -158,6 +149,7 @@ void Board::getGhosts(Square* ghosts) const {
 void Board::updateActualGameBoardHeight(string* map, int len) {
     int start = 0, end = 0, counter = 0;
     bool firstRowWall = false;
+
     for (int i = 0; i < len ; i++) {
         counter = 0;
         for (int j = 0; j < map[i].size(); j++) {
@@ -176,7 +168,7 @@ void Board::updateActualGameBoardHeight(string* map, int len) {
             }
         }
         if (counter == 0 && firstRowWall) {
-            end = i - 1;
+            end = i;
             break;
         }
     }

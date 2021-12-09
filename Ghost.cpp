@@ -125,3 +125,4 @@ void Ghost::changePosition(const int y, const int x) {
 //	//	return true;
 //	return false;
 //}
+

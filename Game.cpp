@@ -6,11 +6,11 @@
 
 
 void Game::printBanner()const {
-	goToXY(0,getHeight() + 2);
+	goToXY(_legend.getX(), _legend.getY());
 	clearConsoleRow();
 	if(_isWithColor) changeColor(10);
 	cout << "[ Life: " << getHealth() << " | Score: " << getPoints() << " ]";
-	goToXY(_pacman.getX(), _pacman.getY());
+	goToXY(_pacman.getX(), _pacman.getY() + _board.getDistantceFromStart());
 }
 
 void clearConsoleRow() {
@@ -19,27 +19,27 @@ void clearConsoleRow() {
 
 void Game::startGame(bool isWithColor) {
 	char prevKey = RIGHT;
+	int maxPoints, smartMoveDirection, counterGhostsMoves = 0;
+	bool printGhostFlag = 1;
 	Square pacmanStart;
 	setWithColor(isWithColor);
 	
-	int maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend);
+	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend);
 
 	setMaxPoints(maxPoints);
+	
+	printBanner();
+
+	goToXY(0, _board.getDistantceFromStart());
 
 	_board.printBoard(isWithColor);
 
 	_pacman = pacmanStart;
 
-	_pacman.print(isWithColor);
+	_pacman.print(isWithColor, _board.getDistantceFromStart());
 
-	//createGhosts();
-	
-	
-	int counterGhostsMoves = 0;
-	bool printGhostFlag = 1;
+	printGhosts(isWithColor);
 
-
-	for (int i = 0; i < _numOfGhosts; i++) { _ghosts[i].print(isWithColor); }
 	while (_health != 0 && _points != _maxPoints){
 		prevKey = _playerKey;
 		Sleep(SPEED);
@@ -81,7 +81,7 @@ void Game::startGame(bool isWithColor) {
 				break;
 		}
 		
-		_pacman.print(isWithColor);
+		_pacman.print(isWithColor, _board.getDistantceFromStart());
 
 		if (printGhostFlag){
 			for (int i = 0; i < _numOfGhosts; i++) {
@@ -100,9 +100,8 @@ void Game::startGame(bool isWithColor) {
 						counterGhostsMoves++;
 					}
 
-				//-------------------------------------------
-				//_ghosts[i].SmartMove(getPacman(), getBoard());
-				//-------------------------------------------
+				smartMoveDirection = smartMove(_ghosts[i]);
+				_ghosts[i].setDirection(smartMoveDirection);
 
 				MoveAndPrintGhost(_ghosts[i]);
 				if (isGhostHitPacman(_ghosts[i].getPosition())) {
@@ -132,6 +131,12 @@ void Game::startGame(bool isWithColor) {
 	gameOver(true);
 }
 
+void Game::printGhosts(int isWithColor) {
+	for (int i = 0; i < _numOfGhosts; i++) {
+		_ghosts[i].print(isWithColor, _board.getDistantceFromStart());
+	}
+}
+
 void Game::movePacmanThruTunnel(Pacman& pacman) {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
@@ -158,12 +163,12 @@ const bool Game::isPacmanAteFood() const {
 
 void Game::deletePacmanLastMove() {
 	_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
-	goToXY(_pacman.getX(), _pacman.getY());
+	goToXY(_pacman.getX(), _pacman.getY() + _board.getDistantceFromStart());
 	cout << " ";
 }
 
 void Game::deleteGhostLastMove(Ghost& ghost) {
-	goToXY(ghost.getX(), ghost.getY());
+	goToXY(ghost.getX(), ghost.getY() + _board.getDistantceFromStart());
 	cout << " ";
 }
 
@@ -229,7 +234,7 @@ int Game::getKey()const
 void Game::MoveAndPrintGhost(Ghost& ghost) {
 	Square boardPositionOfGhost = _board.getSquare(ghost.getY(), ghost.getX());
 	deleteGhostLastMove(ghost);
-	boardPositionOfGhost.print(_isWithColor);
+	boardPositionOfGhost.print(_isWithColor, _board.getDistantceFromStart());
 	
 	ghost.Move();
 	while (isGhostHitWall(ghost.getPosition())) {
@@ -237,7 +242,7 @@ void Game::MoveAndPrintGhost(Ghost& ghost) {
 		ghost.changeDirection();
 		ghost.Move();
 	}
-	ghost.print(_isWithColor);
+	ghost.print(_isWithColor, _board.getDistantceFromStart());
 }
 
 const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost) const {
@@ -282,6 +287,154 @@ void Game::printInstructions()const {
 	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
 	cout << "  Have FUN" << endl << endl;
 }
+
+
+
+
+int Game::smartMove(const Ghost& ghost) {
+	queSquare tempNode,nodeFront;
+	int x, y,counter,firstIteration = 0;;
+	bool** visited = initArr();
+	queue<queSquare> queue;
+	Square arr[4] = {};
+	queSquare start = { ghost.getPosition() };
+	queue.push(start);
+	while (!queue.empty()) {
+		nodeFront = queue.front();
+		queue.pop();
+		x = nodeFront.currSquare.getX();
+		y = nodeFront.currSquare.getY();
+		visited[y][x] = true;
+		if (x == _pacman.getX() && y == _pacman.getY()) {
+			break;
+		}
+		else {
+			arr[0] = _board.getSquare(y, x+1);
+			arr[1] = _board.getSquare(y, x-1);
+			arr[2] = _board.getSquare(y+1, x);
+			arr[3] = _board.getSquare(y-1, x);
+			counter = 0;
+			for (Square i : arr) { 
+				x = i.getX();
+				y = i.getY();
+				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
+					if (!firstIteration) {
+						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
+						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
+						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
+						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
+					}
+					else { tempNode = { i,nodeFront.move };}
+					queue.push(tempNode);
+				}
+				counter++;
+			}
+		}
+		firstIteration++;
+	}
+	
+	return (int)nodeFront.move;
+}
+
+bool** Game::initArr() {
+	int height = _board.getHeight();
+	int width = _board.getWidth();
+	bool** arr = new bool* [height];
+	for (int i = 0; i < height; ++i) {
+		arr[i] = new bool[width];
+	}
+	return arr;
+}
+
+const bool Game::isTunnel(Square& position) const {
+	int height = _board.getHeight();
+	int width = _board.getWidth();
+	const int xPos = position.getX();
+	const int yPos = position.getY();
+	if (xPos == 0 || xPos == width - 1 || yPos == 0 || yPos == height - 1)
+		return true;
+	return false;
+}
+
+
+
+//int Game::smartMove(const Ghost& ghsot) {
+//	queue<string> queue;
+//	int direction;
+//	queue.push("");
+//	int row, col;
+//	row = ghsot.getY();
+//	col = ghsot.getY();
+//	string moves = "";
+//
+//	while (!foundPacman(row, col, moves)) {
+//		string arr = { 'U', 'D', 'L', 'R' };
+//		string top = queue.front();
+//		queue.pop();
+//		for (auto key : arr) {
+//			if (isValidMove(row, col, moves)) {
+//				queue.push(top + key);
+//			}
+//		}
+//		moves = queue.front();
+//	}
+//	switch (moves[0]) {
+//	case 'U':
+//		direction = (int)DIRECTIONS::UP;
+//	case 'D':
+//		direction = (int)DIRECTIONS::DOWN;
+//	case 'L':
+//		direction = (int)DIRECTIONS::LEFT;
+//	case 'R':
+//		direction = (int)DIRECTIONS::RIGHT;
+//	}
+//	return direction;
+//}
+//
+//
+//bool Game::isValidMove(int row, int col, string moves) {
+//	for (auto move : moves) {
+//		if (move == 'L')
+//			col -= 1;
+//		else if (move == 'R')
+//			col += 1;
+//		else if (move == 'U')
+//			row -= 1;
+//		else if (move == 'D')
+//			row += 1;
+//	}
+//	if (row == 10) {
+//		int z = 5;
+//	}
+//	if (_board.getSquare(row, col).getSqrType() == SqrType::WALL)
+//		return false;
+//	if (row < 0 || row > _board.getHeight() - 1)
+//		return false;
+//	if (col < 0 || col > _board.getWidth() - 1)
+//		return false;
+//	return true;
+//}
+//
+//bool Game::foundPacman(int row, int col, string moves) {
+//	for (auto move : moves) {
+//		if (move == 'L')
+//			col -= 1;
+//		else if (move == 'R')
+//			col += 1;
+//		else if (move == 'U')
+//			row -= 1;
+//		else if (move == 'D')
+//			row += 1;
+//	}
+//	if (row == 10) {
+//		int z = 0;
+//	}
+//	if (_board.getSquare(row, col).getSqrType() == SqrType::PACMAN)
+//		return true;
+//	return false;
+//}
+
+
 //
 //void Game::createGhosts(){
 //	Square* arr = new Square[_numOfGhosts];

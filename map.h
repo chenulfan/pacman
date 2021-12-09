@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,7 +7,7 @@
 #include <windows.h>
 #include "square.h"
 
-const static std::string FILENAME = "mapa2.txt";
+const static std::string FILENAME = "mapa.txt";
 using std::cout;
 using std::cin;
 using std::endl;

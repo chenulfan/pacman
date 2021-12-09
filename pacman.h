@@ -16,7 +16,7 @@ public:
 		return *this;
 	}
 	Pacman() { _position.setSquare(PACMAN_START_Y, PACMAN_START_X, SqrType::PACMAN); };
-	void print(const bool isWithColor) { _position.print(isWithColor); }
+	void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); }
 	const int getX() const { return _position.getX(); }
 	const int getY() const { return _position.getY(); }
 	Square getPosition() const { return _position; };

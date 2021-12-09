@@ -5,8 +5,8 @@
 
 class Board {
 private:
-    int _length;
     Square** _squares;
+    int _length;
     int _height;
     int _width;
     int _amountOfGhosts;
@@ -17,6 +17,7 @@ private:
 public:
     const int getHeight() const { return _height; }
     const int getWidth() const { return _width; }
+    const int getDistantceFromStart() const { return _distanceFromStart; }
     const Square getSquare(const int y, const int x) const { return _squares[y][x]; };
     void printBoard(const bool isWithColor);
     void setTunnels();

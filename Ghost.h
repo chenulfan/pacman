@@ -1,4 +1,5 @@
 #pragma once
+
 #include "square.h"
 #include "pacman.h"
 //#include "board.h"
@@ -15,7 +16,9 @@
 
 static const int GHOST_START_X = 38;
 static const int GHOST_START_Y = 10;
+
 enum class DIRECTIONS { RIGHT, DOWN, LEFT, UP,DEAD};
+
 struct queSquare {
 	Square currSquare;
 	DIRECTIONS move;
@@ -36,15 +39,16 @@ public:
 	Ghost& operator=(Ghost& s);
 
 
-	void print(const bool isWithColor) { _position.print(isWithColor); };
-	int getX() { return _position.getX(); }
-	int getY() { return _position.getY(); }
+	void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); };
+	int getX()const { return _position.getX(); }
+	int getY()const { return _position.getY(); }
 	int getStartX() { return _startX; }
 	int getStartY() { return _startY; }
 	void setX(const int x) { _position.setX(x); }
 	void setY(const int y) { _position.setY(y); }
-	Square& getPosition() { return _position; };
+	Square getPosition()const { return _position; };
 	void changeDirection();
+	void setDirection(int direction) { _direction = direction; };
 	void Move();
 	void changePosition(const int y, const int x);
 	void oneMoveBack();
