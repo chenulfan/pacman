@@ -118,14 +118,17 @@ void Game::startGame(bool isWithColor) {
 		else {
 			printGhostFlag = 1;
 		}
+
 		if (isPacmanAteFood()) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 			setPoints();
 		}
-		if (isTunnel(_pacman)) {
+
+		if (isTunnel(prevKey)) {
 			deletePacmanLastMove();
 			movePacmanThruTunnel(_pacman);
-			if (isPacmanAteFood()) setPoints();
+			if (isPacmanAteFood()) 
+				setPoints();
 		}
 	}
 	gameOver(true);
@@ -146,11 +149,25 @@ void Game::movePacmanThruTunnel(Pacman& pacman) {
 	else if (yPos == getHeight()-1) _pacman.setY(0);
 }
 
-const bool Game::isTunnel(Pacman& pacman) const {
-	const int xPos = pacman.getPosition().getX();
-	const int yPos = pacman.getPosition().getY();
-	if (xPos == 0 || xPos == getWidth()-1 || yPos == 0 || yPos == getHeight()-1)
+const bool Game::isTunnel(char& playerKey) {
+	const int xPos = _pacman.getPosition().getX();
+	const int yPos = _pacman.getPosition().getY();
+	bool ret;
+	if (xPos == 0 )
+		ret = _board.getSquare(yPos, getWidth() - 1).getSqrType() != SqrType::WALL;
+	else if (xPos == getWidth() - 1) 
+		ret = _board.getSquare(yPos, 0).getSqrType() != SqrType::WALL;
+	else if(yPos == 0)
+		ret = _board.getSquare(getHeight() - 1, xPos).getSqrType() != SqrType::WALL;
+	else if(yPos == getHeight() - 1)
+		ret = _board.getSquare(0, xPos).getSqrType() != SqrType::WALL;
+	else {
+		return false;
+	}
+
+	if (ret) 
 		return true;
+	setPlayerKey(STAY);
 	return false;
 }
 
@@ -252,7 +269,7 @@ const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost) const {
  }
 
 void Game::resetGameAfterGhostHit() {
-	_pacman.startPosition();
+	_pacman.moveToStartPosition();
 	for (int i = 0; i < _numOfGhosts; i++) {
 		deleteGhostLastMove(_ghosts[i]);
 		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION

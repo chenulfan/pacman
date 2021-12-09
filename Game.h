@@ -51,11 +51,12 @@ public:
 	void setMaxPoints(const int num) { _maxPoints = num; };
 	void setPoints();
 	void setHealth();
+	void setPlayerKey(char newKey) { _playerKey = newKey; };
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	void resetGameAfterGhostHit();
 	void deletePacmanLastMove();
 	const bool isPacmanAteFood() const;
-	const bool isTunnel(Pacman& pacman) const;
+	const bool isTunnel(char& prevKey);
 	void movePacmanThruTunnel(Pacman& pacman);
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
