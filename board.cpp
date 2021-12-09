@@ -2,18 +2,18 @@
 #include "board.h"
 
 
-bool isWall(const int* arr,const int j);
+bool isWall(const int* arr, const int j);
 
 void Board::printBoard(const bool isWithColor) {
     for (int i = _distanceFromStart; i < _height + _distanceFromStart; i++) {
         for (int j = 0; j < _width; j++) {
-             _squares[i - _distanceFromStart][j].print(isWithColor, _distanceFromStart);
+            _squares[i - _distanceFromStart][j].print(isWithColor, _distanceFromStart);
         }
     }
 }
 
 void Board::initBoardWidth(string firstRow) {
-     _width = firstRow.size();
+    _width = firstRow.size();
 }
 
 int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Square& legend) {
@@ -21,9 +21,11 @@ int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Squa
     ghostCounter = 0;
 
     string* map = _screen.getFromFile();
-    
+
     initBoardWidth(map[0]);
+
     updateActualGameBoardHeight(map, _screen.getHeight());
+    updateActualGameBoardWidth(map[_distanceFromStart]);
 
     _squares = initSquares();
 
@@ -34,25 +36,25 @@ int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Squa
     return foodCounter;
 }
 
-void Board::analyzeBoard( string* map, int len, Ghost* ghosts, int& ghostCounter, Square& pacmanStart, int& foodCounter) {
+void Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, Square& pacmanStart, int& foodCounter) {
     int type, start = 0;
 
-    if (_distanceFromStart == 0) 
+    if (_distanceFromStart == 0)
         len = _height;
-    else 
+    else
         start = _distanceFromStart;
 
 
     for (int i = start; i < len; ++i) {
         for (int j = 0; j < _width; ++j) {
             type = convertType(map[i][j]);
-            
+
             if ((SqrType)type == SqrType::LEGEND) {
-                _squares[i - _distanceFromStart][j].setSquare(j,i - _distanceFromStart, SqrType::LEGEND);
+                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::LEGEND);
             }
-        
+
             else if ((SqrType)type == SqrType::WALL) {
-                _squares[i - _distanceFromStart][j].setSquare(j,i - _distanceFromStart, SqrType::WALL);
+                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::WALL);
             }
 
             else if ((SqrType)type == SqrType::FOOD) {
@@ -60,12 +62,12 @@ void Board::analyzeBoard( string* map, int len, Ghost* ghosts, int& ghostCounter
                 foodCounter++;
             }
 
-            else if ((SqrType)type == SqrType::GHOST) {  
-                Ghost g((int)DIRECTIONS::RIGHT, j , i - _distanceFromStart);
+            else if ((SqrType)type == SqrType::GHOST) {
+                Ghost g((int)DIRECTIONS::RIGHT, j, i - _distanceFromStart);
                 ghosts[ghostCounter++] = g;
                 _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::EMPTY);
             }
-            
+
             else if ((SqrType)type == SqrType::PACMAN) {
                 pacmanStart.setX(j);
                 pacmanStart.setY(i - _distanceFromStart);
@@ -94,14 +96,98 @@ Square Board::getLegendPos(string* map, int len) {
     }
 }
 
-
 Square** Board::initSquares() {
-    Square** squares = new Square*[_height];
+    Square** squares = new Square * [_height];
     for (int i = 0; i < _height; ++i) {
         squares[i] = new Square[_width];
     }
     return squares;
 }
+
+void Board::getGhosts(Square* ghosts) const {
+    int counter = 0;
+    for (int i = 0; i < _height; i++) {
+        for (int j = 0; j < _width; j++) {
+            if (_squares[i][j].getSqrType() == SqrType::GHOST) {
+                ghosts[counter] = _squares[i][j];
+                _squares[i][j].setSqrType(SqrType::EMPTY);
+                counter++;
+            }
+        }
+    }
+}
+
+void Board::updateActualGameBoardWidth(string row) {
+    for (int i = 0; i < row.size(); ++i) {
+        if (row[i] != '%') {
+            _distanceFromLeft = i;
+            return;
+        }
+    }
+}
+
+void Board::updateActualGameBoardHeight(string* map, int len) {
+    int start = 0, end = 0, counter = 0;
+    bool foundFirstRow = false;
+    bool foundWall = false;
+
+    for (int i = 0; i < len; i++) {
+        foundWall = false;
+
+        for (int j = 0; j < map[i].size(); j++) {
+            if (map[i][j] == '#') {
+                foundWall = true;
+                break;
+            }
+        }
+
+        if (foundFirstRow) {
+            if (foundWall) {
+                end = i;
+            }
+        }
+        else {
+            if (foundWall) {
+                start = i;
+                _distanceFromStart = i;
+                foundFirstRow = true;
+            }
+        }
+    }
+    _height = end - start + 1;
+}
+
+bool isWall(const int* arr, const int j) {
+    const int* p = arr;
+    while (*p != -1) {
+        if (j == *p)
+            return true;
+        p++;
+    }
+    return false;
+}
+
+//for (int i = 0; i < len; i++) {
+//    foundWall = false;
+//    for (int j = 0; j < map[i].size(); j++) {
+//        if (!firstRowWall) {
+//            if (map[i][j] == '#') {
+//                foundWall = true;
+//                break;
+//            }
+//        }
+//        else if (map[i][j] == '#')
+//            counter++;
+//    }
+//    if (counter == 0 && firstRowWall) {
+//        end = i;
+//        break;
+//    }
+//}
+//if (end == 0)
+//end = len;
+//
+//_height = end - start;
 
 
 //void readMapFromFile(int& foodCounter, int& ghostCounter, Square& pacmanStart) {
@@ -132,58 +218,3 @@ Square** Board::initSquares() {
 //    }
 //}
 
-
-
-void Board::getGhosts(Square* ghosts) const {
-    int counter = 0;
-    for (int i = 0; i < _height; i++) {
-        for (int j = 0; j < _width; j++) {
-            if (_squares[i][j].getSqrType() == SqrType::GHOST) {
-                ghosts[counter] = _squares[i][j];
-                _squares[i][j].setSqrType(SqrType::EMPTY);
-                counter++;
-            }
-        }
-    }
-}
-void Board::updateActualGameBoardHeight(string* map, int len) {
-    int start = 0, end = 0, counter = 0;
-    bool firstRowWall = false;
-
-    for (int i = 0; i < len ; i++) {
-        counter = 0;
-        for (int j = 0; j < map[i].size(); j++) {
-            if (!firstRowWall) {
-                if (map[i][j] == '#') {
-                    start = i;
-                    firstRowWall = true;
-                    _distanceFromStart = i;
-                    counter = 1;
-                    break;
-                }
-            }
-            else {
-                if (map[i][j] == '#')
-                    counter++;
-            }
-        }
-        if (counter == 0 && firstRowWall) {
-            end = i;
-            break;
-        }
-    }
-    if (end == 0)
-        end = len;
-
-    _height = end - start;
-}
-
-bool isWall(const int* arr,const int j) {
-    const int* p = arr;
-    while (*p != -1) {
-        if (j == *p)
-            return true;
-        p++;
-    }
-    return false;
-}

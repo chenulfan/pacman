@@ -7,9 +7,8 @@
 
 void Game::printBanner()const {
 	goToXY(_legend.getX(), _legend.getY());
-	clearConsoleRow();
 	if(_isWithColor) changeColor(10);
-	cout << "[ Life: " << getHealth() << " | Score: " << getPoints() << " ]";
+	cout << "Life: " << getHealth() << " | Score: " << getPoints();
 	goToXY(_pacman.getX(), _pacman.getY() + _board.getDistantceFromStart());
 }
 
@@ -27,8 +26,6 @@ void Game::startGame(bool isWithColor) {
 	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend);
 
 	setMaxPoints(maxPoints);
-	
-	printBanner();
 
 	goToXY(0, _board.getDistantceFromStart());
 
@@ -39,6 +36,8 @@ void Game::startGame(bool isWithColor) {
 	_pacman.print(isWithColor, _board.getDistantceFromStart());
 
 	printGhosts(isWithColor);
+
+	printBanner();
 
 	while (_health != 0 && _points != _maxPoints){
 		prevKey = _playerKey;

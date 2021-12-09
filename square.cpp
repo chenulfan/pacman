@@ -35,14 +35,6 @@ void Square::print(const bool isWithColor, int distacneFromStart) {
             cout << "$";
             break;
         }
-        case SqrType::LEGEND: {
-            goToXY(_x, _y + distacneFromStart);
-            if (isWithColor) changeColor(10);
-            cout << "[ Life: " << 3 << " | Score: " << 0 << " ]";
-            break;
-        }
-
-
     }
 }
 
