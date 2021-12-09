@@ -3,6 +3,7 @@
 #include "map.h"
 #include "ghost.h"
 
+
 class Board {
 private:
     Square** _squares;
@@ -21,6 +22,7 @@ public:
     const int getDistantceFromStart() const { return _distanceFromStart; }
     const int getDistantceFromLeft() const { return _distanceFromLeft; }
     const Square getSquare(const int y, const int x) const { return _squares[y][x]; };
+    Square** getArrSquare() { return _squares; }
     void printBoard(const bool isWithColor);
     void setTunnels();
     void setSqrType(const int y, const int x, const SqrType sqr) { _squares[y][x].setSqrType(sqr); }

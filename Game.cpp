@@ -98,10 +98,7 @@ void Game::startGame(bool isWithColor) {
 				else {
 						counterGhostsMoves++;
 					}
-
-				smartMoveDirection = smartMove(_ghosts[i]);
-				_ghosts[i].setDirection(smartMoveDirection);
-
+				_ghosts[i].SmartMove(_pacman, _board.getArrSquare(),_board.getHeight(),_board.getWidth());
 				MoveAndPrintGhost(_ghosts[i]);
 				if (isGhostHitPacman(_ghosts[i].getPosition())) {
 						setHealth();
@@ -307,71 +304,71 @@ void Game::printInstructions()const {
 
 
 
-int Game::smartMove(const Ghost& ghost) {
-	queSquare tempNode,nodeFront;
-	int x, y,counter,firstIteration = 0;;
-	bool** visited = initArr();
-	queue<queSquare> queue;
-	Square arr[4] = {};
-	queSquare start = { ghost.getPosition() };
-	queue.push(start);
-	while (!queue.empty()) {
-		nodeFront = queue.front();
-		queue.pop();
-		x = nodeFront.currSquare.getX();
-		y = nodeFront.currSquare.getY();
-		visited[y][x] = true;
-		if (x == _pacman.getX() && y == _pacman.getY()) {
-			break;
-		}
-		else {
-			arr[0] = _board.getSquare(y, x+1);
-			arr[1] = _board.getSquare(y, x-1);
-			arr[2] = _board.getSquare(y+1, x);
-			arr[3] = _board.getSquare(y-1, x);
-			counter = 0;
-			for (Square i : arr) { 
-				x = i.getX();
-				y = i.getY();
-				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
-					if (!firstIteration) {
-						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
-						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
-						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
-						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
-					}
-					else { tempNode = { i,nodeFront.move };}
-					queue.push(tempNode);
-				}
-				counter++;
-			}
-		}
-		firstIteration++;
-	}
-	
-	return (int)nodeFront.move;
-}
-
-bool** Game::initArr() {
-	int height = _board.getHeight();
-	int width = _board.getWidth();
-	bool** arr = new bool* [height];
-	for (int i = 0; i < height; ++i) {
-		arr[i] = new bool[width];
-	}
-	return arr;
-}
-
-const bool Game::isTunnel(Square& position) const {
-	int height = _board.getHeight();
-	int width = _board.getWidth();
-	const int xPos = position.getX();
-	const int yPos = position.getY();
-	if (xPos == 0 || xPos == width - 1 || yPos == 0 || yPos == height - 1)
-		return true;
-	return false;
-}
-
+//int Game::smartMove(const Ghost& ghost) {
+//	queSquare tempNode,nodeFront;
+//	int x, y,counter,firstIteration = 0;;
+//	bool** visited = initArr();
+//	queue<queSquare> queue;
+//	Square arr[4] = {};
+//	queSquare start = { ghost.getPosition() };
+//	queue.push(start);
+//	while (!queue.empty()) {
+//		nodeFront = queue.front();
+//		queue.pop();
+//		x = nodeFront.currSquare.getX();
+//		y = nodeFront.currSquare.getY();
+//		visited[y][x] = true;
+//		if (x == _pacman.getX() && y == _pacman.getY()) {
+//			break;
+//		}
+//		else {
+//			arr[0] = _board.getSquare(y, x+1);
+//			arr[1] = _board.getSquare(y, x-1);
+//			arr[2] = _board.getSquare(y+1, x);
+//			arr[3] = _board.getSquare(y-1, x);
+//			counter = 0;
+//			for (Square i : arr) { 
+//				x = i.getX();
+//				y = i.getY();
+//				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
+//					if (!firstIteration) {
+//						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
+//						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
+//						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
+//						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
+//					}
+//					else { tempNode = { i,nodeFront.move };}
+//					queue.push(tempNode);
+//				}
+//				counter++;
+//			}
+//		}
+//		firstIteration++;
+//	}
+//	
+//	return (int)nodeFront.move;
+//}
+//
+//bool** Game::initArr() {
+//	int height = _board.getHeight();
+//	int width = _board.getWidth();
+//	bool** arr = new bool* [height];
+//	for (int i = 0; i < height; ++i) {
+//		arr[i] = new bool[width];
+//	}
+//	return arr;
+//}
+//
+//const bool Game::isTunnel(Square& position) const {
+//	int height = _board.getHeight();
+//	int width = _board.getWidth();
+//	const int xPos = position.getX();
+//	const int yPos = position.getY();
+//	if (xPos == 0 || xPos == width - 1 || yPos == 0 || yPos == height - 1)
+//		return true;
+//	return false;
+//}
+//
 
 
 //int Game::smartMove(const Ghost& ghsot) {

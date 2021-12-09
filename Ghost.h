@@ -16,6 +16,7 @@
 
 static const int GHOST_START_X = 38;
 static const int GHOST_START_Y = 10;
+class Board;
 
 enum class DIRECTIONS { RIGHT, DOWN, LEFT, UP,DEAD};
 
@@ -52,7 +53,7 @@ public:
 	void Move();
 	void changePosition(const int y, const int x);
 	void oneMoveBack();
-	//const bool isTunnel(Square& position) const;
-	//void SmartMove(const Pacman& pacman, const Board& b);
-	//bool** initArr();
+	const bool isTunnel(Square& position, const int height, const int width) const;
+	void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
+	int** initArr(const int height,const int width);
 };

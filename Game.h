@@ -62,12 +62,12 @@ public:
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
 	void gameOver(const bool isWon);
-	void createGhosts();
+	//void createGhosts();
 	void printGhosts(int isWithColor);
 
-	bool** initArr();
-	int smartMove(const Ghost& ghost);
-	const bool isTunnel(Square& position) const;
+	//bool** initArr();
+	//int smartMove(const Ghost& ghost);
+	//const bool isTunnel(Square& position) const;
 
 
 
