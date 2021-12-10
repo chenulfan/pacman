@@ -37,46 +37,44 @@ int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Squa
 }
 
 void Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, Square& pacmanStart, int& foodCounter) {
-    int type, start = 0;
+    int type, start = 0, startCol = 0;
+    int lenRow = _width;
 
-    if (_distanceFromStart == 0)
-        len = _height;
-    else
-        start = _distanceFromStart;
-
-
-    for (int i = start; i < len; ++i) {
-        for (int j = 0; j < _width; ++j) {
+    for (int i = _distanceFromStart; i < _height + _distanceFromStart; ++i) {
+        if (i == 19) {
+            int w = 5;
+        }
+        for (int j = _distanceFromLeft; j < _width + _distanceFromLeft; ++j) {
             type = convertType(map[i][j]);
 
             if ((SqrType)type == SqrType::LEGEND) {
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::LEGEND);
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::LEGEND);
             }
 
             else if ((SqrType)type == SqrType::WALL) {
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::WALL);
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::WALL);
             }
 
             else if ((SqrType)type == SqrType::FOOD) {
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::FOOD);
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::FOOD);
                 foodCounter++;
             }
 
             else if ((SqrType)type == SqrType::GHOST) {
-                Ghost g((int)DIRECTIONS::RIGHT, j, i - _distanceFromStart);
+                Ghost g((int)DIRECTIONS::RIGHT, j - _distanceFromLeft, i - _distanceFromStart);
                 ghosts[ghostCounter++] = g;
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::EMPTY);
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::EMPTY);
             }
 
             else if ((SqrType)type == SqrType::PACMAN) {
-                pacmanStart.setX(j);
+                pacmanStart.setX(j - _distanceFromLeft);
                 pacmanStart.setY(i - _distanceFromStart);
                 pacmanStart.setSqrType(SqrType::PACMAN);
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::PACMAN); // TODO : CHECK IF PACMAN TYPE
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::PACMAN); // TODO : CHECK IF PACMAN TYPE
             }
 
             else {
-                _squares[i - _distanceFromStart][j].setSquare(j, i - _distanceFromStart, SqrType::EMPTY);
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::EMPTY);
             }
         }
     }
@@ -118,13 +116,24 @@ void Board::getGhosts(Square* ghosts) const {
 }
 
 void Board::updateActualGameBoardWidth(string row) {
+    int start=0, end=0;
+    bool foundStart = false;
     for (int i = 0; i < row.size(); ++i) {
-        if (row[i] != '%') {
-            _distanceFromLeft = i;
-            return;
+        if (!foundStart) {
+            if (row[i] != '%') {
+                start = i;
+                _distanceFromLeft = i;
+                foundStart = true;
+            }
+        }
+        else {
+            if (row[i] != '%') {
+                end = i;
+            }
         }
     }
-}
+    _width = end - start + 1;
+}   
 
 void Board::updateActualGameBoardHeight(string* map, int len) {
     int start = 0, end = 0, counter = 0;

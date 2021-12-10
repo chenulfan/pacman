@@ -33,9 +33,9 @@ void Game::startGame(bool isWithColor) {
 
 	_pacman = pacmanStart;
 
-	_pacman.print(isWithColor, _board.getDistantceFromStart());
-
 	printGhosts(isWithColor);
+
+	//_pacman.print(isWithColor, _board.getDistantceFromStart(), _board.getDistantceFromLeft());
 
 	printBanner();
 
