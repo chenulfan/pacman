@@ -39,7 +39,6 @@ void Square::print(const bool isWithColor, int distacneFromStart)const {
             goToXY(_x, _y + distacneFromStart);
             if (isWithColor)
                 changeColor(2);
-            cout << "F";
             break;
         }
     }

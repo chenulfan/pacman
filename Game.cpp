@@ -89,11 +89,11 @@ void Game::startGame(bool isWithColor) {
 		else 
 			printGhostFlag = 1;
 
-		if (totalCounterMoves % 60 == 1) {
+		if (totalCounterMoves % 60 == 15) {
 			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
-			//cout << _fruit.getVal();
 			_fruit.setFruit(_board);
 			_fruit.getSqr().print(isWithColor, _board.getDistantceFromStart());
+			cout << _fruit.getVal();
 		}
 
 		if (isPacmanAteFood()) {
@@ -111,6 +111,13 @@ void Game::startGame(bool isWithColor) {
 		if (isPacmanAteFruit(_fruit)) {
 			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
 			setPoints(_fruit.getVal());
+		}
+
+
+		for (int i = 0; i < _numOfGhosts; ++i) {
+			if (isGhostAteFruit(_fruit, _ghosts[i])) {
+					_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+			}
 		}
 
 		totalCounterMoves++;
