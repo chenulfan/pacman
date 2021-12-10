@@ -1,5 +1,5 @@
 #include "Ghost.h"
-
+void printArr(const int height, const int width, int** arr);
 
 
 void Ghost::changeDirection() {
@@ -65,64 +65,82 @@ void Ghost::changePosition(const int y, const int x) {
 	setY(y);
 }
 
-//bool** Ghost::initArr() {
-//	bool** arr = new bool * [_height];
-//	for (int i = 0; i < _height; ++i) {
-//		arr[i] = new bool[_width];
-//	}
-//	return arr;
-//}
+int** Ghost::initArr(const int height,const int width) {
+	int** arr = new int * [height];
+	for (int i = 0; i < height; ++i) {
+		arr[i] = new int[width];
+		for (int j = 0; j < width; ++j) {
+			arr[i][j] = 0;
+		}
+	}
+	return arr;
+}
 
-//void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
-//	queSquare tempNode,nodeFront;
-//	int x, y,counter,firstIteration = 0;;
-//	bool** visited = initArr();
-//	queue<queSquare> queue;
-//	Square arr[4] = {};
-//	queSquare start = { _position };
-//	queue.push(start);
-//	while (!queue.empty()) {
-//		nodeFront = queue.front();
-//		queue.pop();
-//		x = nodeFront.currSquare.getX();
-//		y = nodeFront.currSquare.getY();
-//		visited[y][x] = true;
-//		if (x == pacman.getX() && y == pacman.getY()) {
-//			break;
-//		}
-//		else {
-//			arr[0] = b.getSquare(y, x+1);
-//			arr[1] = b.getSquare(y, x-1);
-//			arr[2] = b.getSquare(y+1, x);
-//			arr[3] = b.getSquare(y-1, x);
-//			counter = 0;
-//			for (Square i : arr) { 
-//				x = i.getX();
-//				y = i.getY();
-//				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
-//					if (!firstIteration) {
-//						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
-//						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
-//						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
-//						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
-//					}
-//					else { tempNode = { i,nodeFront.move };}
-//					queue.push(tempNode);
-//				}
-//				counter++;
-//			}
-//		}
-//		firstIteration++;
-//	}
-//	
-//	_direction = (int)nodeFront.move;
-//}
+void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const int width) {
+	queSquare tempNode,nodeFront;
+	int counter2 = 0;
+	int x, y,counter,firstIteration = 0;;
+	int** visited = initArr(height,width);
+	queue<queSquare> queue;
+	Square arr[4] = {};
+	queSquare start = { _position };
+	queue.push(start);
+	while (!queue.empty()) {
+		nodeFront = queue.front();
+		queue.pop();
+		x = nodeFront.currSquare.getX();
+		y = nodeFront.currSquare.getY();
+		visited[y][x] = 1;
+		if (x == pacman.getX() && y == pacman.getY()) {
+			break;
+		}
+		else {
+			arr[0] = b[ y ][ x + 1 ];
+			arr[1] = b[ y ][ x-1];
+			arr[2] = b[ y+1 ][ x ];
+			arr[3] = b[ y-1 ][ x ];
+			counter = 0;
+			for (Square i : arr) { 
+				x = i.getX();
+				y = i.getY();
+				if (visited[y][x] == 0 && i.getSqrType() != SqrType::WALL && !(isTunnel(i,height,width))) {
+					if (counter2 >= 300000) { printArr(height, width, visited); 
+					int wtf = 5;
+					counter2 = 0;
+					}
+					if (!firstIteration) {
+						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
+						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
+						if (counter == 2) { tempNode = { i,DIRECTIONS::DOWN }; }
+						if (counter == 3) { tempNode = { i,DIRECTIONS::UP }; }
+					}
+					else { tempNode = { i,nodeFront.move };}
+					queue.push(tempNode);
+					counter2++;
+				}
+				counter++;
+			}
+		}
+		firstIteration++;
+	}
+	
+	_direction = (int)nodeFront.move;
+}
 
-//const bool Ghost::isTunnel(Square& position) const {
-//	//const int xPos = position.getX();
-//	//const int yPos = position.getY();
-//	//if (xPos == 0 || xPos == _width - 1 || yPos == 0 || yPos == _height - 1)
-//	//	return true;
-//	return false;
-//}
+const bool Ghost::isTunnel(Square& position,const int height,const int width) const {
+	const int xPos = position.getX();
+	const int yPos = position.getY();
+	if (xPos == 0 || xPos == width - 1 || yPos == 0 || yPos == height - 1)
+		return true;
+	return false;
+}
 
+
+void printArr(const int height, const int width,int** arr) {
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			cout << arr[i][j];
+		}
+		cout << endl;
+	}
+}
