@@ -1,4 +1,5 @@
 #pragma once
+#include "fruit.h"
 #include "board.h"
 #include "Ghost.h"
 #include "pacman.h"
@@ -30,6 +31,7 @@ private:
 	int _numOfGhosts = 0;
 	Ghost _ghosts[4];
 	Square _legend;
+	Fruit _fruit;
 	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;
@@ -49,7 +51,7 @@ public:
 	const int getHeight() const { return _board.getHeight(); }
 	const int getWidth() const { return _board.getWidth(); }
 	void setMaxPoints(const int num) { _maxPoints = num; };
-	void setPoints();
+	void setPoints(int num);
 	void setHealth();
 	void setPlayerKey(char newKey) { _playerKey = newKey; };
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
@@ -64,6 +66,8 @@ public:
 	void gameOver(const bool isWon);
 	void printGhosts(int isWithColor);
 	void whichDirectionMovePacman();
+	const bool isPacmanAteFruit(const Fruit& fruit) const;
+	const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
 
 
 	//void createGhosts();

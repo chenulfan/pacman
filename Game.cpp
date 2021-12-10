@@ -18,7 +18,7 @@ void clearConsoleRow() {
 
 void Game::startGame(bool isWithColor) {
 	char prevKey = RIGHT;
-	int maxPoints, smartMoveDirection, counterGhostsMoves = 0;
+	int maxPoints, smartMoveDirection, counterGhostsMoves = 0, totalCounterMoves = 0;;
 	bool printGhostFlag = 1;
 	Square pacmanStart;
 
@@ -70,6 +70,12 @@ void Game::startGame(bool isWithColor) {
 				else
 					counterGhostsMoves++;
 
+				if (totalCounterMoves % 60 == 0) {
+					_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+					_fruit.setFruit(_board);
+					_fruit.getSqr().print(isWithColor, _board.getDistantceFromStart());
+				}
+
 				_ghosts[i].SmartMove(_pacman, _board.getArrSquare(),_board.getHeight(),_board.getWidth());
 
 				MoveAndPrintGhost(_ghosts[i]);
@@ -100,8 +106,24 @@ void Game::startGame(bool isWithColor) {
 			if (isPacmanAteFood()) 
 				setPoints();
 		}
+
+		if (isPacmanAteFruit(_fruit)) {
+			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor);
+			setPoints(_fruit.getVal());
+		}
+
+		totalCounterMoves++;
+
 	}
 	gameOver(true);
+}
+
+const bool Game::isPacmanAteFruit(const Fruit& fruit) const {
+	return _pacman.getPosition().getX() == fruit.getX() && _pacman.getPosition().getY() == fruit.getY();
+}
+
+const bool Game::isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const {
+	return ghost.getX() == fruit.getX() && ghost.getY() == fruit.getY();
 }
 
 void Game::whichDirectionMovePacman() {
@@ -274,8 +296,8 @@ void Game::resetGameAfterGhostHit() {
 	}
 }
 
-void Game::setPoints() { 
-	_points = getPoints() + 1; 
+void Game::setPoints(int num = 1) {
+	_points = getPoints() + num;
 	printBanner();
 };
 
