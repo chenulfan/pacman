@@ -51,7 +51,7 @@ public:
 	const int getHeight() const { return _board.getHeight(); }
 	const int getWidth() const { return _board.getWidth(); }
 	void setMaxPoints(const int num) { _maxPoints = num; };
-	void setPoints(int num);
+	void setPoints(int num = 1);
 	void setHealth();
 	void setPlayerKey(char newKey) { _playerKey = newKey; };
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };

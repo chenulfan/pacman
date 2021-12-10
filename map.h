@@ -7,7 +7,7 @@
 #include <windows.h>
 #include "square.h"
 
-const static std::string FILENAME = "mapa6.txt";
+const static std::string FILENAME = "mapa.txt";
 using std::cout;
 using std::cin;
 using std::endl;

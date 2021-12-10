@@ -70,6 +70,13 @@ void Game::startGame(bool isWithColor) {
 				else
 					counterGhostsMoves++;
 
+				if (totalCounterMoves % 60 == 1 ) {
+					_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+					//cout << _fruit.getVal();
+					_fruit.setFruit(_board);
+					_fruit.getSqr().print(isWithColor, _board.getDistantceFromStart());
+				}
+
 				_ghosts[i].SmartMove(_pacman, _board.getArrSquare(),_board.getHeight(),_board.getWidth());
 
 				MoveAndPrintGhost(_ghosts[i]);
@@ -88,13 +95,6 @@ void Game::startGame(bool isWithColor) {
 		}
 		else 
 			printGhostFlag = 1;
-
-		if (totalCounterMoves % 60 == 1) {
-			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
-			//cout << _fruit.getVal();
-			_fruit.setFruit(_board);
-			_fruit.getSqr().print(isWithColor, _board.getDistantceFromStart());
-		}
 
 		if (isPacmanAteFood()) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);

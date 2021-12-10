@@ -1,6 +1,6 @@
 #include "square.h"
 
-void Square::print(const bool isWithColor, int distacneFromStart) {
+void Square::print(const bool isWithColor, int distacneFromStart)const {
     switch (_sqrType) {
     case SqrType::EMPTY: {
             goToXY(_x, _y + distacneFromStart);
@@ -33,6 +33,13 @@ void Square::print(const bool isWithColor, int distacneFromStart) {
             if (isWithColor)
                 changeColor(12);
             cout << "$";
+            break;
+        }        
+        case SqrType::FRUIT: {
+            goToXY(_x, _y + distacneFromStart);
+            if (isWithColor)
+                changeColor(2);
+            cout << "F";
             break;
         }
     }
