@@ -18,7 +18,7 @@ using std::endl;
 void goToXY(int x, int y);
 void changeColor(int color);
 
-enum class SqrType { EMPTY, FOOD, WALL, PACMAN, GHOST,LEGEND };
+enum class SqrType { EMPTY, FOOD, WALL, PACMAN, GHOST,LEGEND, FRUIT };
 
 class Square {
 
