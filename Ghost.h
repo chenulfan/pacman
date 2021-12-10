@@ -2,7 +2,6 @@
 
 #include "square.h"
 #include "pacman.h"
-//#include "board.h"
 #include <string>
 #include <cstdlib>
 #include <time.h>
@@ -14,8 +13,6 @@
 #define TWO 2
 #define THREE 3
 
-static const int GHOST_START_X = 38;
-static const int GHOST_START_Y = 10;
 class Board;
 
 enum class DIRECTIONS { RIGHT, DOWN, LEFT, UP,DEAD};
@@ -27,12 +24,11 @@ struct queSquare {
 
 class Ghost {
 
+private:
 	Square _position;
 	int _direction = 0;
 	int _startX = 0;
 	int _startY = 0;
-	//int _height = 0;
-	//int _width = 0;
 
 public:
 	Ghost() {};

@@ -36,7 +36,7 @@ public:
 	void startGame(const bool withColor);
 	const bool isGhostHitWall(Square position) const;
 	const bool isPacmanHitGhost(Square position, Ghost &ghost) const ;
-	const bool isNextMoveIsAWall(const int x, const int y, Board b) const;
+	const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;
 	void clear();
 	void printMenu()const;
 	void printBanner()const;
@@ -57,14 +57,16 @@ public:
 	void deletePacmanLastMove();
 	const bool isPacmanAteFood() const;
 	const bool isTunnel(char& prevKey);
-	void movePacmanThruTunnel(Pacman& pacman);
+	void movePacmanThruTunnel();
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
 	void gameOver(const bool isWon);
-	//void createGhosts();
 	void printGhosts(int isWithColor);
+	void whichDirectionMovePacman();
 
+
+	//void createGhosts();
 	//bool** initArr();
 	//int smartMove(const Ghost& ghost);
 	//const bool isTunnel(Square& position) const;
