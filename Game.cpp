@@ -16,12 +16,12 @@ void clearConsoleRow() {
 	printf("%c[2K", 27);
 }
 
-bool Game::startGame(bool isWithColor,string filename) {
+bool Game::startGame(bool isWithColor,string filename,Level type) {
 	char prevKey = RIGHT;
 	int maxPoints, smartMoveDirection, counterGhostsMoves = 0, totalCounterMoves = 0;;
-	bool printGhostFlag = 1;
+	bool printCreatureFlag = 1,fruitFlag = false;
 	Square pacmanStart;
-
+	int random = 20 +  rand() % 30;
 	setWithColor(isWithColor);
 	
 	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend,filename);
@@ -38,7 +38,8 @@ bool Game::startGame(bool isWithColor,string filename) {
 
 	printBanner();
 
-	while (_health != 0 && _points < _maxPoints){
+
+	while (_health != 0 && _points < _maxPoints) {
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
@@ -48,50 +49,43 @@ bool Game::startGame(bool isWithColor,string filename) {
 				_playerKey = prevKey;
 			}
 		}
+
 		if (_playerKey == ESC) continue;
 
 		whichDirectionMovePacman();
-		
+
 		_pacman.print(isWithColor, _board.getDistantceFromStart());
 
-		if (printGhostFlag){
-			for (int i = 0; i < _numOfGhosts; i++) {
-				if (isPacmanHitGhost(_pacman.getPosition(), _ghosts[i])) {
-					setHealth();
-					if ( getHealth() == 0) {
-						return false;
-					}
-					resetGameAfterGhostHit();
+		isPacmanHitGhost(_pacman.getPosition());
+
+		if (printCreatureFlag) {
+			printGhostsAndCheckifGhostHitPacman(type, counterGhostsMoves);
+			if (counterGhostsMoves == 25) { counterGhostsMoves = 0; }
+			else { counterGhostsMoves++; }
+			if (fruitFlag) {
+				if (!(_fruit.getVal() == 0)) {
+					MoveAndPrintFruit();
 				}
-
-				if (counterGhostsMoves == 20)
-					counterGhostsMoves = 0;
-				else
-					counterGhostsMoves++;
-
-				_ghosts[i].SmartMove(_pacman, _board.getArrSquare(),_board.getHeight(),_board.getWidth());
-
-				MoveAndPrintGhost(_ghosts[i]);
-				
-				if (isGhostHitPacman(_ghosts[i].getPosition())) {
-						setHealth();
-						if (getHealth() == 0) {
-							return false;
-						}
-						resetGameAfterGhostHit();
-				}
-
-				printGhostFlag = 0;
 			}
+			printCreatureFlag = 0;
 		}
-		else 
-			printGhostFlag = 1;
 
-		if (totalCounterMoves % 60 == 15) {
-			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
-			_fruit.setFruit(_board);
-			_fruit.getSqr().print(isWithColor, _board.getDistantceFromStart());
-			cout << _fruit.getVal();
+		else { printCreatureFlag = 1; }
+
+		if (totalCounterMoves == random) {
+			if (!fruitFlag) {
+				_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+				_fruit.setFruit(_board);
+				_fruit.getPosition().print(isWithColor, _board.getDistantceFromStart());
+				cout << _fruit.getVal();
+				fruitFlag = true;
+				totalCounterMoves = 0;
+			}
+			else { 
+				fruitFlag = false;
+				_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+				totalCounterMoves = 0;
+			}
 		}
 
 		if (isPacmanAteFood()) {
@@ -109,8 +103,8 @@ bool Game::startGame(bool isWithColor,string filename) {
 		if (isPacmanAteFruit(_fruit)) {
 			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
 			setPoints(_fruit.getVal());
+			_fruit.resetFruit();
 		}
-
 
 		for (int i = 0; i < _numOfGhosts; ++i) {
 			if (isGhostAteFruit(_fruit, _ghosts[i])) {
@@ -122,6 +116,78 @@ bool Game::startGame(bool isWithColor,string filename) {
 
 	}
 	return true;
+}
+
+bool Game::printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves) {
+	switch (int(type)) {
+	case 0:
+		for (int i = 0; i < _numOfGhosts; i++) {
+			_ghosts[i].SmartMove(_pacman, _board.getArrSquare(), _board.getHeight(), _board.getWidth());
+			MoveAndPrintGhost(_ghosts[i]);
+			if (isGhostHitPacman(_ghosts[i].getPosition())) {
+				setHealth();
+				if (getHealth() == 0) {
+					return true;
+				}
+				resetGameAfterGhostHit();
+			}
+		}
+		break;
+	case 1:
+		for (int i = 0; i < _numOfGhosts;i++) {
+			if (counterGhostsMoves < 20) {
+				_ghosts[i].SmartMove(_pacman, _board.getArrSquare(), _board.getHeight(), _board.getWidth());
+				MoveAndPrintGhost(_ghosts[i]);
+				if (isGhostHitPacman(_ghosts[i].getPosition())) {
+					setHealth();
+					if (getHealth() == 0) {
+						return true;
+					}
+					resetGameAfterGhostHit();
+				}
+			}
+			else  {
+				if (counterGhostsMoves == 20) {
+					_ghosts[i].changeDirection();
+					MoveAndPrintGhost(_ghosts[i]);
+					if (isGhostHitPacman(_ghosts[i].getPosition())) {
+						setHealth();
+						if (getHealth() == 0) {
+							return true;
+						}
+						resetGameAfterGhostHit();
+					}
+				}
+				else {
+						MoveAndPrintGhost(_ghosts[i]);
+						if (isGhostHitPacman(_ghosts[i].getPosition())) {
+							setHealth();
+							if (getHealth() == 0) {
+								return true;
+							}
+							resetGameAfterGhostHit();
+						}
+					}
+			}
+		}
+		break;
+	case 2:
+		for (int i = 0; i < _numOfGhosts;i++) {
+			if (counterGhostsMoves == 20) {
+				_ghosts[i].changeDirection();
+			}
+			MoveAndPrintGhost(_ghosts[i]);
+			if (isGhostHitPacman(_ghosts[i].getPosition())) {
+				setHealth();
+				if (getHealth() == 0) {
+					return true;
+				}
+				resetGameAfterGhostHit();
+			}
+		}
+		break;
+	}
+	return false;
 }
 
 const bool Game::isPacmanAteFruit(const Fruit& fruit) const {
@@ -200,6 +266,24 @@ const bool Game::isTunnel(char& playerKey) {
 	return false;
 }
 
+
+const bool Game::isCreatureInTunnel(Square pos) {
+	const int xPos = pos.getX();
+	const int yPos = pos.getY();
+	bool ret;
+	if (xPos == 0)
+		ret = _board.getSquare(yPos, getWidth() - 1).getSqrType() != SqrType::WALL;
+	else if (xPos == getWidth() - 1)
+		ret = _board.getSquare(yPos, 0).getSqrType() != SqrType::WALL;
+	else if (yPos == 0)
+		ret = _board.getSquare(getHeight() - 1, xPos).getSqrType() != SqrType::WALL;
+	else if (yPos == getHeight() - 1)
+		ret = _board.getSquare(0, xPos).getSqrType() != SqrType::WALL;
+	else {
+		return false;
+	}
+}
+
 const bool Game::isPacmanAteFood() const {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
@@ -218,12 +302,17 @@ void Game::deleteGhostLastMove(Ghost& ghost) {
 	cout << " ";
 }
 
+void Game::deleteFruitLastMove(Fruit& fruit) {
+	goToXY(fruit.getX(), fruit.getY() + _board.getDistantceFromStart());
+	cout << " ";
+}
+
 const bool Game::isNextMoveIsAWall(const int x, const int y,  const Board& b) const {
 	Square pos = b.getSquare(y, x);
 	return pos.getSqrType() == SqrType::WALL;
 }
 
-const bool Game::isGhostHitWall(Square position) const{
+const bool Game::isCreatureHitWall(Square position) const{
 	const int xPos = position.getX();
 	const int yPos = position.getY();
 	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
@@ -237,34 +326,7 @@ const bool Game::isGhostHitPacman(Square position){
 		return true;
 	return false;
 }
-//
-//void Game::gameOver(const bool isWon) {
-//	clear(); // clears the console;
-//	char ch;
-//	if(isWon)
-//		cout << "You WON!!" << endl;
-//	else
-//		cout << "GAME OVER" << endl;
-//	cout << "press any key to return to the menu..." << endl;
-//	cin >> ch;
-//}
 
-//void Game::clear() {
-//	COORD topLeft = { 0, 0 };
-//	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-//	CONSOLE_SCREEN_BUFFER_INFO screen;
-//	DWORD written;
-//
-//	GetConsoleScreenBufferInfo(console, &screen);
-//	FillConsoleOutputCharacterA(
-//		console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-//	);
-//	FillConsoleOutputAttribute(
-//		console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
-//		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-//	);
-//	SetConsoleCursorPosition(console, topLeft);
-//}
 
 int Game::getKey()const
 {
@@ -280,19 +342,13 @@ void Game::MoveAndPrintGhost(Ghost& ghost) {
 	boardPositionOfGhost.print(_isWithColor, _board.getDistantceFromStart());
 	
 	ghost.Move();
-	while (isGhostHitWall(ghost.getPosition())) {
+	while (isCreatureHitWall(ghost.getPosition()) || isCreatureInTunnel(ghost.getPosition())) {
 		ghost.oneMoveBack();
 		ghost.changeDirection();
 		ghost.Move();
 	}
 	ghost.print(_isWithColor, _board.getDistantceFromStart());
 }
-
-const bool Game::isPacmanHitGhost(Square position,  Ghost& ghost) const {
-	if (position.getX() == ghost.getX() && position.getY() == ghost.getY())
-		return true;
-	 return false;
- }
 
 void Game::resetGameAfterGhostHit() {
 	_pacman.moveToStartPosition();
@@ -318,6 +374,34 @@ void Game::resetGame() {
 	_maxPoints = 0;
 	_numOfGhosts = 0;
 }
+
+const bool Game::isPacmanHitGhost(const Square& position) {
+	for (int i = 0; i < _numOfGhosts; i++) {
+		if ((position.getX() == _ghosts[i].getX() && position.getY() == _ghosts[i].getY())) {
+			setHealth();
+			if (getHealth() == 0) {
+					return true;
+				}
+				resetGameAfterGhostHit();
+			}
+		}
+	return false;
+	}
+
+void Game::MoveAndPrintFruit() {
+	Square boardPositionOfFruit = _board.getSquare(_fruit.getY(), _fruit.getX());
+	deleteFruitLastMove(_fruit);
+	boardPositionOfFruit.print(_isWithColor, _board.getDistantceFromStart());
+	_fruit.Move();
+	while (isCreatureHitWall(_fruit.getPosition()) || isCreatureInTunnel(_fruit.getPosition())) {
+		_fruit.oneMoveBack();
+		_fruit.changeDirection();
+		_fruit.Move();
+	}
+	_fruit.print(_isWithColor, _board.getDistantceFromStart());
+	cout << _fruit.getVal();
+}
+
 //void Game::printMenu()const {
 //	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 //		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
@@ -406,6 +490,25 @@ void Game::resetGame() {
 //}
 //
 
+//void Game::printMenu()const {
+//	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
+//		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
+//}
+//
+//void Game::printInstructions()const {
+//	cout << endl << "The instructions are: " << endl;
+//	cout << "  Press W to move up" << endl;
+//	cout << "  Press D to move right" << endl;
+//	cout << "  Press A to move left" << endl;
+//	cout << "  Press X to move down" << endl;
+//	cout << "  Press S to stay in your place" << endl;
+//	cout << "  You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
+//	cout << "  Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
+//	cout << "  You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
+//	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
+//	cout << "  Have FUN" << endl << endl;
+//}
+
 
 //int Game::smartMove(const Ghost& ghsot) {
 //	queue<string> queue;
@@ -481,3 +584,31 @@ void Game::resetGame() {
 //	return false;
 //}
 
+//
+//void Game::gameOver(const bool isWon) {
+//	clear(); // clears the console;
+//	char ch;
+//	if(isWon)
+//		cout << "You WON!!" << endl;
+//	else
+//		cout << "GAME OVER" << endl;
+//	cout << "press any key to return to the menu..." << endl;
+//	cin >> ch;
+//}
+
+//void Game::clear() {
+//	COORD topLeft = { 0, 0 };
+//	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+//	CONSOLE_SCREEN_BUFFER_INFO screen;
+//	DWORD written;
+//
+//	GetConsoleScreenBufferInfo(console, &screen);
+//	FillConsoleOutputCharacterA(
+//		console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+//	);
+//	FillConsoleOutputAttribute(
+//		console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+//		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+//	);
+//	SetConsoleCursorPosition(console, topLeft);
+//}

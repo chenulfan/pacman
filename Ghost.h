@@ -22,10 +22,10 @@ struct queSquare {
 	DIRECTIONS move;
 };
 
-class Ghost {
+class Ghost: public Creature{
 
 private:
-	Square _position;
+	//Square _position;
 	int _direction = 0;
 	int _startX = 0;
 	int _startY = 0;
@@ -36,14 +36,14 @@ public:
 	Ghost& operator=(Ghost& s);
 
 
-	void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); };
-	int getX()const { return _position.getX(); }
-	int getY()const { return _position.getY(); }
+	//void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); };
+	//int getX()const { return _position.getX(); }
+	//int getY()const { return _position.getY(); }
 	int getStartX() { return _startX; }
 	int getStartY() { return _startY; }
-	void setX(const int x) { _position.setX(x); }
-	void setY(const int y) { _position.setY(y); }
-	Square getPosition()const { return _position; };
+	//void setX(const int x) { _position.setX(x); }
+	//void setY(const int y) { _position.setY(y); }
+	//Square getPosition()const { return _position; };
 	void changeDirection();
 	void setDirection(int direction) { _direction = direction; };
 	void Move();

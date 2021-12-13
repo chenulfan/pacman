@@ -12,14 +12,16 @@ void Ghost::changeDirection() {
 
 Ghost::Ghost(int direction, int x, int y)
 {
-	_position.setSquare(x, y, SqrType::GHOST);
+	//_position.setSquare(x, y, SqrType::GHOST);
+	setPosition(x,y,SqrType::GHOST);
 	_direction = direction;
 	_startX = x;
 	_startY = y;
 }
 
 Ghost& Ghost::operator=(Ghost& s) {
-	_position = s._position;
+	Square pos = s.getPosition();
+	setPosition(pos);
 	_direction = s._direction;
 	_startX = s._startX;
 	_startY = s._startY;
@@ -31,32 +33,32 @@ void Ghost::Move() {
 	switch ((DIRECTIONS)_direction)
 	{
 	case DIRECTIONS::RIGHT:
-		_position.setX((_position.getX()) + 1);
+		setX((getX()) + 1);
 		break;
 	case DIRECTIONS::DOWN:
-		_position.setY((_position.getY()) + 1);
+		setY((getY()) + 1);
 		break;
 	case DIRECTIONS::LEFT:
-		_position.setX((_position.getX()) - 1);
+		setX((getX()) - 1);
 		break;
 	case DIRECTIONS::UP:
-		_position.setY((_position.getY()) - 1);
+		setY((getY()) - 1);
 		break;
 	}
 }
 void Ghost::oneMoveBack() {
 	switch (_direction) {
 	case ZERO:
-		_position.setX((_position.getX()) - 1);
+		setX((getX()) - 1);
 		break;
 	case ONE:
-		_position.setY((_position.getY()) - 1);
+		setY((getY()) - 1);
 		break;
 	case TWO:
-		_position.setX((_position.getX()) + 1);
+		setX((getX()) + 1);
 		break;
 	case THREE:
-		_position.setY((_position.getY()) + 1);
+		setY((getY()) + 1);
 		break;
 	}
 	}
@@ -83,7 +85,7 @@ void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const in
 	int** visited = initArr(height,width);
 	queue<queSquare> queue;
 	Square arr[4] = {};
-	queSquare start = { _position };
+	queSquare start = { getPosition() };
 	queue.push(start);
 	while (!queue.empty()) {
 		nodeFront = queue.front();
@@ -153,11 +155,11 @@ void printArr(const int height, const int width,int** arr) {
 }
 
 void Ghost::notSmartMove(const Pacman& pacman, Square** b, const int height, const int width) {
-	int x = _position.getX(), y = _position.getY();
+	int x = getX(), y = getY();
 	if (pacman.getY() != y) {
 		if (pacman.getY() > y && b[y + 1][x].getSqrType() != SqrType::WALL) { _direction = 1; return; }
 		else {
-			if (pacman.getY() < _position.getY() && b[y - 1][x].getSqrType() != SqrType::WALL) { _direction = 3; return; }
+			if (pacman.getY() < getY() && b[y - 1][x].getSqrType() != SqrType::WALL) { _direction = 3; return; }
 			if (pacman.getX() > x) { _direction = 0; return; }
 			else { _direction = 2;return; }
 		}

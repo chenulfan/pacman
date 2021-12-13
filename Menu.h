@@ -18,9 +18,11 @@ public:
 	void printInstructions()const;
 	void printMenu()const;
 	int getOption();
+	Level getLevelOption();
 	void startMenu();
 	void gameOver(const bool isWon);
 	void clear();
 	bool fileExists(string filename);
+	void printLevelMenu() const;
 };
 

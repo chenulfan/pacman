@@ -6,6 +6,11 @@ void Menu::printMenu()const {
 		<< " (4) Start a new game with colors from specific file" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
 }
+void Menu::printLevelMenu() const {
+	cout << endl << "Please Choose Difficulty Level (1-3)" << endl << " (1) HARD (BEST)" << endl
+		<< " (2) MID (GOOD)" << endl
+		<< " (3) EASY (NOVICE)" << endl;
+}
 
 
 void Menu::printInstructions()const {
@@ -29,14 +34,17 @@ void Menu::startMenu() {
 		changeColor(WHITE);
 		Game game;
 		string filename;
+		Level level = Level::NOVICE;
 		printMenu();
 		option = getOption();
 		clear();
 		switch (option) 
 		{
 		case GAME_WITHOUT_COLOR:
+			printLevelMenu();
+			level = getLevelOption();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
-				if (!game.startGame(false, *i))
+				if (!game.startGame(false, *i,level))
 				{
 					gameOver(false);
 				}
@@ -46,8 +54,10 @@ void Menu::startMenu() {
 			gameOver(true);
 			break;
 		case GAME_WITH_COLOR:
+			printLevelMenu();
+			level = getLevelOption();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
-				if (!game.startGame(true, *i))
+				if (!game.startGame(true, *i,level))
 				{
 					gameOver(false);
 				}
@@ -61,7 +71,9 @@ void Menu::startMenu() {
 			cin >> filename;
 			if (fileExists(filename)) {
 				clear();
-				gameOver(game.startGame(false,filename));
+				printLevelMenu();
+				level = getLevelOption();
+				gameOver(game.startGame(false,filename,level));
 			}
 			else {
 				cout << "file doesn't exist" << endl;
@@ -72,11 +84,14 @@ void Menu::startMenu() {
 			clear();
 			break;
 		case FILE_WITH_COLOR:
+
 			cout << "please enter filename" << endl;
 			cin >> filename;
 			if (fileExists(filename)) {
 				clear();
-				gameOver(game.startGame(true, filename));
+				printLevelMenu();
+				level = getLevelOption();
+				gameOver(game.startGame(true, filename,level));
 			}
 			else {
 				cout <<"file doesn't exist" << endl;
@@ -161,4 +176,15 @@ bool Menu::fileExists(string filename) {
 		file.close();
 		return false;
 	}
+}
+Level Menu::getLevelOption() {
+	int option;
+	cin >> option;
+	--option;
+	while (option != int(Level::BEST) && option != int(Level::GOOD) && option != int(Level::NOVICE) ) {
+		cout << "plesae enter valid number" << endl;
+		cin >> option;
+		--option;
+	}
+	return Level(option);
 }

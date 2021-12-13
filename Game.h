@@ -17,8 +17,10 @@ static const int SPEED = 150;
 static const int STAY = 115;
 
 
-void clearConsoleRow();
 
+
+void clearConsoleRow();
+enum class Level { BEST, GOOD, NOVICE };
 class Game {
 private:
 	Board _board;
@@ -35,9 +37,9 @@ private:
 	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;
-	bool startGame(const bool withColor,string filename);
-	const bool isGhostHitWall(Square position) const;
-	const bool isPacmanHitGhost(Square position, Ghost &ghost) const ;
+	bool startGame(const bool withColor,string filename,Level type);
+	const bool isCreatureHitWall(Square position) const;
+	const bool isPacmanHitGhost(const Square& position);
 	const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;
 	//void clear();
 	//void printMenu()const;
@@ -54,13 +56,16 @@ public:
 	void setPoints(int num = 1);
 	void setHealth();
 	void setPlayerKey(char newKey) { _playerKey = newKey; };
+	const bool isCreatureInTunnel(Square pos);
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	void resetGameAfterGhostHit();
 	void deletePacmanLastMove();
+	void deleteFruitLastMove(Fruit& fruit);
 	const bool isPacmanAteFood() const;
 	const bool isTunnel(char& prevKey);
 	void movePacmanThruTunnel();
 	void MoveAndPrintGhost(Ghost& ghost);
+	void MoveAndPrintFruit();
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
 	//void gameOver(const bool isWon);
@@ -69,7 +74,7 @@ public:
 	const bool isPacmanAteFruit(const Fruit& fruit) const;
 	const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
 	void resetGame();
-
+	bool printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves);
 	//void createGhosts();
 	//bool** initArr();
 	//int smartMove(const Ghost& ghost);
