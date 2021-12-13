@@ -10,6 +10,7 @@ struct pos {
 
 pos randomPos(const Board& b);
 int randomNum(int from, int to);
+int randomY(const Board& b, int x);
 
 class Fruit
 {

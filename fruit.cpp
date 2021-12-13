@@ -24,11 +24,9 @@ pos randomPos(const Board& b) {
 	int x, y;
 	SqrType type;
 	pos randPos;
-	do {
-		x = randomNum(1, b.getWidth() - 2);
-		y = randomNum(1, b.getHeight() - 2);
-		type = b.getSquare(y, x).getSqrType();
-	} while (type == SqrType::WALL);
+	x = randomNum(1, b.getWidth() - 2);
+	y = randomY(b, x);
+	type = b.getSquare(y, x).getSqrType();
 	randPos.x = x;
 	randPos.y = y;
 	return randPos;
@@ -37,4 +35,16 @@ pos randomPos(const Board& b) {
 int randomNum(int from, int to) {
 	srand(time(0));
 	return rand() % (to - from + 1) + from;
+}
+
+int randomY(const Board &b, int x) {
+	int counterSpaces = 0;
+	std::vector<int> myvector;
+	for (int i = 0; i < b.getHeight(); i++) {
+		if (b.getSquare(i, x).getSqrType() != SqrType::WALL) {
+			myvector.push_back(i);
+		}
+	}
+	int size = myvector.size();
+	return(myvector[rand() % size]);
 }

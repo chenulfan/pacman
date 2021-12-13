@@ -2,10 +2,10 @@
 
 
 
-string* Map::getFromFile() {
+string* Map::getFromFile(string FILENAME) {
 	ifstream f(FILENAME);
 	string str;
-	_height = getColSize();
+	_height = getColSize(FILENAME);
 	int index = 0;
 	string* arrOfStr = new string[_height];
 
@@ -55,7 +55,7 @@ Square** Map::initArr() {
 	return arr;
 }
 
-int Map::getFirstRowSize() {
+int Map::getFirstRowSize(string FILENAME) {
 	ifstream file(FILENAME);
 	string str;
 	getline(file, str);
@@ -66,7 +66,7 @@ int Map::getFirstRowSize() {
 	return firstRowSize;
 }
 
-int Map::getColSize() {
+int Map::getColSize(string FILENAME) {
 	ifstream file(FILENAME);
 	string str;
 	int colSize = 0;

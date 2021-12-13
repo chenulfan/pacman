@@ -16,7 +16,7 @@ void clearConsoleRow() {
 	printf("%c[2K", 27);
 }
 
-void Game::startGame(bool isWithColor) {
+bool Game::startGame(bool isWithColor,string filename) {
 	char prevKey = RIGHT;
 	int maxPoints, smartMoveDirection, counterGhostsMoves = 0, totalCounterMoves = 0;;
 	bool printGhostFlag = 1;
@@ -24,7 +24,7 @@ void Game::startGame(bool isWithColor) {
 
 	setWithColor(isWithColor);
 	
-	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend);
+	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend,filename);
 
 	setMaxPoints(maxPoints);
 
@@ -38,7 +38,7 @@ void Game::startGame(bool isWithColor) {
 
 	printBanner();
 
-	while (_health != 0 && _points != _maxPoints){
+	while (_health != 0 && _points < _maxPoints){
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
@@ -59,8 +59,7 @@ void Game::startGame(bool isWithColor) {
 				if (isPacmanHitGhost(_pacman.getPosition(), _ghosts[i])) {
 					setHealth();
 					if ( getHealth() == 0) {
-						gameOver(false);
-						return;
+						return false;
 					}
 					resetGameAfterGhostHit();
 				}
@@ -77,8 +76,7 @@ void Game::startGame(bool isWithColor) {
 				if (isGhostHitPacman(_ghosts[i].getPosition())) {
 						setHealth();
 						if (getHealth() == 0) {
-							gameOver(false);
-							return;
+							return false;
 						}
 						resetGameAfterGhostHit();
 				}
@@ -123,7 +121,7 @@ void Game::startGame(bool isWithColor) {
 		totalCounterMoves++;
 
 	}
-	gameOver(true);
+	return true;
 }
 
 const bool Game::isPacmanAteFruit(const Fruit& fruit) const {
@@ -239,34 +237,34 @@ const bool Game::isGhostHitPacman(Square position){
 		return true;
 	return false;
 }
+//
+//void Game::gameOver(const bool isWon) {
+//	clear(); // clears the console;
+//	char ch;
+//	if(isWon)
+//		cout << "You WON!!" << endl;
+//	else
+//		cout << "GAME OVER" << endl;
+//	cout << "press any key to return to the menu..." << endl;
+//	cin >> ch;
+//}
 
-void Game::gameOver(const bool isWon) {
-	clear(); // clears the console;
-	char ch;
-	if(isWon)
-		cout << "You WON!!" << endl;
-	else
-		cout << "GAME OVER" << endl;
-	cout << "press any key to return to the menu..." << endl;
-	cin >> ch;
-}
-
-void Game::clear() {
-	COORD topLeft = { 0, 0 };
-	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	CONSOLE_SCREEN_BUFFER_INFO screen;
-	DWORD written;
-
-	GetConsoleScreenBufferInfo(console, &screen);
-	FillConsoleOutputCharacterA(
-		console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-	);
-	FillConsoleOutputAttribute(
-		console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
-		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
-	);
-	SetConsoleCursorPosition(console, topLeft);
-}
+//void Game::clear() {
+//	COORD topLeft = { 0, 0 };
+//	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+//	CONSOLE_SCREEN_BUFFER_INFO screen;
+//	DWORD written;
+//
+//	GetConsoleScreenBufferInfo(console, &screen);
+//	FillConsoleOutputCharacterA(
+//		console, ' ', screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+//	);
+//	FillConsoleOutputAttribute(
+//		console, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_BLUE,
+//		screen.dwSize.X * screen.dwSize.Y, topLeft, &written
+//	);
+//	SetConsoleCursorPosition(console, topLeft);
+//}
 
 int Game::getKey()const
 {
@@ -314,24 +312,30 @@ void Game::setHealth() {
 	printBanner();
 };
 
-void Game::printMenu()const {
-	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
-		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
+void Game::resetGame() {
+	_board.resetBoard();
+	_points = 0;
+	_maxPoints = 0;
+	_numOfGhosts = 0;
 }
-
-void Game::printInstructions()const {
-	cout << endl << "The instructions are: " << endl;
-	cout << "  Press W to move up" << endl;
-	cout << "  Press D to move right" << endl;
-	cout << "  Press A to move left" << endl;
-	cout << "  Press X to move down" << endl;
-	cout << "  Press S to stay in your place" << endl;
-	cout << "  You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
-	cout << "  Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
-	cout << "  You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
-	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
-	cout << "  Have FUN" << endl << endl;
-}
+//void Game::printMenu()const {
+//	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
+//		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
+//}
+//
+//void Game::printInstructions()const {
+//	cout << endl << "The instructions are: " << endl;
+//	cout << "  Press W to move up" << endl;
+//	cout << "  Press D to move right" << endl;
+//	cout << "  Press A to move left" << endl;
+//	cout << "  Press X to move down" << endl;
+//	cout << "  Press S to stay in your place" << endl;
+//	cout << "  You have 4 tunnel each side of the board which you can teleport to other side! TRY THEM" << endl;
+//	cout << "  Your goal is to eat all the breadcrumbs without being eaten by the ghosts!" << endl;
+//	cout << "  You have 3 life to achieve that, each time you get eaten by a ghost ur life will be reduce by 1" << endl;
+//	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
+//	cout << "  Have FUN" << endl << endl;
+//}
 
 
 // TODO DELETE:

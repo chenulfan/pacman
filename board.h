@@ -31,9 +31,10 @@ public:
     void updateActualGameBoardHeight(string* map, int len);
     void updateActualGameBoardWidth(string map);
     void initBoardWidth(string firstRow) ;
-    int initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Square& legend);
+    int initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Square& legend,string filename);
     void analyzeBoard(string* map, int len, Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, int& foodCounter);
     Square** initSquares();
     Square getLegendPos(string* map, int len);
+    void resetBoard();
 };
 

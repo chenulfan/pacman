@@ -16,11 +16,11 @@ void Board::initBoardWidth(string firstRow) {
     _width = firstRow.size();
 }
 
-int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Square& legend) {
+int Board::initBoard(Ghost* ghosts, int& ghostCounter, Square& pacmanStart, Square& legend,string filename) {
     int foodCounter = 0, type = 0;
     ghostCounter = 0;
 
-    string* map = _screen.getFromFile();
+    string* map = _screen.getFromFile(filename); 
 
     initBoardWidth(map[0]);
 
@@ -92,6 +92,19 @@ Square Board::getLegendPos(string* map, int len) {
             }
         }
     }
+}
+
+void Board::resetBoard() {
+    for (int i = 0; i < _height; i++)
+    {
+        delete[] _squares[i];
+    }
+    _length = 0;
+    _height = 0;
+    _width = 0;
+    _amountOfGhosts = 0;
+    _distanceFromStart = 0;
+    _distanceFromLeft = 0;
 }
 
 Square** Board::initSquares() {

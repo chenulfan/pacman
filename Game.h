@@ -35,14 +35,14 @@ private:
 	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;
-	void startGame(const bool withColor);
+	bool startGame(const bool withColor,string filename);
 	const bool isGhostHitWall(Square position) const;
 	const bool isPacmanHitGhost(Square position, Ghost &ghost) const ;
 	const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;
-	void clear();
-	void printMenu()const;
+	//void clear();
+	//void printMenu()const;
 	void printBanner()const;
-	void printInstructions()const;
+	//void printInstructions()const;
 	const int getPoints() const { return _points; };
 	const int getHealth() const { return _health; };
 	const int getMaxPoints() const { return _maxPoints; };
@@ -63,12 +63,12 @@ public:
 	void MoveAndPrintGhost(Ghost& ghost);
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
-	void gameOver(const bool isWon);
+	//void gameOver(const bool isWon);
 	void printGhosts(int isWithColor);
 	void whichDirectionMovePacman();
 	const bool isPacmanAteFruit(const Fruit& fruit) const;
 	const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
-
+	void resetGame();
 
 	//void createGhosts();
 	//bool** initArr();

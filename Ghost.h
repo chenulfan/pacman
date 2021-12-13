@@ -52,4 +52,5 @@ public:
 	const bool isTunnel(Square& position, const int height, const int width) const;
 	void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
 	int** initArr(const int height,const int width);
+	void notSmartMove(const Pacman& pacman, Square** b, const int height, const int width);
 };

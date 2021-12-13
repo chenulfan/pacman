@@ -1,6 +1,6 @@
 #include "Ghost.h"
 void printArr(const int height, const int width, int** arr);
-
+void resetArr(const int height, const int width, int** arr);
 
 void Ghost::changeDirection() {
 	int randomdirection = rand() % 4;
@@ -104,10 +104,6 @@ void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const in
 				x = i.getX();
 				y = i.getY();
 				if (visited[y][x] == 0 && i.getSqrType() != SqrType::WALL && !(isTunnel(i,height,width))) {
-					if (counter2 >= 300000) { printArr(height, width, visited); 
-					int wtf = 5;
-					counter2 = 0;
-					}
 					if (!firstIteration) {
 						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
 						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
@@ -121,10 +117,21 @@ void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const in
 				counter++;
 			}
 		}
+		if (counter2 >= 20000) {
+			notSmartMove(pacman,b,height,width);
+			return;
+		}
 		firstIteration++;
 	}
 	
 	_direction = (int)nodeFront.move;
+}
+void resetArr(const int height, const int width,int** arr) {
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			arr[i][j] = 0;
+		}
+	}
 }
 
 const bool Ghost::isTunnel(Square& position,const int height,const int width) const {
@@ -142,5 +149,23 @@ void printArr(const int height, const int width,int** arr) {
 			cout << arr[i][j];
 		}
 		cout << endl;
+	}
+}
+
+void Ghost::notSmartMove(const Pacman& pacman, Square** b, const int height, const int width) {
+	int x = _position.getX(), y = _position.getY();
+	if (pacman.getY() != y) {
+		if (pacman.getY() > y && b[y + 1][x].getSqrType() != SqrType::WALL) { _direction = 1; return; }
+		else {
+			if (pacman.getY() < _position.getY() && b[y - 1][x].getSqrType() != SqrType::WALL) { _direction = 3; return; }
+			if (pacman.getX() > x) { _direction = 0; return; }
+			else { _direction = 2;return; }
+		}
+		if (pacman.getX() > x) { _direction = 0; return; }
+		else { _direction = 2;return; }
+		}
+	else {
+		if (pacman.getX() > x) { _direction = 0; return; }
+		else { _direction = 2;return; }
 	}
 }
