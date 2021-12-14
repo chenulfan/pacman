@@ -29,10 +29,10 @@ public:
     void getGhosts(Square* ghosts) const;
     void printBanner(bool isWithColor)const;
     void updateActualGameBoardHeight(string* map, int len);
-    void updateActualGameBoardWidth(string map);
+    void updateActualGameBoardWidth(string* map,int height);
     void initBoardWidth(string firstRow) ;
-    int initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Square& legend,string filename);
-    void analyzeBoard(string* map, int len, Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, int& foodCounter);
+    int initBoard(Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, Square& legend,string filename,int& foodCounter);
+    int analyzeBoard(string* map, int len, Ghost* ghosts, int& amountOfGhosts, Square& pacmanStart, int& foodCounter);
     Square** initSquares();
     Square getLegendPos(string* map, int len);
     void resetBoard();

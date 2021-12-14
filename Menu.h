@@ -20,7 +20,7 @@ public:
 	int getOption();
 	Level getLevelOption();
 	void startMenu();
-	void gameOver(const bool isWon);
+	void gameOver(int result);
 	void clear();
 	bool fileExists(string filename);
 	void printLevelMenu() const;

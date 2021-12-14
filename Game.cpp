@@ -16,16 +16,18 @@ void clearConsoleRow() {
 	printf("%c[2K", 27);
 }
 
-bool Game::startGame(bool isWithColor,string filename,Level type) {
+int Game::startGame(bool isWithColor,string filename,Level type) {
 	char prevKey = RIGHT;
-	int maxPoints, smartMoveDirection, counterGhostsMoves = 0, totalCounterMoves = 0;;
+	int maxPoints =0 ,result, smartMoveDirection, counterGhostsMoves = 0, totalCounterMoves = 0;;
 	bool printCreatureFlag = 1,fruitFlag = false;
 	Square pacmanStart;
 	int random = 20 +  rand() % 30;
 	setWithColor(isWithColor);
 	
-	maxPoints = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend,filename);
-
+	result = _board.initBoard(_ghosts, _numOfGhosts, pacmanStart, _legend,filename,maxPoints);
+	if (result != 1) {
+		return result;
+	}
 	setMaxPoints(maxPoints);
 
 	goToXY(0, _board.getDistantceFromStart());
@@ -56,10 +58,14 @@ bool Game::startGame(bool isWithColor,string filename,Level type) {
 
 		_pacman.print(isWithColor, _board.getDistantceFromStart());
 
-		isPacmanHitGhost(_pacman.getPosition());
+		if (isPacmanHitGhost(_pacman.getPosition())) {
+			return 1;
+		}
 
 		if (printCreatureFlag) {
-			printGhostsAndCheckifGhostHitPacman(type, counterGhostsMoves);
+			if (printGhostsAndCheckifGhostHitPacman(type, counterGhostsMoves)) {
+				return 1;
+			}
 			if (counterGhostsMoves == 25) { counterGhostsMoves = 0; }
 			else { counterGhostsMoves++; }
 			if (fruitFlag) {
@@ -92,7 +98,6 @@ bool Game::startGame(bool isWithColor,string filename,Level type) {
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 			setPoints();
 		}
-
 		if (isTunnel(prevKey)) {
 			deletePacmanLastMove();
 			movePacmanThruTunnel();
@@ -115,7 +120,7 @@ bool Game::startGame(bool isWithColor,string filename,Level type) {
 		totalCounterMoves++;
 
 	}
-	return true;
+	return 0;
 }
 
 bool Game::printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves) {
@@ -239,9 +244,9 @@ void Game::movePacmanThruTunnel() {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) _pacman.setX(getWidth()-1);
-	else if (xPos == getWidth()-1) _pacman.setX(0);
+	else if (xPos == getWidth()-1) _pacman.setX(1);
 	else if (yPos == 0) _pacman.setY(getHeight()-1);
-	else if (yPos == getHeight()-1) _pacman.setY(0);
+	else if (yPos == getHeight()-1) _pacman.setY(1);
 }
 
 const bool Game::isTunnel(char& playerKey) {

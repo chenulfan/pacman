@@ -99,3 +99,4 @@ void Fruit::resetFruit() {
 	setX(0);
 	setY(0);
 }
+

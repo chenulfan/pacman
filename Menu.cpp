@@ -28,13 +28,14 @@ void Menu::printInstructions()const {
 }
 void Menu::startMenu() {
 	getFileNameFromFile();
-	int option;
+	int option,result,counter = 0;
 	char ch;
 	do {
 		changeColor(WHITE);
 		Game game;
 		string filename;
 		Level level = Level::NOVICE;
+		clear();
 		printMenu();
 		option = getOption();
 		clear();
@@ -44,27 +45,49 @@ void Menu::startMenu() {
 			printLevelMenu();
 			level = getLevelOption();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
-				if (!game.startGame(false, *i,level))
+				++counter;
+				result = game.startGame(false, *i, level);
+				if (result != 0)
 				{
-					gameOver(false);
+					gameOver(result);
+					break;
+				}
+				else {
+					clear();
+					cout << "you finished map number " << counter << " out of "<< _filenames.size() << endl;
+					cout << "press any key to countinue to the next game..." << endl;
+					cin >> ch;
+					clear();
 				}
 				clear();
 				game.resetGame();
 			}
-			gameOver(true);
+			gameOver(0);
+			counter = 0;
 			break;
 		case GAME_WITH_COLOR:
 			printLevelMenu();
 			level = getLevelOption();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
-				if (!game.startGame(true, *i,level))
+				++counter;
+				result = game.startGame(true, *i, level);
+				if (result != 0)
 				{
-					gameOver(false);
+					gameOver(result);
+					break;
+				}
+				else {
+					clear();
+					cout << "you finished map number " << counter << " out of " << _filenames.size() << endl;
+					cout << "press any key to countinue to the next game..." << endl;
+					cin >> ch;
+					clear();
 				}
 				clear();
 				game.resetGame();
 			}
-			gameOver(true);
+			gameOver(0);
+			counter = 0;
 			break;
 		case FILE_WITHOUT_COLOR:
 			cout << "please enter filename" << endl;
@@ -73,6 +96,7 @@ void Menu::startMenu() {
 				clear();
 				printLevelMenu();
 				level = getLevelOption();
+				clear();
 				gameOver(game.startGame(false,filename,level));
 			}
 			else {
@@ -91,6 +115,7 @@ void Menu::startMenu() {
 				clear();
 				printLevelMenu();
 				level = getLevelOption();
+				clear();
 				gameOver(game.startGame(true, filename,level));
 			}
 			else {
@@ -139,15 +164,52 @@ void Menu::getFileNameFromFile() {
 }
 
 
-void Menu::gameOver(const bool isWon) {
-	clear(); // clears the console;
+void Menu::gameOver(int result) {
 	char ch;
-	if (isWon)
+	clear(); // clears the console;
+	switch (result) {
+	case 0:
 		cout << "You WON!!" << endl;
-	else
-		cout << "GAME OVER" << endl;
-	cout << "press any key to return to the menu..." << endl;
-	cin >> ch;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 1:
+	    cout << "GAME OVER" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 2:
+		cout << "BOARD INVALID TOO MANY PACMANS" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 3:
+		cout << "BOARD INVALID TOO MANY LEGENDS" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 4:
+		cout << "BOARD INVALID TOO MANY GHOSTS" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 5:
+		cout << "BOARD INVALID HEIGHT IS TOO BIG" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	
+	case 6:
+		cout << "BOARD INVALID WIDTH IS TOO BIG" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	case 7:
+		cout << "BOARD INVALID NO PACMAN FOUND" << endl;
+		cout << "press any key to return to the menu..." << endl;
+		cin >> ch;
+		break;
+	}
 }
 
 void Menu::clear() {

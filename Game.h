@@ -37,7 +37,7 @@ private:
 	//TODO: GHOST DESTRACTOR!
 public:
 	int getKey()const;
-	bool startGame(const bool withColor,string filename,Level type);
+	int startGame(const bool withColor,string filename,Level type);
 	const bool isCreatureHitWall(Square position) const;
 	const bool isPacmanHitGhost(const Square& position);
 	const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;

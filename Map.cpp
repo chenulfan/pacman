@@ -6,6 +6,7 @@ string* Map::getFromFile(string FILENAME) {
 	ifstream f(FILENAME);
 	string str;
 	_height = getColSize(FILENAME);
+	_width = getFirstRowSize(FILENAME);
 	int index = 0;
 	string* arrOfStr = new string[_height];
 
@@ -60,7 +61,6 @@ int Map::getFirstRowSize(string FILENAME) {
 	string str;
 	getline(file, str);
 	int firstRowSize = str.size();
-	if (firstRowSize > 79) { firstRowSize = 79; }
 	file.clear();
 	file.seekg(0);
 	return firstRowSize;
@@ -73,7 +73,6 @@ int Map::getColSize(string FILENAME) {
 	while (std::getline(file, str)) {
 		colSize++;
 	}
-	if (colSize > 24) { colSize = 24; }
 	file.clear();
 	file.seekg(0);
 	return colSize;
