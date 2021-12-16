@@ -81,7 +81,7 @@ int Game::startGame(bool isWithColor,string filename,Level type) {
 		if (totalCounterMoves == random) {
 			if (!fruitFlag) {
 				_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
-				_fruit.setFruit(_board);
+				_fruit.setFruit(_board,getLegend());
 				_fruit.getPosition().print(isWithColor, _board.getDistantceFromStart());
 				cout << _fruit.getVal();
 				fruitFlag = true;

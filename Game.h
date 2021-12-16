@@ -50,6 +50,7 @@ public:
 	const int getMaxPoints() const { return _maxPoints; };
 	Board getBoard() const { return _board; };
 	Pacman getPacman() const { return _pacman; }
+	Square getLegend() const { return _legend; }
 	const int getHeight() const { return _board.getHeight(); }
 	const int getWidth() const { return _board.getWidth(); }
 	void setMaxPoints(const int num) { _maxPoints = num; };

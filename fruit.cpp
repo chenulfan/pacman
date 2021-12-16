@@ -2,13 +2,13 @@
 #include "square.h"
 #include<time.h>
 
-Fruit::Fruit(const Board& b) {
-	setPos(b);
+Fruit::Fruit(const Board& b, const Square& legend) {
+	setPos(b, legend);
 }
 
 
-void Fruit::setPos(const Board& b) {
-	pos randPos = randomPos(b);
+void Fruit::setPos(const Board& b, const Square& legend) {
+	pos randPos = randomPos(b, legend);
 	setPosition(randPos.x, randPos.y, SqrType::FRUIT);
 }
 
@@ -16,17 +16,17 @@ void Fruit::setVal() {
 	_val = randomNum(5, 9);
 }
 
-void Fruit::setFruit(const Board& b) {
+void Fruit::setFruit(const Board& b, const Square& legend) {
 	setVal();
-	setPos(b);
+	setPos(b, legend);
 }
 
-pos randomPos(const Board& b) {
+pos Fruit::randomPos(const Board& b, const Square& legend) {
 	int x, y;
 	SqrType type;
 	pos randPos;
 	y = randomNum(1, b.getHeight() - 2);
-	x = randomY(b, y);
+	x = randomX(b, y, legend);
 	type = b.getSquare(y, x).getSqrType();
 	randPos.x = x;
 	randPos.y = y;
@@ -38,11 +38,11 @@ int randomNum(int from, int to) {
 	return rand() % (to - from + 1) + from;
 }
 
-int randomY(const Board &b, int y) {
+int Fruit::randomX(const Board& b, int y, const Square& legend) {
 	int counterSpaces = 0;
 	std::vector<int> myvector;
 	for (int i = 0; i < b.getWidth(); i++) {
-		if (b.getSquare(y, i).getSqrType() != SqrType::WALL) {
+		if (b.getSquare(y, i).getSqrType() != SqrType::WALL && !isLegend(legend,y,i)) {
 			myvector.push_back(i);
 		}
 	}
@@ -100,3 +100,11 @@ void Fruit::resetFruit() {
 	setY(0);
 }
 
+bool Fruit::isLegend(const Square& legend,int y,int x) {
+	if (y >= legend.getY() &&y <= legend.getY() + 2) {
+		if (x >= legend.getX() && x <= legend.getX() + 19) {
+			return true;
+		}
+	}
+	return false;
+}

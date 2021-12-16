@@ -6,7 +6,7 @@ struct pos {
 	int y;
 };
 
-pos randomPos(const Board& b);
+
 int randomNum(int from, int to);
 int randomY(const Board& b, int x);
 class Fruit : public Creature
@@ -17,20 +17,19 @@ private:
 	int _direction = 0;
 public:
 	Fruit() = default;
-	Fruit(const Board& b);
+	Fruit(const Board& b, const Square& legend);
 	//Square getSqr() const { return _position; };
 	//int getX() const { return getSqr().getX(); };
 	//int getY() const { return getSqr().getY(); };
 	int getVal() const { return _val; };
-	void setPos(const Board& b);
+	void setPos(const Board& b, const Square& legend);
 	void setVal();
-	void setFruit(const Board& b);
+	void setFruit(const Board& b, const Square& legend);
 	void Move();
 	void oneMoveBack();
 	void changeDirection();
 	void resetFruit();
+	bool isLegend(const Square& legend, int y, int x);
+	int randomX(const Board& b, int y, const Square& legend);
+	pos randomPos(const Board& b, const Square& legend);
 };
-
-
-
-
