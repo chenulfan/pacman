@@ -12,7 +12,6 @@ void Ghost::changeDirection() {
 
 Ghost::Ghost(int direction, int x, int y)
 {
-	//_position.setSquare(x, y, SqrType::GHOST);
 	setPosition(x,y,SqrType::GHOST);
 	_direction = direction;
 	_startX = x;
@@ -157,18 +156,30 @@ void printArr(const int height, const int width,int** arr) {
 void Ghost::notSmartMove(const Pacman& pacman, Square** b, const int height, const int width) {
 	int x = getX(), y = getY();
 	if (pacman.getY() != y) {
-		if (pacman.getY() > y && b[y + 1][x].getSqrType() != SqrType::WALL) { _direction = 1; return; }
+		if (pacman.getY() > y && b[y + 1][x].getSqrType() != SqrType::WALL) { 
+			_direction = 1;
+			return;
+		}
 		else {
-			if (pacman.getY() < getY() && b[y - 1][x].getSqrType() != SqrType::WALL) { _direction = 3; return; }
-			if (pacman.getX() > x) { _direction = 0; return; }
-			else { _direction = 2;return; }
+			if (pacman.getY() < getY() && b[y - 1][x].getSqrType() != SqrType::WALL) 
+				_direction = 3; 
+			else if (pacman.getX() > x) 
+				_direction = 0;
+			else 
+				_direction = 2;
+			return;
 		}
-		if (pacman.getX() > x) { _direction = 0; return; }
-		else { _direction = 2;return; }
-		}
-	else {
-		if (pacman.getX() > x) { _direction = 0; return; }
-		else { _direction = 2;return; }
+
+		if (pacman.getX() > x)
+			_direction = 0;
+		else 
+			_direction = 2;
+		return; 
 	}
+
+	if (pacman.getX() > x)
+		_direction = 0;
+	else
+		_direction = 2;
 }
 
