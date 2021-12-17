@@ -28,8 +28,9 @@ private:
 	Pacman _pacman;
 	int _health=3;
 	int _points=0;
-	bool _isWithColor= false;
+	int _allPoints=0;
 	int _maxPoints = 0;
+	bool _isWithColor= false;
 	int _numOfGhosts = 0;
 	Ghost _ghosts[4];
 	Square _legend;
@@ -45,7 +46,7 @@ public:
 	//void printMenu()const;
 	void printBanner()const;
 	//void printInstructions()const;
-	const int getPoints() const { return _points; };
+	const int getPoints() const { return _allPoints; };
 	const int getHealth() const { return _health; };
 	const int getMaxPoints() const { return _maxPoints; };
 	Board getBoard() const { return _board; };
@@ -54,7 +55,7 @@ public:
 	const int getHeight() const { return _board.getHeight(); }
 	const int getWidth() const { return _board.getWidth(); }
 	void setMaxPoints(const int num) { _maxPoints = num; };
-	void setPoints(int num = 1);
+	void setPoints();
 	void setHealth();
 	void setPlayerKey(char newKey) { _playerKey = newKey; };
 	const bool isCreatureInTunnel(Square pos);
@@ -76,6 +77,7 @@ public:
 	const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
 	void resetGame();
 	bool printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves);
+	void isParallelTunnelIsFood(int yPos, int xPos);
 	//void createGhosts();
 	//bool** initArr();
 	//int smartMove(const Ghost& ghost);
