@@ -280,29 +280,6 @@ const bool Game::isCreatureInTunnel(Creature& creature) {
 	return false;
 }
 
-void Game::MoveAndPrintGhost(Ghost& ghost) {
-	Square boardPositionOfGhost = _board.getSquare(ghost.getY(), ghost.getX());
-	deleteGhostLastMove(ghost);
-	boardPositionOfGhost.print(_isWithColor, _board.getDistantceFromStart());
-
-	ghost.Move();
-	while (isCreatureHitWall(ghost.getPosition()) || isCreatureInTunnel(ghost.getPosition())) {
-		ghost.oneMoveBack();
-		ghost.changeDirection();
-		ghost.Move();
-	}
-	ghost.print(_isWithColor, _board.getDistantceFromStart());
-}
-
-const bool Game::isCreatureHitWall(Square position) const {
-	const int xPos = position.getX();
-	const int yPos = position.getY();
-	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
-	if (sqrType == SqrType::WALL)
-		return true;
-	return false;
-}
-
 const bool Game::isPacmanAteFood() const {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
