@@ -15,4 +15,6 @@ public:
 	virtual void setPosition(int x, int y, SqrType  type) { _position.setX(x);_position.setY(y);_position.setSqrType(type); };
 	virtual void setX(const int x) { _position.setX(x); };
 	virtual void setY(const int y) { _position.setY(y); }
+	//virtual void moveAndPrint() = 0;
+
 };

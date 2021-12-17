@@ -158,7 +158,8 @@ void Board::updateActualGameBoardWidth(string* map,int height) {
                 }
             }
             else {
-                if (map[j][i] != '#') { continue; }
+                if (map[j][i] != '#') 
+                    continue; 
                 if (map[j][i] == '#' && map[j][map[j].size() - 1] == '#') {
                    if ((map[j].size() - i) > width) {
                         width = map[j].size()  - i;

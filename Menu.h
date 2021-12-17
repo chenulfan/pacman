@@ -1,5 +1,7 @@
 #pragma once
 #include "Game.h";
+#include <string>
+
 
 static const int WHITE = 15;
 static const int GAME_WITHOUT_COLOR = 1;
@@ -21,8 +23,9 @@ public:
 	Level getLevelOption();
 	void startMenu();
 	void gameOver(int result);
-	void clear();
+	void clear()const;
 	bool fileExists(string filename);
 	void printLevelMenu() const;
+	void pressAnyKeyToContinue(string msg);
 };
 

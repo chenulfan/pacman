@@ -1,5 +1,11 @@
 #include "Menu.h"
 
+void Menu::pressAnyKeyToContinue(string msg) {
+	cout << "press any key to " << msg << endl;
+	cin.ignore();
+	cin.ignore();
+}
+
 void Menu::printMenu()const {
 	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 		<< " (3) Start a new game without colors from specific file" << endl
@@ -27,9 +33,9 @@ void Menu::printInstructions()const {
 	cout << "  Have FUN" << endl << endl;
 }
 void Menu::startMenu() {
+	string msg;
 	getFileNameFromFile();
 	int option,result,counter = 0;
-	char ch;
 	do {
 		changeColor(WHITE);
 		Game game;
@@ -44,6 +50,7 @@ void Menu::startMenu() {
 		case GAME_WITHOUT_COLOR:
 			printLevelMenu();
 			level = getLevelOption();
+			clear();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
 				++counter;
 				result = game.startGame(false, *i, level);
@@ -55,19 +62,22 @@ void Menu::startMenu() {
 				else {
 					clear();
 					cout << "you finished map number " << counter << " out of "<< _filenames.size() << endl;
-					cout << "press any key to countinue to the next game..." << endl;
-					cin >> ch;
+
 					clear();
 				}
 				clear();
 				game.resetGame();
 			}
-			gameOver(0);
+			
+			if (counter == _filenames.size())
+				gameOver(0);
+			
 			counter = 0;
 			break;
 		case GAME_WITH_COLOR:
 			printLevelMenu();
 			level = getLevelOption();
+			clear();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
 				++counter;
 				result = game.startGame(true, *i, level);
@@ -79,14 +89,17 @@ void Menu::startMenu() {
 				else {
 					clear();
 					cout << "you finished map number " << counter << " out of " << _filenames.size() << endl;
-					cout << "press any key to countinue to the next game..." << endl;
-					cin >> ch;
+					msg = "countinue to the next game...";
+					pressAnyKeyToContinue(msg);
 					clear();
 				}
 				clear();
 				game.resetGame();
 			}
-			gameOver(0);
+
+			if (counter == _filenames.size()) 
+				gameOver(0);
+			
 			counter = 0;
 			break;
 		case FILE_WITHOUT_COLOR:
@@ -101,8 +114,8 @@ void Menu::startMenu() {
 			}
 			else {
 				cout << "file doesn't exist" << endl;
-				cout << "press any key to return to the menu..." << endl;
-				cin >> ch;
+				msg = "return to the menu...";
+				pressAnyKeyToContinue(msg);
 				clear();
 			}
 			clear();
@@ -120,16 +133,17 @@ void Menu::startMenu() {
 			}
 			else {
 				cout <<"file doesn't exist" << endl;
-				cout << "press any key to return to the menu..." << endl;
-				cin >> ch;
+				msg = "return to the menu...";
+				pressAnyKeyToContinue(msg);
 				clear();
 			}
 			clear();
 			break;
 		case INSTRUCTIONS:
 			printInstructions();
-			cout << "press any key to return to the menu..." << endl;
-			cin >> ch;
+			msg = "return to the menu...";
+			pressAnyKeyToContinue(msg);
+		
 			clear();
 			break;
 		}
@@ -165,54 +179,40 @@ void Menu::getFileNameFromFile() {
 
 
 void Menu::gameOver(int result) {
-	char ch;
+	string msg;
 	clear(); // clears the console;
 	switch (result) {
 	case 0:
 		cout << "You WON!!" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 1:
 	    cout << "GAME OVER" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 2:
 		cout << "BOARD INVALID TOO MANY PACMANS" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 3:
 		cout << "BOARD INVALID TOO MANY LEGENDS" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 4:
 		cout << "BOARD INVALID TOO MANY GHOSTS" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 5:
 		cout << "BOARD INVALID HEIGHT IS TOO BIG" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	
 	case 6:
 		cout << "BOARD INVALID WIDTH IS TOO BIG" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	case 7:
 		cout << "BOARD INVALID NO PACMAN FOUND" << endl;
-		cout << "press any key to return to the menu..." << endl;
-		cin >> ch;
 		break;
 	}
+	msg = "return to the menu...";
+	pressAnyKeyToContinue(msg);
 }
 
-void Menu::clear() {
+void Menu::clear()const {
 	COORD topLeft = { 0, 0 };
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO screen;
