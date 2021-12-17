@@ -3,7 +3,7 @@
 #include "map.h"
 #include "ghost.h"
 
-
+class Ghost;
 class Board {
 private:
     Square** _squares;

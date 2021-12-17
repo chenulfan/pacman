@@ -7,14 +7,15 @@ private:
 	Square _position;
 
 public:
-	virtual int getX()const { return _position.getX(); }
-	virtual int getY()const { return _position.getY(); }
-	virtual Square getPosition() const { return _position; };
-	virtual void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor, distanceFromStart); }
-	virtual void setPosition(Square& s)  {  _position = s; };
-	virtual void setPosition(int x, int y, SqrType  type) { _position.setX(x);_position.setY(y);_position.setSqrType(type); };
-	virtual void setX(const int x) { _position.setX(x); };
-	virtual void setY(const int y) { _position.setY(y); }
-	//virtual void moveAndPrint() = 0;
-
+	 int getX()const { return _position.getX(); }
+	 int getY()const { return _position.getY(); }
+	 Square getPosition() const { return _position; };
+	 void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor, distanceFromStart); }
+	 void setPosition(Square& s)  {  _position = s; };
+	 void setPosition(int x, int y, SqrType  type) { _position.setX(x);_position.setY(y);_position.setSqrType(type); };
+	 void setX(const int x) { _position.setX(x); };
+	 void setY(const int y) { _position.setY(y); }
+	 virtual void Move(char playerkey) = 0;
+	 virtual void changeDirection() = 0;
+	 virtual void oneMoveBack(char playerkey) = 0;
 };
