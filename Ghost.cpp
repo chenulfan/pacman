@@ -1,6 +1,6 @@
 #include "Ghost.h"
-
-
+void printArr(const int height, const int width, int** arr);
+void resetArr(const int height, const int width, int** arr);
 
 void Ghost::changeDirection() {
 	int randomdirection = rand() % 4;
@@ -9,45 +9,56 @@ void Ghost::changeDirection() {
 	}
 	_direction = randomdirection;
 }
-Ghost::Ghost(const int direction, const int height, const int width, const int x, const int y)
+
+Ghost::Ghost(int direction, int x, int y)
 {
-	_height = height;
-	_width = width;
-	_position.setSquare(x, y, SqrType::GHOST);
+	//_position.setSquare(x, y, SqrType::GHOST);
+	setPosition(x,y,SqrType::GHOST);
 	_direction = direction;
 	_startX = x;
 	_startY = y;
 }
+
+Ghost& Ghost::operator=(Ghost& s) {
+	Square pos = s.getPosition();
+	setPosition(pos);
+	_direction = s._direction;
+	_startX = s._startX;
+	_startY = s._startY;
+	return *this;
+}
+
+
 void Ghost::Move() {
 	switch ((DIRECTIONS)_direction)
 	{
 	case DIRECTIONS::RIGHT:
-		_position.setX((_position.getX()) + 1);
+		setX((getX()) + 1);
 		break;
 	case DIRECTIONS::DOWN:
-		_position.setY((_position.getY()) + 1);
+		setY((getY()) + 1);
 		break;
 	case DIRECTIONS::LEFT:
-		_position.setX((_position.getX()) - 1);
+		setX((getX()) - 1);
 		break;
 	case DIRECTIONS::UP:
-		_position.setY((_position.getY()) - 1);
+		setY((getY()) - 1);
 		break;
 	}
 }
 void Ghost::oneMoveBack() {
 	switch (_direction) {
 	case ZERO:
-		_position.setX((_position.getX()) - 1);
+		setX((getX()) - 1);
 		break;
 	case ONE:
-		_position.setY((_position.getY()) - 1);
+		setY((getY()) - 1);
 		break;
 	case TWO:
-		_position.setX((_position.getX()) + 1);
+		setX((getX()) + 1);
 		break;
 	case THREE:
-		_position.setY((_position.getY()) + 1);
+		setY((getY()) + 1);
 		break;
 	}
 	}
@@ -55,33 +66,46 @@ void Ghost::changePosition(const int y, const int x) {
 	setX(x);
 	setY(y);
 }
-void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
+
+int** Ghost::initArr(const int height,const int width) {
+	int** arr = new int * [height];
+	for (int i = 0; i < height; ++i) {
+		arr[i] = new int[width];
+		for (int j = 0; j < width; ++j) {
+			arr[i][j] = 0;
+		}
+	}
+	return arr;
+}
+
+void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const int width) {
 	queSquare tempNode,nodeFront;
+	int counter2 = 0;
 	int x, y,counter,firstIteration = 0;;
-	bool visited[19][70] = {};
-	std::queue<queSquare> queue;
+	int** visited = initArr(height,width);
+	queue<queSquare> queue;
 	Square arr[4] = {};
-	queSquare start = { _position };
+	queSquare start = { getPosition() };
 	queue.push(start);
 	while (!queue.empty()) {
 		nodeFront = queue.front();
 		queue.pop();
 		x = nodeFront.currSquare.getX();
 		y = nodeFront.currSquare.getY();
-		visited[y][x] = true;
+		visited[y][x] = 1;
 		if (x == pacman.getX() && y == pacman.getY()) {
 			break;
 		}
 		else {
-			arr[0] = b.getSquare(y, x+1);
-			arr[1] = b.getSquare(y, x-1);
-			arr[2] = b.getSquare(y+1, x);
-			arr[3] = b.getSquare(y-1, x);
+			arr[0] = b[ y ][ x + 1 ];
+			arr[1] = b[ y ][ x-1];
+			arr[2] = b[ y+1 ][ x ];
+			arr[3] = b[ y-1 ][ x ];
 			counter = 0;
 			for (Square i : arr) { 
 				x = i.getX();
 				y = i.getY();
-				if (!visited[y][x] && i.getSqrType() != SqrType::WALL && !(isTunnel(i))) {
+				if (visited[y][x] == 0 && i.getSqrType() != SqrType::WALL && !(isTunnel(i,height,width))) {
 					if (!firstIteration) {
 						if (counter == 0) { tempNode = { i,DIRECTIONS::RIGHT }; }
 						if (counter == 1) { tempNode = { i,DIRECTIONS::LEFT }; }
@@ -90,19 +114,60 @@ void Ghost::SmartMove(const Pacman& pacman, const Board& b) {
 					}
 					else { tempNode = { i,nodeFront.move };}
 					queue.push(tempNode);
+					counter2++;
 				}
 				counter++;
 			}
+		}
+		if (counter2 >= 20000) {
+			notSmartMove(pacman,b,height,width);
+			return;
 		}
 		firstIteration++;
 	}
 	
 	_direction = (int)nodeFront.move;
 }
-const bool Ghost::isTunnel(Square& position) const {
+void resetArr(const int height, const int width,int** arr) {
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			arr[i][j] = 0;
+		}
+	}
+}
+
+const bool Ghost::isTunnel(Square& position,const int height,const int width) const {
 	const int xPos = position.getX();
 	const int yPos = position.getY();
-	if (xPos == 0 || xPos == _width - 1 || yPos == 0 || yPos == _height - 1)
+	if (xPos == 0 || xPos == width - 1 || yPos == 0 || yPos == height - 1)
 		return true;
 	return false;
+}
+
+
+void printArr(const int height, const int width,int** arr) {
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			cout << arr[i][j];
+		}
+		cout << endl;
+	}
+}
+
+void Ghost::notSmartMove(const Pacman& pacman, Square** b, const int height, const int width) {
+	int x = getX(), y = getY();
+	if (pacman.getY() != y) {
+		if (pacman.getY() > y && b[y + 1][x].getSqrType() != SqrType::WALL) { _direction = 1; return; }
+		else {
+			if (pacman.getY() < getY() && b[y - 1][x].getSqrType() != SqrType::WALL) { _direction = 3; return; }
+			if (pacman.getX() > x) { _direction = 0; return; }
+			else { _direction = 2;return; }
+		}
+		if (pacman.getX() > x) { _direction = 0; return; }
+		else { _direction = 2;return; }
+		}
+	else {
+		if (pacman.getX() > x) { _direction = 0; return; }
+		else { _direction = 2;return; }
+	}
 }
