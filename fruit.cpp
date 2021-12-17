@@ -50,7 +50,7 @@ int Fruit::randomX(const Board& b, int y, const Square& legend) {
 	return(myvector[rand() % size]);
 }
 
-void Fruit::oneMoveBack() {
+void Fruit::oneMoveBack(char c) {
 	switch (_direction) {
 	case ZERO:
 		setX((getX()) - 1);
@@ -67,7 +67,7 @@ void Fruit::oneMoveBack() {
 	}
 }
 
-void Fruit::Move() {
+void Fruit::Move(char c) {
 	switch ((DIRECTIONS)_direction)
 	{
 	case DIRECTIONS::RIGHT:

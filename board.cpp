@@ -43,9 +43,6 @@ int Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, 
     int counterPacman = 0, counterLegend = 0;
 
     for (int i = _distanceFromStart; i < _height + _distanceFromStart; ++i) {
-        if (i == 19) {
-            int w = 5;
-        }
         for (int j = _distanceFromLeft; j < _width + _distanceFromLeft; ++j) {
             type = convertType(map[i][j]);
 
@@ -84,14 +81,14 @@ int Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, 
                 pacmanStart.setX(j - _distanceFromLeft);
                 pacmanStart.setY(i - _distanceFromStart);
                 pacmanStart.setSqrType(SqrType::PACMAN);
-                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::PACMAN); // TODO : CHECK IF PACMAN TYPE
+                _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::EMPTY); // TODO : CHECK IF PACMAN TYPE
             }
 
             else {
                 _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::EMPTY);
             }
         }
-        
+        foodCounter = 20;
     }
     return 1;
 }

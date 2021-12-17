@@ -44,11 +44,11 @@ public:
 	//void setX(const int x) { _position.setX(x); }
 	//void setY(const int y) { _position.setY(y); }
 	//Square getPosition()const { return _position; };
-	void changeDirection();
+	void changeDirection() override;
 	void setDirection(int direction) { _direction = direction; };
-	void Move();
+	void Move(char c) override;
 	void changePosition(const int y, const int x);
-	void oneMoveBack();
+	void oneMoveBack(char c) override;
 	const bool isTunnel(Square& position, const int height, const int width) const;
 	void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
 	int** initArr(const int height,const int width);

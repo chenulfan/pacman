@@ -4,6 +4,12 @@
 #include "square.h"
 #include "Creature.h"
 
+static const int UP = 119; // Up Arrow 
+static const int DOWN = 120; // Down Arrow 
+static const int LEFT = 97; // Left Arrow 
+static const int RIGHT = 100; // Right Arrow 
+static const int ESC = 27;  // Escape Key
+static const int STAY = 115;
 
 class Pacman : public Creature {
 private:
@@ -16,15 +22,11 @@ public:
 		_startPosition = s;
 		return *this;
 	}
-	//Pacman() {};
-	//void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); }
-	//const int getX() const { return _position.getX(); }
-	//const int getY() const { return _position.getY(); }
-	//Square getPosition() const { return _position; };
 	Square getStartPosition() const { return _startPosition; };
-	//void setX(const int x) { _position.setX(x); };
-	//void setY(const int y) { _position.setY(y); }
 	void moveToStartPosition() { setX(_startPosition.getX());setY(_startPosition.getY()); };
+	virtual void Move(char playerkey) override;
+	virtual void changeDirection() {};
+	virtual void oneMoveBack(char playerkey) override;
 
 	
 };
