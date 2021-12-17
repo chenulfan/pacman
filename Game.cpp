@@ -221,18 +221,22 @@ void Game::movePacmanThruTunnel() {
 	const int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) {
 		_pacman.setX(getWidth()-2);
+		_board.setSqrType(yPos, getWidth() - 2, SqrType::EMPTY);
 		isParallelTunnelIsFood(yPos, getWidth() - 1);
 	}
 	else if (xPos == getWidth() - 1) {
 		_pacman.setX(1);
+		_board.setSqrType(yPos, 1, SqrType::EMPTY);
 		isParallelTunnelIsFood(yPos, 0);
 	}
 	else if (yPos == 0) {
 		_pacman.setY(getHeight()-2);
+		_board.setSqrType(getHeight() - 2, xPos, SqrType::EMPTY);
 		isParallelTunnelIsFood(getHeight() - 1, xPos);
 	}
 	else if (yPos == getHeight() - 1) {
 		_pacman.setY(1);
+		_board.setSqrType(1, xPos, SqrType::EMPTY);
 		isParallelTunnelIsFood(0, xPos);
 	}
 }
