@@ -4,7 +4,7 @@
 class Creature {
 
 private:
-	Square _position;
+	Square _position ;
 
 public:
 	 int getX()const { return _position.getX(); }

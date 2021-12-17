@@ -100,6 +100,7 @@ Square Board::getLegendPos(string* map, int len) {
             }
         }
     }
+    return s;
 }
 
 void Board::resetBoard() {
@@ -137,7 +138,7 @@ void Board::getGhosts(Square* ghosts) const {
 }
 
 void Board::updateActualGameBoardWidth(string* map,int height) {
-    int width = 0, distanceFromLeft;
+    int width = 0;
     bool foundStart = false;
     for (int j = _distanceFromStart;j < _height + _distanceFromStart;j++) {
         for (int i = 0; i < map[j].size(); ++i) {
