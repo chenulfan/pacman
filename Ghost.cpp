@@ -29,7 +29,7 @@ Ghost& Ghost::operator=(Ghost& s) {
 }
 
 
-void Ghost::Move() {
+void Ghost::Move(char c) {
 	switch ((DIRECTIONS)_direction)
 	{
 	case DIRECTIONS::RIGHT:
@@ -46,7 +46,7 @@ void Ghost::Move() {
 		break;
 	}
 }
-void Ghost::oneMoveBack() {
+void Ghost::oneMoveBack(char c) {
 	switch (_direction) {
 	case ZERO:
 		setX((getX()) - 1);
@@ -171,3 +171,4 @@ void Ghost::notSmartMove(const Pacman& pacman, Square** b, const int height, con
 		else { _direction = 2;return; }
 	}
 }
+

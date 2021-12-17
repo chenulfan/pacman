@@ -25,9 +25,9 @@ public:
 	void setPos(const Board& b, const Square& legend);
 	void setVal();
 	void setFruit(const Board& b, const Square& legend);
-	void Move();
-	void oneMoveBack();
-	void changeDirection();
+	void Move(char c) override;
+	void oneMoveBack(char c) override;
+	void changeDirection() override;
 	void resetFruit();
 	bool isLegend(const Square& legend, int y, int x);
 	int randomX(const Board& b, int y, const Square& legend);

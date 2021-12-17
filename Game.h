@@ -8,13 +8,9 @@
 #include <windows.h>
 #include <stdbool.h>
 
-static const int UP = 119; // Up Arrow 
-static const int DOWN = 120; // Down Arrow 
-static const int LEFT = 97; // Left Arrow 
-static const int RIGHT = 100; // Right Arrow 
-static const int ESC = 27;  // Escape Key
+
 static const int SPEED = 150;
-static const int STAY = 115;
+
 
 
 
@@ -38,9 +34,9 @@ private:
 public:
 	int getKey()const;
 	int startGame(const bool withColor,string filename,Level type);
-	const bool isCreatureHitWall(Square position) const;
+	const bool isCreatureHitWall(Creature& creature) const;
 	const bool isPacmanHitGhost(const Square& position);
-	const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;
+	//const bool isNextMoveIsAWall(const int x, const int y, const Board& b) const;
 	//void clear();
 	//void printMenu()const;
 	void printBanner()const;
@@ -57,34 +53,23 @@ public:
 	void setPoints(int num = 1);
 	void setHealth();
 	void setPlayerKey(char newKey) { _playerKey = newKey; };
-	const bool isCreatureInTunnel(Square pos);
+	const bool isCreatureInTunnel(Creature& creature);
 	void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
 	void resetGameAfterGhostHit();
 	void deletePacmanLastMove();
-	void deleteFruitLastMove(Fruit& fruit);
+	//void deleteFruitLastMove(Fruit& fruit);
+	void deleteCreatureLastMove(Creature& creature);
 	const bool isPacmanAteFood() const;
 	const bool isTunnel(char& prevKey);
 	void movePacmanThruTunnel();
-	void MoveAndPrintGhost(Ghost& ghost);
-	void MoveAndPrintFruit();
+	void MoveAndPrintCreature(Creature& creature);
 	void deleteGhostLastMove(Ghost& ghost);
 	const bool isGhostHitPacman(Square position);
-	//void gameOver(const bool isWon);
 	void printGhosts(int isWithColor);
-	void whichDirectionMovePacman();
+	//void whichDirectionMovePacman();
 	const bool isPacmanAteFruit(const Fruit& fruit) const;
 	const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
 	void resetGame();
 	bool printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves);
-	//void createGhosts();
-	//bool** initArr();
-	//int smartMove(const Ghost& ghost);
-	//const bool isTunnel(Square& position) const;
-
-
-
-	//int smartMove(const Ghost& ghost);
-	//bool isValidMove(int row, int col, string moves);
-	//bool foundPacman(int row, int col, string moves);
 };
 
