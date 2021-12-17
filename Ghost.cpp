@@ -1,6 +1,4 @@
 #include "Ghost.h"
-void printArr(const int height, const int width, int** arr);
-void resetArr(const int height, const int width, int** arr);
 
 void Ghost::changeDirection() {
 	int randomdirection = rand() % 4;
@@ -27,7 +25,6 @@ Ghost& Ghost::operator=(Ghost& s) {
 	return *this;
 }
 
-
 void Ghost::Move(char c) {
 	switch ((DIRECTIONS)_direction)
 	{
@@ -45,22 +42,24 @@ void Ghost::Move(char c) {
 		break;
 	}
 }
+
 void Ghost::oneMoveBack(char c) {
 	switch (_direction) {
-	case ZERO:
-		setX((getX()) - 1);
-		break;
-	case ONE:
-		setY((getY()) - 1);
-		break;
-	case TWO:
-		setX((getX()) + 1);
-		break;
-	case THREE:
-		setY((getY()) + 1);
-		break;
+		case ZERO:
+			setX((getX()) - 1);
+			break;
+		case ONE:
+			setY((getY()) - 1);
+			break;
+		case TWO:
+			setX((getX()) + 1);
+			break;
+		case THREE:
+			setY((getY()) + 1);
+			break;
+		}
 	}
-	}
+
 void Ghost::changePosition(const int y, const int x) {
 	setX(x);
 	setY(y);
@@ -127,13 +126,6 @@ void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const in
 	
 	_direction = (int)nodeFront.move;
 }
-void resetArr(const int height, const int width,int** arr) {
-	for (int i = 0; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			arr[i][j] = 0;
-		}
-	}
-}
 
 const bool Ghost::isTunnel(Square& position,const int height,const int width) const {
 	const int xPos = position.getX();
@@ -143,8 +135,15 @@ const bool Ghost::isTunnel(Square& position,const int height,const int width) co
 	return false;
 }
 
+void Ghost::resetArr(const int height, const int width,int** arr) {
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			arr[i][j] = 0;
+		}
+	}
+}
 
-void printArr(const int height, const int width,int** arr) {
+void Ghost::printArr(const int height, const int width,int** arr) {
 	for (int i = 0; i < height; ++i) {
 		for (int j = 0; j < width; ++j) {
 			cout << arr[i][j];

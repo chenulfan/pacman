@@ -200,7 +200,6 @@ void Menu::gameOver(int result) {
 	case 5:
 		cout << "BOARD INVALID HEIGHT IS TOO BIG" << endl;
 		break;
-	
 	case 6:
 		cout << "BOARD INVALID WIDTH IS TOO BIG" << endl;
 		break;

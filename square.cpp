@@ -49,16 +49,15 @@ void changeColor(int color) {
     SetConsoleTextAttribute(hConsole, color);
 }
 
-
 void Square::setSquare(const int x, const int y, const SqrType sqrType) {
-    this->setX(x);
-    this->setY(y);
-    this->setSqrType(sqrType);
+    setX(x);
+    setY(y);
+    setSqrType(sqrType);
 }
 void Square::setSquare(const Square& sqr) {
-    this->setX(sqr._x);
-    this->setY(sqr._y);
-    this->setSqrType(sqr._sqrType);
+    setX(sqr._x);
+    setY(sqr._y);
+    setSqrType(sqr._sqrType);
 }
 
 void goToXY(int x, int y)

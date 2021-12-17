@@ -1,9 +1,6 @@
 
 #include "board.h"
 
-
-bool isWall(const int* arr, const int j);
-
 void Board::printBoard(const bool isWithColor) {
     for (int i = _distanceFromStart; i < _height + _distanceFromStart; i++) {
         for (int j = 0; j < _width; j++) {
@@ -92,8 +89,6 @@ int Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, 
     }
     return 1;
 }
-
-
 
 Square Board::getLegendPos(string* map, int len) {
     Square s;
@@ -201,7 +196,7 @@ void Board::updateActualGameBoardHeight(string* map, int len) {
     _height = end - start + 1;
 }
 
-bool isWall(const int* arr, const int j) {
+bool Board::isWall(const int* arr, const int j) {
     const int* p = arr;
     while (*p != -1) {
         if (j == *p)
@@ -210,55 +205,4 @@ bool isWall(const int* arr, const int j) {
     }
     return false;
 }
-
-//for (int i = 0; i < len; i++) {
-//    foundWall = false;
-//    for (int j = 0; j < map[i].size(); j++) {
-//        if (!firstRowWall) {
-//            if (map[i][j] == '#') {
-//                foundWall = true;
-//                break;
-//            }
-//        }
-//        else if (map[i][j] == '#')
-//            counter++;
-//    }
-//    if (counter == 0 && firstRowWall) {
-//        end = i;
-//        break;
-//    }
-//}
-//if (end == 0)
-//end = len;
-//
-//_height = end - start;
-
-
-//void readMapFromFile(int& foodCounter, int& ghostCounter, Square& pacmanStart) {
-//
-//    int type;
-//    Square** arr = nullptr;
-//    ifstream file(dafuq);
-//    string str;
-//
-//    _width = getFirstRowSize();
-//    _height = getColSize();
-//
-//    arr = initArr();
-//
-//    for (int i = 0; i < _height; i++) {
-//        getline(file, str);
-//        for (int j = 0; j < _width; j++) {
-//            type = convertType(str[j]);
-//            if ((SqrType)type == SqrType::FOOD) { foodCounter++; }
-//            if ((SqrType)type == SqrType::GHOST) { ghostCounter++; }
-//            if ((SqrType)type == SqrType::PACMAN) {
-//                pacmanStart.setX(j);
-//                pacmanStart.setY(i);
-//                pacmanStart.setSqrType(SqrType::PACMAN);
-//            }
-//            arr[i][j].setSquare(j, i, (SqrType)type);
-//        }
-//    }
-//}
 
