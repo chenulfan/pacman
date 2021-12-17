@@ -1,7 +1,5 @@
 #include "map.h"
 
-
-
 string* Map::getFromFile(string FILENAME) {
 	ifstream f(FILENAME);
 	string str;
@@ -16,37 +14,6 @@ string* Map::getFromFile(string FILENAME) {
 
 	return arrOfStr;
 }
-
-
-//
-//Square** Map::readMapFromFile(int& foodCounter,int& ghostCounter, Square& pacmanStart) {
-//
-//	int type;
-//	Square** arr = nullptr;
-//	ifstream file(dafuq);
-//	string str;
-//
-//	_width = getFirstRowSize();
-//	_height = getColSize();
-//
-//	arr = initArr();
-//	
-//	for (int i = 0; i < _height; i++) {
-//		getline(file, str);
-//		for (int j = 0; j < _width; j++) {
-//			type = convertType(str[j]);
-//			if ((SqrType)type == SqrType::FOOD){foodCounter++;}
-//			if ((SqrType)type == SqrType::GHOST){ghostCounter++;}
-//			if ((SqrType)type == SqrType::PACMAN) { 
-//				pacmanStart.setX(j); 
-//				pacmanStart.setY(i); 
-//				pacmanStart.setSqrType(SqrType::PACMAN); 
-//			}
-//			arr[i][j].setSquare(j, i, (SqrType)type);
-//		}
-//	}
-//	return arr;
-//}
 
 Square** Map::initArr() {
 	Square** arr = new Square * [_height];

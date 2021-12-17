@@ -1,9 +1,6 @@
 #include "Game.h"
-#include "square.h"
-#include "board.h"
+
 #include <cctype>
-
-
 
 void Game::printBanner()const {
 	goToXY(_legend.getX(), _legend.getY());
@@ -40,13 +37,12 @@ int Game::startGame(bool isWithColor,string filename,Level type) {
 
 	printBanner();
 
-
 	while (_health != 0 && _points < _maxPoints) {
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
-		if (_kbhit()) { // if any key was hit
-			_playerKey = tolower(getKey());  // change direction
+		if (_kbhit()) { 
+			_playerKey = tolower(getKey());  
 			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
@@ -307,28 +303,11 @@ const bool Game::isCreatureHitWall(Creature& creature) const{
 	return false;
 }
 
-// void Game::deleteGhostLastMove(Ghost& ghost) {
-// 	goToXY(ghost.getX(), ghost.getY() + _board.getDistantceFromStart());
-// 	cout << " ";
-// }
-
-// void Game::deleteFruitLastMove(Fruit& fruit) {
-// 	goToXY(fruit.getX(), fruit.getY() + _board.getDistantceFromStart());
-// 	cout << " ";
-// }
-
-// const bool Game::isNextMoveIsAWall(const int x, const int y,  const Board& b) const {
-// 	Square pos = b.getSquare(y, x);
-// 	return pos.getSqrType() == SqrType::WALL;
-
-
-
 const bool Game::isGhostHitPacman(Square position){
 	if (position.getX() == _pacman.getX() && position.getY() == _pacman.getY())
 		return true;
 	return false;
 }
-
 
 int Game::getKey()const
 {
@@ -342,7 +321,7 @@ void Game::resetGameAfterGhostHit() {
 	_pacman.moveToStartPosition();
 	for (int i = 0; i < _numOfGhosts; i++) {
 		deleteGhostLastMove(_ghosts[i]);
-		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
+		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX());
 	}
 }
 
@@ -368,14 +347,13 @@ const bool Game::isPacmanHitGhost(const Square& position) {
 	for (int i = 0; i < _numOfGhosts; i++) {
 		if ((position.getX() == _ghosts[i].getX() && position.getY() == _ghosts[i].getY())) {
 			setHealth();
-			if (getHealth() == 0) {
+			if (getHealth() == 0)
 					return true;
-				}
-				resetGameAfterGhostHit();
-			}
+			resetGameAfterGhostHit();
 		}
-	return false;
 	}
+	return false;
+}
 
 void Game::MoveAndPrintCreature(Creature& creature) {
 	Square boardPositionOfGhost = _board.getSquare(creature.getY(), creature.getX());

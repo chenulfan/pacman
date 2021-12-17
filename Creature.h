@@ -1,8 +1,8 @@
 #pragma once
 #include "square.h"
 
-
 class Creature {
+
 private:
 	Square _position;
 

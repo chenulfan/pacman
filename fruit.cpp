@@ -1,11 +1,9 @@
 #include "fruit.h"
-#include "square.h"
 #include<time.h>
 
 Fruit::Fruit(const Board& b, const Square& legend) {
 	setPos(b, legend);
 }
-
 
 void Fruit::setPos(const Board& b, const Square& legend) {
 	pos randPos = randomPos(b, legend);
@@ -33,7 +31,7 @@ pos Fruit::randomPos(const Board& b, const Square& legend) {
 	return randPos;
 }
 
-int randomNum(int from, int to) {
+int Fruit::randomNum(int from, int to) {
 	srand(time(0));
 	return rand() % (to - from + 1) + from;
 }
@@ -102,9 +100,8 @@ void Fruit::resetFruit() {
 
 bool Fruit::isLegend(const Square& legend,int y,int x) {
 	if (y >= legend.getY() &&y <= legend.getY() + 2) {
-		if (x >= legend.getX() && x <= legend.getX() + 19) {
+		if (x >= legend.getX() && x <= legend.getX() + 19)
 			return true;
-		}
 	}
 	return false;
 }

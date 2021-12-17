@@ -7,13 +7,8 @@
 #include <windows.h>
 #include <fstream>
 #include <sstream>
+
 using namespace std;
-
-
-using std::cout;
-using std::cin;
-using std::endl;
-
 
 void goToXY(int x, int y);
 void changeColor(int color);
@@ -24,7 +19,8 @@ class Square {
 
     private:
         SqrType _sqrType;
-        int _x, _y;
+        int _x;
+        int _y;
 
     public:
         const int getX() const { return _x; };

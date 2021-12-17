@@ -24,33 +24,28 @@ struct queSquare {
 
 class Ghost: public Creature{
 
-private:
-	//Square _position;
-	int _direction = 0;
-	int _startX = 0;
-	int _startY = 0;
+	private:
+		int _direction = 0;
+		int _startX = 0;
+		int _startY = 0;
 
-public:
-	Ghost() {};
-	Ghost(int direction, int x, int y);
-	Ghost& operator=(Ghost& s);
+	public:
+		Ghost() {};
+		Ghost(int direction, int x, int y);
+		Ghost& operator=(Ghost& s);
+		int getStartX() { return _startX; }
+		int getStartY() { return _startY; }
+		void changeDirection() override;
+		void setDirection(int direction) { _direction = direction; };
+		void Move(char c) override;
+		void changePosition(const int y, const int x);
+		void oneMoveBack(char c) override;
+		const bool isTunnel(Square& position, const int height, const int width) const;
+		void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
+		int** initArr(const int height,const int width);
+		void notSmartMove(const Pacman& pacman, Square** b, const int height, const int width);
 
-
-	//void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor , distanceFromStart); };
-	//int getX()const { return _position.getX(); }
-	//int getY()const { return _position.getY(); }
-	int getStartX() { return _startX; }
-	int getStartY() { return _startY; }
-	//void setX(const int x) { _position.setX(x); }
-	//void setY(const int y) { _position.setY(y); }
-	//Square getPosition()const { return _position; };
-	void changeDirection() override;
-	void setDirection(int direction) { _direction = direction; };
-	void Move(char c) override;
-	void changePosition(const int y, const int x);
-	void oneMoveBack(char c) override;
-	const bool isTunnel(Square& position, const int height, const int width) const;
-	void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
-	int** initArr(const int height,const int width);
-	void notSmartMove(const Pacman& pacman, Square** b, const int height, const int width);
+	private:
+		void printArr(const int height, const int width, int** arr);
+		void resetArr(const int height, const int width, int** arr);
 };
