@@ -1,6 +1,9 @@
 #include "Game.h"
-
+#include "square.h"
+#include "board.h"
 #include <cctype>
+
+
 
 void Game::printBanner()const {
 	goToXY(_legend.getX(), _legend.getY());
@@ -37,12 +40,13 @@ int Game::startGame(bool isWithColor,string filename,Level type) {
 
 	printBanner();
 
+
 	while (_health != 0 && _points < _maxPoints) {
 		prevKey = _playerKey;
 		Sleep(SPEED);
 
-		if (_kbhit()) { 
-			_playerKey = tolower(getKey());  
+		if (_kbhit()) { // if any key was hit
+			_playerKey = tolower(getKey());  // change direction
 			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
@@ -217,22 +221,18 @@ void Game::movePacmanThruTunnel() {
 	const int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) {
 		_pacman.setX(getWidth()-2);
-		_board.setSqrType(yPos, getWidth() - 2, SqrType::EMPTY);
 		isParallelTunnelIsFood(yPos, getWidth() - 1);
 	}
 	else if (xPos == getWidth() - 1) {
 		_pacman.setX(1);
-		_board.setSqrType(yPos, 1, SqrType::EMPTY);
 		isParallelTunnelIsFood(yPos, 0);
 	}
 	else if (yPos == 0) {
 		_pacman.setY(getHeight()-2);
-		_board.setSqrType(getHeight() - 2, xPos, SqrType::EMPTY);
 		isParallelTunnelIsFood(getHeight() - 1, xPos);
 	}
 	else if (yPos == getHeight() - 1) {
 		_pacman.setY(1);
-		_board.setSqrType(1, xPos, SqrType::EMPTY);
 		isParallelTunnelIsFood(0, xPos);
 	}
 }
@@ -280,6 +280,16 @@ const bool Game::isCreatureInTunnel(Creature& creature) {
 	return false;
 }
 
+
+const bool Game::isCreatureHitWall(Creature& creature) const {
+	const int xPos = creature.getX();
+	const int yPos = creature.getY();
+	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
+	if (sqrType == SqrType::WALL)
+		return true;
+	return false;
+}
+
 const bool Game::isPacmanAteFood() const {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
@@ -294,20 +304,28 @@ void Game::deletePacmanLastMove() {
 }
 
 
-const bool Game::isCreatureHitWall(Creature& creature) const{
-	const int xPos = creature.getX();
-	const int yPos = creature.getY();
-	const SqrType sqrType = _board.getSquare(yPos, xPos).getSqrType();
-	if (sqrType == SqrType::WALL)
-		return true;
-	return false;
-}
+// void Game::deleteGhostLastMove(Ghost& ghost) {
+// 	goToXY(ghost.getX(), ghost.getY() + _board.getDistantceFromStart());
+// 	cout << " ";
+// }
+
+// void Game::deleteFruitLastMove(Fruit& fruit) {
+// 	goToXY(fruit.getX(), fruit.getY() + _board.getDistantceFromStart());
+// 	cout << " ";
+// }
+
+// const bool Game::isNextMoveIsAWall(const int x, const int y,  const Board& b) const {
+// 	Square pos = b.getSquare(y, x);
+// 	return pos.getSqrType() == SqrType::WALL;
+
+
 
 const bool Game::isGhostHitPacman(Square position){
 	if (position.getX() == _pacman.getX() && position.getY() == _pacman.getY())
 		return true;
 	return false;
 }
+
 
 int Game::getKey()const
 {
@@ -321,7 +339,7 @@ void Game::resetGameAfterGhostHit() {
 	_pacman.moveToStartPosition();
 	for (int i = 0; i < _numOfGhosts; i++) {
 		deleteGhostLastMove(_ghosts[i]);
-		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX());
+		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
 	}
 }
 
@@ -347,13 +365,14 @@ const bool Game::isPacmanHitGhost(const Square& position) {
 	for (int i = 0; i < _numOfGhosts; i++) {
 		if ((position.getX() == _ghosts[i].getX() && position.getY() == _ghosts[i].getY())) {
 			setHealth();
-			if (getHealth() == 0)
+			if (getHealth() == 0) {
 					return true;
-			resetGameAfterGhostHit();
+				}
+				resetGameAfterGhostHit();
+			}
 		}
-	}
 	return false;
-}
+	}
 
 void Game::MoveAndPrintCreature(Creature& creature) {
 	Square boardPositionOfGhost = _board.getSquare(creature.getY(), creature.getX());
