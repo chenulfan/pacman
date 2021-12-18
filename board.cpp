@@ -85,7 +85,6 @@ int Board::analyzeBoard(string* map, int len, Ghost* ghosts, int& ghostCounter, 
                 _squares[i - _distanceFromStart][j - _distanceFromLeft].setSquare(j - _distanceFromLeft, i - _distanceFromStart, SqrType::EMPTY);
             }
         }
-        foodCounter = 20;
     }
     return 1;
 }
