@@ -35,7 +35,7 @@ void Menu::printInstructions()const {
 void Menu::startMenu() {
 	string msg;
 	getFileNameFromFile();
-	int option,result,counter = 0;
+	int option, result, counter = 0;
 	do {
 		changeColor(WHITE);
 		Game game;
@@ -45,7 +45,7 @@ void Menu::startMenu() {
 		printMenu();
 		option = getOption();
 		clear();
-		switch (option) 
+		switch (option)
 		{
 		case GAME_WITHOUT_COLOR:
 			printLevelMenu();
@@ -53,7 +53,7 @@ void Menu::startMenu() {
 			clear();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
 				++counter;
-				result = game.startGame(false, *i, level);
+				result = game.startGame(false, *i, level, true);
 				if (result != 0)
 				{
 					gameOver(result);
@@ -61,17 +61,17 @@ void Menu::startMenu() {
 				}
 				else {
 					clear();
-					cout << "you finished map number " << counter << " out of "<< _filenames.size() << endl;
+					cout << "you finished map number " << counter << " out of " << _filenames.size() << endl;
 
 					clear();
 				}
 				clear();
 				game.resetGame();
 			}
-			
+
 			if (counter == _filenames.size())
 				gameOver(0);
-			
+
 			counter = 0;
 			break;
 		case GAME_WITH_COLOR:
@@ -80,7 +80,7 @@ void Menu::startMenu() {
 			clear();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
 				++counter;
-				result = game.startGame(true, *i, level);
+				result = game.startGame(true, *i, level, true);
 				if (result != 0)
 				{
 					gameOver(result);
@@ -97,9 +97,9 @@ void Menu::startMenu() {
 				game.resetGame();
 			}
 
-			if (counter == _filenames.size()) 
+			if (counter == _filenames.size())
 				gameOver(0);
-			
+
 			counter = 0;
 			break;
 		case FILE_WITHOUT_COLOR:
@@ -110,7 +110,7 @@ void Menu::startMenu() {
 				printLevelMenu();
 				level = getLevelOption();
 				clear();
-				gameOver(game.startGame(false,filename,level));
+				gameOver(game.startGame(false, filename, level, true));
 			}
 			else {
 				cout << "file doesn't exist" << endl;
@@ -129,10 +129,10 @@ void Menu::startMenu() {
 				printLevelMenu();
 				level = getLevelOption();
 				clear();
-				gameOver(game.startGame(true, filename,level));
+				gameOver(game.startGame(true, filename, level, true));
 			}
 			else {
-				cout <<"file doesn't exist" << endl;
+				cout << "file doesn't exist" << endl;
 				msg = "return to the menu...";
 				pressAnyKeyToContinue(msg);
 				clear();
@@ -143,7 +143,7 @@ void Menu::startMenu() {
 			printInstructions();
 			msg = "return to the menu...";
 			pressAnyKeyToContinue(msg);
-		
+
 			clear();
 			break;
 		}
@@ -186,7 +186,7 @@ void Menu::gameOver(int result) {
 		cout << "You WON!!" << endl;
 		break;
 	case 1:
-	    cout << "GAME OVER" << endl;
+		cout << "GAME OVER" << endl;
 		break;
 	case 2:
 		cout << "BOARD INVALID TOO MANY PACMANS" << endl;
@@ -242,7 +242,7 @@ Level Menu::getLevelOption() {
 	int option;
 	cin >> option;
 	--option;
-	while (option != int(Level::BEST) && option != int(Level::GOOD) && option != int(Level::NOVICE) ) {
+	while (option != int(Level::BEST) && option != int(Level::GOOD) && option != int(Level::NOVICE)) {
 		cout << "plesae enter valid number" << endl;
 		cin >> option;
 		--option;

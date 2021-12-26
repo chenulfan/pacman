@@ -11,11 +11,12 @@ class Fruit : public Creature
 {
 	private:
 		int _val;
-		int _direction = 0;
+
 	public:
 		Fruit() = default;
 		Fruit(const Board& b, const Square& legend);
 		int getVal() const { return _val; };
+
 		void setPos(const Board& b, const Square& legend);
 		void setVal();
 		void setFruit(const Board& b, const Square& legend);

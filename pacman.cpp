@@ -1,6 +1,7 @@
 #include "pacman.h"
 
 void Pacman::Move(char playerkey) {
+	
 	switch (playerkey) {
 	case RIGHT:
 	    setX(getX() + 1);
