@@ -141,6 +141,8 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 				file << 0;
 				file << ',';
 				file << 0;
+				file << ',';
+				file << 0;
 			}
 		}
 
@@ -165,6 +167,8 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 			file << ',';
 			file << 0;
 			file << ',';
+			file << 0;
+		    file << ',';
 			file << 0;
 		}
 
@@ -245,10 +249,17 @@ int Game::loadGame(bool isWithColor, string boardFileName,string gameFile) {
 					fruitX = strtok(NULL, ",");
 					fruitY = strtok(NULL, ",");
 					fruitVal = strtok(NULL, ",");
-					_fruit.setX(atoi(fruitX));
-					_fruit.setY(atoi(fruitY));
-					_fruit.setVal(atoi(fruitVal));
-					_fruit.print(_isWithColor, _board.getDistantceFromStart());
+					if (*fruitX == '0' && *fruitY == '0') {
+						_board.getSquare(_fruit.getY(), _fruit.getX()).print(_isWithColor,_board.getDistantceFromStart());
+						_fruit.resetFruit();
+					}
+					else {
+						_fruit.setX(atoi(fruitX));
+						_fruit.setY(atoi(fruitY));
+						_fruit.setVal(atoi(fruitVal));
+						goToXY(_fruit.getX(), _fruit.getY());
+						cout << _fruit.getVal();
+					}
 					iterationCounter = iterationCounter + 2;
 				}
 				else {
@@ -264,6 +275,10 @@ int Game::loadGame(bool isWithColor, string boardFileName,string gameFile) {
 			movePacmanThruTunnel();
 			if (isPacmanAteFood())
 				setPoints();
+		}
+		if (isPacmanAteFood()) {
+			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
+			setPoints();
 		}
 
 	}
@@ -561,8 +576,14 @@ void Game::MoveAndPrintLoadedCreature(Creature& creature,char dir) {
 		boardPositionOfGhost.print(_isWithColor, _board.getDistantceFromStart());
 		creature.Move(char(charToPlayerKey(dir)));
 	}
-	creature.print(_isWithColor, _board.getDistantceFromStart());
-	if (typeid(creature) == typeid(_fruit)) { cout << _fruit.getVal(); }
+	if (typeid(creature) == typeid(_fruit)) {
+		goToXY(_fruit.getX(), _fruit.getY());
+		cout << _fruit.getVal(); 
+	}
+	else { 
+		creature.print(_isWithColor, _board.getDistantceFromStart()); 
+	}
+	
 }
 
 void Game::deleteGhostLastMove(Ghost& ghost) {
