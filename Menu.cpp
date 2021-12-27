@@ -121,7 +121,7 @@ void Menu::startMenu() {
 			clear();
 			break;
 		case FILE_WITH_COLOR:
-			gameOver(game.loadGame(true, "pacman1.screen", "test.txt"));
+			gameOver(game.loadGame(true, "pacman1.screen"));
 			//cout << "please enter filename" << endl;
 			//cin >> filename;
 			//if (fileExists(filename)) {

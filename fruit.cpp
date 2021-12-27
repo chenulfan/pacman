@@ -14,7 +14,6 @@ void Fruit::setRandomVal() {
 	_val = randomNum(5, 9);
 }
 
-
 void Fruit::setFruit(const Board& b, const Square& legend) {
 	setRandomVal();
 	setPos(b, legend);
@@ -105,4 +104,13 @@ bool Fruit::isLegend(const Square& legend,int y,int x) {
 			return true;
 	}
 	return false;
+}
+
+void Fruit::print(bool isWithColor, int distantceFromStart) {
+	if (_val != 0) {
+		Square fruitSqr = getPosition();
+		fruitSqr.setSqrType(SqrType::FRUIT);
+		fruitSqr.print(isWithColor, distantceFromStart);
+		cout << _val;
+	}
 }

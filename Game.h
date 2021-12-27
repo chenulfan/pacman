@@ -23,10 +23,14 @@ private:
     int _maxPoints = 0;
     bool _isWithColor = false;
     int _numOfGhosts = 0;
+    int _totalCounterMoves = 1;
     Ghost _ghosts[4];
     Square _legend;
     Fruit _fruit;
     bool _saveToFile = false;
+    ofstream _stepsFile;
+    ofstream _resultFile;
+
 
 public:
     int getKey()const;
@@ -38,11 +42,15 @@ public:
     Square getLegend() const { return _legend; }
     const int getHeight() const { return _board.getHeight(); }
     const int getWidth() const { return _board.getWidth(); }
+    ofstream& getStepsFile() { return _stepsFile; };
+    ofstream& getResultFile() { return _resultFile; };
 
     void setMaxPoints(const int num) { _maxPoints = num; };
     void setPoints();
     void setHealth();
     void setPlayerKey(char newKey) { _playerKey = newKey; };
+    void setStepsFile(string fileName) { _stepsFile.open(fileName); };
+    void setResultFile(string fileName) { _resultFile.open(fileName); };
 
     const bool isCreatureHitWall(Creature& creature) const;
     const bool isPacmanHitGhost(const Square& position);
@@ -58,7 +66,7 @@ public:
     void deleteGhostLastMove(Ghost& ghost);
 
     int startGame(const bool withColor, string filename, Level type, bool saveToFile);
-    int loadGame(const bool withColor, string boardFileName, string gameFile);
+    int loadGame(const bool withColor, string boardFileName);
     void printBanner()const;
     void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
     void resetGameAfterGhostHit();
