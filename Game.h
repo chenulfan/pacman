@@ -58,6 +58,7 @@ public:
     void deleteGhostLastMove(Ghost& ghost);
 
     int startGame(const bool withColor, string filename, Level type, bool saveToFile);
+    int loadGame(const bool withColor, string boardFileName, string gameFile);
     void printBanner()const;
     void setWithColor(const bool isWithColor) { _isWithColor = isWithColor; };
     void resetGameAfterGhostHit();
@@ -65,6 +66,7 @@ public:
     bool printGhostsAndCheckifGhostHitPacman(Level type, int counterGhostsMoves, ofstream& file);
     void movePacmanThruTunnel();
     void MoveAndPrintCreature(Creature& creature, ofstream& file);
+    void MoveAndPrintLoadedCreature(Creature& creature, char dir);
     void printGhosts(int isWithColor);
     void isParallelTunnelIsFood(int yPos, int xPos);
 };

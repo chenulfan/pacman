@@ -11,7 +11,7 @@ public:
 	int getX()const { return _position.getX(); }
 	int getY()const { return _position.getY(); }
 	int getDirection()const { return _direction; }
-
+	void setDirection(int direction) { _direction = direction; };
 	Square getPosition() const { return _position; };
 	void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor, distanceFromStart); }
 	void setPosition(Square& s) { _position = s; };

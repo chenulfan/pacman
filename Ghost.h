@@ -37,7 +37,6 @@ class Ghost: public Creature{
 
 
 		void changeDirection() override;
-		void setDirection(int direction) { _direction = direction; };
 		void Move(char c) override;
 		void changePosition(const int y, const int x);
 		void oneMoveBack(char c) override;

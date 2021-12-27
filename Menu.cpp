@@ -121,23 +121,23 @@ void Menu::startMenu() {
 			clear();
 			break;
 		case FILE_WITH_COLOR:
-
-			cout << "please enter filename" << endl;
-			cin >> filename;
-			if (fileExists(filename)) {
-				clear();
-				printLevelMenu();
-				level = getLevelOption();
-				clear();
-				gameOver(game.startGame(true, filename, level, true));
-			}
-			else {
-				cout << "file doesn't exist" << endl;
-				msg = "return to the menu...";
-				pressAnyKeyToContinue(msg);
-				clear();
-			}
-			clear();
+			gameOver(game.loadGame(true, "pacman1.screen", "test.txt"));
+			//cout << "please enter filename" << endl;
+			//cin >> filename;
+			//if (fileExists(filename)) {
+			//	clear();
+			//	printLevelMenu();
+			//	level = getLevelOption();
+			//	clear();
+			//	gameOver(game.startGame(true, filename, level, true));
+			//}
+			//else {
+			//	cout << "file doesn't exist" << endl;
+			//	msg = "return to the menu...";
+			//	pressAnyKeyToContinue(msg);
+			//	clear();
+			//}
+			//clear();
 			break;
 		case INSTRUCTIONS:
 			printInstructions();
