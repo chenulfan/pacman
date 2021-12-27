@@ -10,12 +10,13 @@ void Fruit::setPos(const Board& b, const Square& legend) {
 	setPosition(randPos.x, randPos.y, SqrType::FRUIT);
 }
 
-void Fruit::setVal() {
+void Fruit::setRandomVal() {
 	_val = randomNum(5, 9);
 }
 
+
 void Fruit::setFruit(const Board& b, const Square& legend) {
-	setVal();
+	setRandomVal();
 	setPos(b, legend);
 }
 

@@ -18,8 +18,10 @@ class Fruit : public Creature
 		int getVal() const { return _val; };
 
 		void setPos(const Board& b, const Square& legend);
-		void setVal();
+		void setRandomVal();
 		void setFruit(const Board& b, const Square& legend);
+		void setVal(int newVal) { _val = newVal; };
+
 		void Move(char c) override;
 		void oneMoveBack(char c) override;
 		void changeDirection() override;

@@ -70,7 +70,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		MoveAndPrintCreature(_pacman, file);
 
 		if (isPacmanHitGhost(_pacman.getPosition())) {
-			return 1;
+ 			return 1;
 		}
 
 		//save to file num of ghosts
@@ -124,6 +124,8 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 					file << _fruit.getX();
 					file << ',';
 					file << _fruit.getY();
+					file << ',';
+					file << _fruit.getVal();
 				}
 				fruitFlag = true;
 				fruitCounterMoves = 0;
@@ -132,6 +134,13 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 				fruitFlag = false;
 				_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
 				fruitCounterMoves = 0;
+				_fruit.resetFruit();
+				file << ',';
+				file << 'F';
+				file << ',';
+				file << 0;
+				file << ',';
+				file << 0;
 			}
 		}
 
@@ -139,7 +148,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 			_board.setSqrType(_pacman.getY(), _pacman.getX(), SqrType::EMPTY);
 			setPoints();
 		}
-		if (isTunnel(prevKey)) {
+		if (isTunnel()) {
 			deletePacmanLastMove();
 			movePacmanThruTunnel();
 			if (isPacmanAteFood())
@@ -151,6 +160,12 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 			_allPoints += _fruit.getVal();
 			printBanner();
 			_fruit.resetFruit();
+			file << ',';
+			file << 'F';
+			file << ',';
+			file << 0;
+			file << ',';
+			file << 0;
 		}
 
 		for (int i = 0; i < _numOfGhosts; ++i) {
@@ -167,7 +182,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 	}
 	return 0;
 }
-
+//=======================================================================================================================
 int Game::loadGame(bool isWithColor, string boardFileName,string gameFile) {
 	fstream file;
 	string line;
@@ -191,13 +206,14 @@ int Game::loadGame(bool isWithColor, string boardFileName,string gameFile) {
 	printGhosts(isWithColor);
 
 	printBanner();
+
 	while (getline(file, line)) {
 		Sleep(SPEED);
 		iterationCounter = 0;
 		counterGhosts = 0;
 		linecopy = new char[line.size()];
 		strcpy(linecopy, line.c_str());
-		char* pch,* fruitX,* fruitY;
+		char* pch,* fruitX,* fruitY, *fruitVal;
 		pch = strtok(linecopy, ",");
 		while (pch != NULL)
 		{
@@ -208,22 +224,48 @@ int Game::loadGame(bool isWithColor, string boardFileName,string gameFile) {
 					return 1;
 				}
 			}
-			if (iterationCounter >= 3 && iterationCounter < (_numOfGhosts + 3)) //ghosts 
+			if (iterationCounter >= 3 && iterationCounter < _numOfGhosts + 3) //ghosts 
 			{
 				MoveAndPrintLoadedCreature(_ghosts[counterGhosts], *pch);
+
+				if (isGhostHitPacman(_ghosts[counterGhosts].getPosition())) {
+					setHealth();
+					if (getHealth() == 0) {
+						return true;
+					}
+					resetGameAfterGhostHit();
+				}
+
 				counterGhosts++;
+
 			}
-			if (iterationCounter >= _numOfGhosts + 3)//fruit 
+			if (iterationCounter >= _numOfGhosts + 3) //fruit 
 			{
 				if (*pch == 'F') {
 					fruitX = strtok(NULL, ",");
 					fruitY = strtok(NULL, ",");
+					fruitVal = strtok(NULL, ",");
+					_fruit.setX(atoi(fruitX));
+					_fruit.setY(atoi(fruitY));
+					_fruit.setVal(atoi(fruitVal));
+					_fruit.print(_isWithColor, _board.getDistantceFromStart());
 					iterationCounter = iterationCounter + 2;
+				}
+				else {
+					MoveAndPrintLoadedCreature(_fruit, *pch);
 				}
 			}
 			pch = strtok(NULL, ",");
 			iterationCounter++;
 		}
+
+		if (isTunnel()) {
+			deletePacmanLastMove();
+			movePacmanThruTunnel();
+			if (isPacmanAteFood())
+				setPoints();
+		}
+
 	}
 	int wtf = 5;
 	return 0;
@@ -345,7 +387,7 @@ void Game::movePacmanThruTunnel() {
 	}
 }
 
-const bool Game::isTunnel(char& playerKey) {
+const bool Game::isTunnel() {
 	const int xPos = _pacman.getPosition().getX();
 	const int yPos = _pacman.getPosition().getY();
 	bool ret;
@@ -432,6 +474,8 @@ void Game::resetGameAfterGhostHit() {
 		deleteGhostLastMove(_ghosts[i]);
 		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
 	}
+	// TODO: resultFile << counterTotal; -----------------------------------------------------
+	
 }
 
 void Game::setPoints() {

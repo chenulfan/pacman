@@ -48,7 +48,7 @@ public:
     const bool isPacmanHitGhost(const Square& position);
     const bool isCreatureInTunnel(Creature& creature);
     const bool isPacmanAteFood() const;
-    const bool isTunnel(char& prevKey);
+    const bool isTunnel();
     const bool isPacmanAteFruit(const Fruit& fruit) const;
     const bool isGhostAteFruit(const Fruit& fruit, const Ghost& ghost) const;
     const bool isGhostHitPacman(Square position);
