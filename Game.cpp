@@ -71,6 +71,9 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		MoveAndPrintCreature(_pacman, _stepsFile);
 
 		if (isPacmanHitGhost(_pacman.getPosition())) {
+			if (_saveToFile) {
+				_resultFile << "," << _totalCounterMoves;
+			}
  			return 1;
 		}
 
@@ -82,6 +85,9 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		if (printCreatureFlag) {
 
 			if (printGhostsAndCheckifGhostHitPacman(type, counterGhostsMoves, _stepsFile)) {
+				if (_saveToFile) {
+					_resultFile << "," << _totalCounterMoves;
+				}
 				return 1;
 			}
 
@@ -162,17 +168,20 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 	
 		if (_saveToFile)
 			_stepsFile << endl;
+
+		_maxPoints = 45;
 	}
 
-	if (_saveToFile)
+	if (_saveToFile) {
+		_resultFile << endl << _allPoints << "," << _health;
 		_resultFile << endl << _totalCounterMoves;
-	
+	}
 	return 0;
 }
 
 //=======================================================================================================================
 int Game::loadGame(bool isWithColor, string fileName) {
-	fstream _stepsFile;
+	ifstream _stepsFile, _resultFile;
 	string line;
 	char* linecopy;
 	string stepsFileName = fileName.substr(0, fileName.find(".")) + ".steps";
@@ -473,10 +482,8 @@ void Game::resetGameAfterGhostHit() {
 		deleteGhostLastMove(_ghosts[i]);
 		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
 	}
-	// TODO: resultFile << counterTotal; -----------------------------------------------------
 	if (_saveToFile) {
-		_resultFile << _totalCounterMoves;
-		_resultFile << " ";
+			_resultFile <<_totalCounterMoves << "," ;
 	}
 	
 }
@@ -493,6 +500,12 @@ void Game::setHealth() {
 };
 
 void Game::resetGame() {
+
+	if (_saveToFile) {
+		_resultFile.close();
+		_stepsFile.close();
+	}
+
 	_board.resetBoard();
 	_points = 0;
 	_maxPoints = 0;
