@@ -10,6 +10,7 @@ void Menu::printMenu()const {
 	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 		<< " (3) Start a new game without colors from specific file" << endl
 		<< " (4) Start a new game with colors from specific file" << endl
+		<< " (5) play record game" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
 }
 void Menu::printLevelMenu() const {
@@ -33,8 +34,10 @@ void Menu::printInstructions()const {
 	cout << "  Have FUN" << endl << endl;
 }
 void Menu::startMenu() {
+	bool isSilentMode = true;
+	bool isFinished;
 	string msg;
-	getFileNameFromFile();
+	getScreensFileName();
 	int option, result, counter = 0;
 	do {
 		changeColor(WHITE);
@@ -47,6 +50,7 @@ void Menu::startMenu() {
 		clear();
 		switch (option)
 		{
+
 		case GAME_WITHOUT_COLOR:
 			printLevelMenu();
 			level = getLevelOption();
@@ -62,7 +66,6 @@ void Menu::startMenu() {
 				else {
 					clear();
 					cout << "you finished map number " << counter << " out of " << _filenames.size() << endl;
-
 					clear();
 				}
 				clear();
@@ -74,13 +77,14 @@ void Menu::startMenu() {
 
 			counter = 0;
 			break;
+
 		case GAME_WITH_COLOR:
 			printLevelMenu();
 			level = getLevelOption();
 			clear();
-			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
+			for (auto y = _filenames.begin(); y != _filenames.end(); ++y) {
 				++counter;
-				result = game.startGame(true, *i, level, true);
+				result = game.startGame(true, *y, level, true);
 				if (result != 0)
 				{
 					gameOver(result);
@@ -102,6 +106,7 @@ void Menu::startMenu() {
 
 			counter = 0;
 			break;
+
 		case FILE_WITHOUT_COLOR:
 			cout << "please enter filename" << endl;
 			cin >> filename;
@@ -120,25 +125,51 @@ void Menu::startMenu() {
 			}
 			clear();
 			break;
+
 		case FILE_WITH_COLOR:
-			gameOver(game.loadGame(true, "pacman1.screen"));
-			//cout << "please enter filename" << endl;
-			//cin >> filename;
-			//if (fileExists(filename)) {
-			//	clear();
-			//	printLevelMenu();
-			//	level = getLevelOption();
-			//	clear();
-			//	gameOver(game.startGame(true, filename, level, true));
-			//}
-			//else {
-			//	cout << "file doesn't exist" << endl;
-			//	msg = "return to the menu...";
-			//	pressAnyKeyToContinue(msg);
-			//	clear();
-			//}
-			//clear();
+			cout << "please enter filename" << endl;
+			cin >> filename;
+			if (fileExists(filename)) {
+				clear();
+				printLevelMenu();
+				level = getLevelOption();
+				clear();
+				gameOver(game.startGame(true, filename, level, true));
+			}
+			else {
+				cout << "file doesn't exist" << endl;
+				msg = "return to the menu...";
+				pressAnyKeyToContinue(msg);
+				clear();
+			}
+			clear();
 			break;
+
+		case LOAD:
+			counter = 0;
+			isFinished = false;
+			for (auto x = _filenames.begin(); x != _filenames.end(); ++x) {
+				result = game.loadGame(true, isSilentMode, isFinished, *x);
+				if (result != 0 && isFinished){
+					gameOver(result);
+					break;
+				}
+				else {
+					game.resetGame();
+					clear();
+				}
+				counter++;
+			}
+
+			if (counter == _filenames.size()) {
+				if (isSilentMode)
+					gameOver(-2);
+				else
+					gameOver(0);
+			}
+
+			break;
+
 		case INSTRUCTIONS:
 			printInstructions();
 			msg = "return to the menu...";
@@ -154,7 +185,7 @@ void Menu::startMenu() {
 int Menu::getOption() {
 	int option;
 	cin >> option;
-	while (option != GAME_WITHOUT_COLOR && option != GAME_WITH_COLOR && option != FILE_WITH_COLOR && option != FILE_WITHOUT_COLOR && option != INSTRUCTIONS && option != EXIT) {
+	while (option != GAME_WITHOUT_COLOR && option != GAME_WITH_COLOR && option != FILE_WITH_COLOR && option != FILE_WITHOUT_COLOR && option != LOAD && option != INSTRUCTIONS && option != EXIT) {
 		cout << "plesae enter valid number" << endl;
 		cin >> option;
 	}
@@ -162,7 +193,7 @@ int Menu::getOption() {
 }
 
 
-void Menu::getFileNameFromFile() {
+void Menu::getScreensFileName() {
 	string sourceFolder;
 	sourceFolder = _getcwd(NULL, 0);
 
@@ -178,10 +209,17 @@ void Menu::getFileNameFromFile() {
 }
 
 
+
 void Menu::gameOver(int result) {
 	string msg;
 	clear(); // clears the console;
 	switch (result) {
+	case -1:
+		cout << "Test Failed" << endl;
+		break;
+	case -2:
+		cout << "Test Passed" << endl;
+		break;
 	case 0:
 		cout << "You WON!!" << endl;
 		break;

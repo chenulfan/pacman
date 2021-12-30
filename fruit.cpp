@@ -19,6 +19,12 @@ void Fruit::setFruit(const Board& b, const Square& legend) {
 	setPos(b, legend);
 }
 
+void Fruit::setFruit(int x, int y, int val) {
+	setX(x);
+	setY(y);
+	setVal(val);
+}
+
 pos Fruit::randomPos(const Board& b, const Square& legend) {
 	int x, y;
 	SqrType type;
@@ -106,8 +112,8 @@ bool Fruit::isLegend(const Square& legend,int y,int x) {
 	return false;
 }
 
-void Fruit::print(bool isWithColor, int distantceFromStart) {
-	if (_val != 0) {
+void Fruit::print(bool isWithColor, int distantceFromStart , bool isSilentMode) {
+	if (_val != 0 && !isSilentMode) {
 		Square fruitSqr = getPosition();
 		fruitSqr.setSqrType(SqrType::FRUIT);
 		fruitSqr.print(isWithColor, distantceFromStart);

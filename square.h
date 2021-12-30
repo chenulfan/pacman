@@ -33,8 +33,8 @@ class Square {
         void setSqrType(const SqrType sqrType) { _sqrType = (SqrType)sqrType; } ;
         void setSquare(const int x, const int y, const SqrType sqrType);
         void setSquare(const Square& b);
-        void print(const bool isWithColor, int distacneFromStart)const;
-        void printBanner(bool isWithColor);
+        void print(const bool isWithColor, int distacneFromStart, bool isSilentMode = false)const;
+        void printBanner(bool isWithColor, bool isSilentMode = false);
 
 };
 

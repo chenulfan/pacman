@@ -13,7 +13,9 @@ public:
 	int getDirection()const { return _direction; }
 	void setDirection(int direction) { _direction = direction; };
 	Square getPosition() const { return _position; };
-	void print(const bool isWithColor, int distanceFromStart) { _position.print(isWithColor, distanceFromStart); }
+	void print(const bool isWithColor, int distanceFromStart, bool isSilentMode = false) { 
+		_position.print(isWithColor, distanceFromStart, isSilentMode); 
+	}
 	void setPosition(Square& s) { _position = s; };
 	void setPosition(int x, int y, SqrType  type) { _position.setX(x); _position.setY(y); _position.setSqrType(type); };
 	void setX(const int x) { _position.setX(x); };
