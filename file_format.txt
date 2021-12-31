@@ -1,0 +1,38 @@
+@ FILE FORMAT:
+
+@ Result file:
+    # First line: in format of: "(int)," for any death.
+            - points of time of deaths if any. 
+    # Second line: in format of: "(int)totalPoints, (int)health". 
+            - at the end of the screen if passed the screen.
+    # Third line: in format of:"(int)"
+            - points of time when pacman finished the screen - (ate all the breadcrumbs)
+
+@ Steps file:
+    # every line is in the same format.
+    # the format is:
+        - "(int)point of time" 
+        - ","
+        - "(char) pacman move direction (U/D/L/R)"
+        - ","
+        -"(int)amount of ghosts"
+        - ","
+        - for each gohst is direction: "(char) ghost move direction (U/D/L/R)"
+        - ","
+        - after each ghost direction there is two options:
+            - 1. fruit is created / deleted -> there will be indicator "F" for fruit.
+                - after that will be the x , y and init fruit val.
+                - In the end the format will be like so: "F, initX, initY, val". 
+            - 2. fruit is alive -> there will be a fruit move direction in fromat of : 
+                 "(char) fruit move direction (U/D/L/R)"
+
+    # Examples:
+        - 1. There is 3 ghosts and no fruit:
+            - "5,R,3,U,R,U"
+        - 2. There is 3 ghosts and fruit is first created:
+            - "32,U,3,S,S,S,F,6,5,9"
+        - 3. There is 3 ghosts and fruit is already created:
+            - "33,U,3,L,U,L,R"
+        - 4. There is 3 ghosts and fruit is deleted:
+            - "33,U,3,L,U,L,F,0,0,0"
+            

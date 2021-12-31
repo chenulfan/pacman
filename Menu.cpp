@@ -10,7 +10,6 @@ void Menu::printMenu()const {
 	cout << endl << " (1) Start a new game without colors" << endl << " (2) Start a new game with colors" << endl
 		<< " (3) Start a new game without colors from specific file" << endl
 		<< " (4) Start a new game with colors from specific file" << endl
-		<< " (5) play record game" << endl
 		<< " (8) Present instructions and keys" << endl << " (9) EXIT" << endl;
 }
 void Menu::printLevelMenu() const {
@@ -33,8 +32,7 @@ void Menu::printInstructions()const {
 	cout << "  The amount of lifes left will be indicated under the game board, when you reach 0 you lose" << endl;
 	cout << "  Have FUN" << endl << endl;
 }
-void Menu::startMenu() {
-	bool isSilentMode = true;
+void Menu::startMenu(bool isSaveToFile, bool isLoadMode, bool isSilentMode) {
 	bool isFinished;
 	string msg;
 	getScreensFileName();
@@ -45,8 +43,14 @@ void Menu::startMenu() {
 		string filename;
 		Level level = Level::NOVICE;
 		clear();
-		printMenu();
-		option = getOption();
+
+		if (isLoadMode)
+			option = LOAD;
+		else {
+			printMenu();
+			option = getOption();
+		}
+
 		clear();
 		switch (option)
 		{
@@ -57,7 +61,7 @@ void Menu::startMenu() {
 			clear();
 			for (auto i = _filenames.begin(); i != _filenames.end(); ++i) {
 				++counter;
-				result = game.startGame(false, *i, level, true);
+				result = game.startGame(false, *i, level, isSaveToFile);
 				if (result != 0)
 				{
 					gameOver(result);
@@ -84,7 +88,7 @@ void Menu::startMenu() {
 			clear();
 			for (auto y = _filenames.begin(); y != _filenames.end(); ++y) {
 				++counter;
-				result = game.startGame(true, *y, level, true);
+				result = game.startGame(true, *y, level, isSaveToFile);
 				if (result != 0)
 				{
 					gameOver(result);
@@ -115,7 +119,7 @@ void Menu::startMenu() {
 				printLevelMenu();
 				level = getLevelOption();
 				clear();
-				gameOver(game.startGame(false, filename, level, true));
+				gameOver(game.startGame(false, filename, level, false));
 			}
 			else {
 				cout << "file doesn't exist" << endl;
@@ -134,7 +138,7 @@ void Menu::startMenu() {
 				printLevelMenu();
 				level = getLevelOption();
 				clear();
-				gameOver(game.startGame(true, filename, level, true));
+				gameOver(game.startGame(true, filename, level, false));
 			}
 			else {
 				cout << "file doesn't exist" << endl;
@@ -150,7 +154,7 @@ void Menu::startMenu() {
 			isFinished = false;
 			for (auto x = _filenames.begin(); x != _filenames.end(); ++x) {
 				result = game.loadGame(true, isSilentMode, isFinished, *x);
-				if (result != 0 && isFinished){
+				if (result != 0 && isFinished) {
 					gameOver(result);
 					break;
 				}
@@ -168,7 +172,7 @@ void Menu::startMenu() {
 					gameOver(0);
 			}
 
-			break;
+			return;
 
 		case INSTRUCTIONS:
 			printInstructions();
@@ -179,13 +183,14 @@ void Menu::startMenu() {
 			break;
 		}
 	} while (option != EXIT);
+	clear();
 }
 
 
 int Menu::getOption() {
 	int option;
 	cin >> option;
-	while (option != GAME_WITHOUT_COLOR && option != GAME_WITH_COLOR && option != FILE_WITH_COLOR && option != FILE_WITHOUT_COLOR && option != LOAD && option != INSTRUCTIONS && option != EXIT) {
+	while (option != GAME_WITHOUT_COLOR && option != GAME_WITH_COLOR && option != FILE_WITH_COLOR && option != FILE_WITHOUT_COLOR && option != INSTRUCTIONS && option != EXIT) {
 		cout << "plesae enter valid number" << endl;
 		cin >> option;
 	}

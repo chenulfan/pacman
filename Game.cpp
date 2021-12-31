@@ -62,8 +62,8 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 		Sleep(SPEED);
 
-		if (_kbhit()) { // if any key was hit
-			_playerKey = tolower(getKey());  // change direction
+		if (_kbhit()) { 
+			_playerKey = tolower(getKey());  
 			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
@@ -75,12 +75,11 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 		if (isPacmanHitGhost(_pacman.getPosition())) {
 			if (_saveToFile) {
-				_resultFile << _totalCounterMoves;
+				_resultFile << _totalCounterMoves << ",";
 			}
 			return 1;
 		}
 
-		//save to _stepsFile num of ghosts
 		if (_saveToFile) {
 			_stepsFile << ',' << _numOfGhosts;
 		}
@@ -89,7 +88,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 			if (printGhostsAndCheckifGhostHitPacman(type, counterGhostsMoves, _stepsFile)) {
 				if (_saveToFile) {
-					_resultFile << _totalCounterMoves;
+					_resultFile << _totalCounterMoves << ",";
 				}
 				return 1;
 			}
@@ -183,7 +182,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		if (_saveToFile)
 			_stepsFile << endl;
 
-		_maxPoints = 20;// DELETE
+		_maxPoints = 30; // DELETE
 	}
 
 	if (_saveToFile) {
@@ -194,7 +193,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 	return 0;
 }
 
-//=======================================================================================================================
 int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string fileName) {
 
 	int maxPoints = 0, result, smartMoveDirection, iterationCounter, counterGhosts;
@@ -206,7 +204,6 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 	string fileNameWithoutExtension = fileName.substr(0, fileName.find("."));
 	_stepsFile.open(fileNameWithoutExtension + ".steps");
 	_resultFile.open(fileNameWithoutExtension + ".result");
-
 
 	setIsSilentMode(isSilentMode);
 	setWithColor(isWithColor);
@@ -225,9 +222,10 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 	printGhosts(isWithColor);
 	printBanner();
 
-
-
-	while (std::getline(_stepsFile, line, '\n')) {
+	getline(_resultFile, deaths, '\n');
+	_resultFile.seekg(0);
+	
+	while (getline(_stepsFile, line, '\n')) {
 		char* pch, * fruitX, * fruitY, * fruitVal;
 
 		if (!_isSilentMode) {
@@ -246,8 +244,8 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 				MoveAndPrintLoadedCreature(_pacman, *pch);
 				if (isPacmanHitGhostLoaded(_pacman.getPosition())) {
 
-					std::getline(_resultFile, deaths, ',');
-					if (atoi(deaths.c_str()) != _totalCounterMoves) {
+					getline(_resultFile, death, ',');
+					if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") {
 						isfinished = true;
 						return -1;
 					}
@@ -263,9 +261,8 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 
 				if (isGhostHitPacman(_ghosts[counterGhosts].getPosition())) {
 
-					// check in result file if the same *point of time* -------------------------------------------------
-					std::getline(_resultFile, deaths, ',');
-					if (atoi(deaths.c_str()) != _totalCounterMoves) {
+					getline(_resultFile, death, ',');
+					if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") {
 						isfinished = true;
 						return -1;
 					}
@@ -318,42 +315,38 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 
 	finish:
 
-	std::getline(_resultFile, extraDeath, ',');
-	
-	if (extraDeath != "") {
+	getline(_resultFile, extraDeath, '\n');
+	if (_isSilentMode && extraDeath != "") {
 		isfinished = true;
 		return -1;
 	}
+	_resultFile.seekg(0);
 
-	std::getline(_resultFile, line, '\n');
-	std::getline(_resultFile, healthPointLine, '\n');
-	std::getline(_resultFile, winLine, '\n');
+	string pointsLine;
+	string healthLine;
+	getline(_resultFile, line, '\n');
+	getline(_resultFile, pointsLine, ',');
+	getline(_resultFile, healthLine, '\n');
+	getline(_resultFile, winLine, '\n');
+
+
 
 	if (winLine == "") {
 		isfinished = true;
-		// check in result file if the same *point of time*--------------------------------------------------------------
-		if (atoi(deaths.c_str()) != _totalCounterMoves) {
+		if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") 
 			return -1;
-		}
-		if (deaths.c_str()) {
-
-		}
-		if (_isSilentMode) {
+		if (_isSilentMode) 
 			return -2;
-		}
 		return 1; // GAME OVER
 	}
 	else {
-		// check in result file if the same *point of time* of winning---------------------------------------------------
-		if (atoi(winLine.c_str()) != _totalCounterMoves) {
+		if (atoi(winLine.c_str()) != _totalCounterMoves || atoi(healthLine.c_str()) != _health || atoi(pointsLine.c_str()) != _allPoints) {
 			isfinished = true;
-			if (_isSilentMode) {
+			if (_isSilentMode) 
 				return -1; // TODO : cHANGE 
-			}
 		}
 		if (_isSilentMode)
 			return -2;
-
 		return 0; // CONTINUE
 	}
 
@@ -532,7 +525,6 @@ const bool Game::isCreatureInTunnel(Creature& creature) {
 	return false;
 }
 
-
 const bool Game::isCreatureHitWall(Creature& creature) const {
 	const int xPos = creature.getX();
 	const int yPos = creature.getY();
@@ -631,8 +623,6 @@ const bool Game::isPacmanHitGhostLoaded(const Square& position) {
 	return false;
 }
 
-
-
 void Game::MoveAndPrintCreature(Creature& creature, ofstream& _stepsFile) {
 	Square boardPositionOfGhost = _board.getSquare(creature.getY(), creature.getX());
 	deleteCreatureLastMove(creature);
@@ -695,7 +685,7 @@ void Game::MoveAndPrintLoadedCreature(Creature& creature, char dir) {
 
 void Game::deleteGhostLastMove(Ghost& ghost) {
 	goToXY(ghost.getX(), ghost.getY() + _board.getDistantceFromStart());
-	cout << " ";
+	_board.getSquare(ghost.getY(), ghost.getX()).print(_isWithColor, _board.getDistantceFromStart());
 }
 
 void Game::deleteCreatureLastMove(Creature& creature) {

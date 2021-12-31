@@ -13,20 +13,20 @@ static const int WHITE = 15;
 
 class Menu
 {
-	private:
-		vector<string> _filenames;
+private:
+	vector<string> _filenames;
 
-	public:
-		void getScreensFileName();
-		void printInstructions()const;
-		void printMenu()const;
-		int getOption();
-		Level getLevelOption();
-		void startMenu();
-		void gameOver(int result);
-		void clear()const;
-		bool fileExists(string filename);
-		void printLevelMenu() const;
-		void pressAnyKeyToContinue(string msg);
+public:
+	void getScreensFileName();
+	void printInstructions()const;
+	void printMenu()const;
+	int getOption();
+	Level getLevelOption();
+	void startMenu(bool isSaveToFile = false, bool isLoadMode = false, bool isSilentMode = false);
+	void gameOver(int result);
+	void clear()const;
+	bool fileExists(string filename);
+	void printLevelMenu() const;
+	void pressAnyKeyToContinue(string msg);
 };
 
