@@ -1,10 +1,12 @@
 
 #include "board.h"
 
-void Board::printBoard(const bool isWithColor) {
-    for (int i = _distanceFromStart; i < _height + _distanceFromStart; i++) {
-        for (int j = 0; j < _width; j++) {
-            _squares[i - _distanceFromStart][j].print(isWithColor, _distanceFromStart);
+void Board::printBoard(const bool isWithColor, bool isSilentMode) {
+    if (!isSilentMode) {
+        for (int i = _distanceFromStart; i < _height + _distanceFromStart; i++) {
+            for (int j = 0; j < _width; j++) {
+                _squares[i - _distanceFromStart][j].print(isWithColor, _distanceFromStart);
+            }
         }
     }
 }

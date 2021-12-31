@@ -22,7 +22,7 @@ class Board {
         const int getDistantceFromLeft() const { return _distanceFromLeft; }
         const Square getSquare(const int y, const int x) const { return _squares[y][x]; };
         Square** getArrSquare() { return _squares; }
-        void printBoard(const bool isWithColor);
+        void printBoard(const bool isWithColor, bool isSilentMode = false);
         void setSqrType(const int y, const int x, const SqrType sqr) { _squares[y][x].setSqrType(sqr); }
         void getGhosts(Square* ghosts) const;
         void updateActualGameBoardHeight(string* map, int len);

@@ -1,45 +1,47 @@
 #include "square.h"
 
-void Square::print(const bool isWithColor, int distacneFromStart)const {
-    switch (_sqrType) {
-    case SqrType::EMPTY: {
-            goToXY(_x, _y + distacneFromStart);
-            cout << " ";
-            break;
-        }
-        case SqrType::FOOD: {
-            goToXY(_x, _y + distacneFromStart);
-            if(isWithColor)
-                changeColor(9);
-            cout << char(250);
-            break;
-        }
-        case SqrType::WALL: {
-            goToXY(_x, _y + distacneFromStart);
-            if (isWithColor)
-                changeColor(5);
-            cout << char(219);
-            break;
-        }
-        case SqrType::PACMAN: {
-            goToXY(_x, _y + distacneFromStart);
-            if (isWithColor)
-                changeColor(6);
-            cout << "@";
-            break;
-        }
-        case SqrType::GHOST: {
-            goToXY(_x, _y + distacneFromStart);
-            if (isWithColor)
-                changeColor(12);
-            cout << "$";
-            break;
-        }        
-        case SqrType::FRUIT: {
-            goToXY(_x, _y + distacneFromStart);
-            if (isWithColor)
-                changeColor(2);
-            break;
+void Square::print(const bool isWithColor, int distacneFromStart, bool isSilentMode )const {
+    if (!isSilentMode) {
+        switch (_sqrType) {
+        case SqrType::EMPTY: {
+                goToXY(_x, _y + distacneFromStart);
+                cout << " ";
+                break;
+            }
+            case SqrType::FOOD: {
+                goToXY(_x, _y + distacneFromStart);
+                if(isWithColor)
+                    changeColor(9);
+                cout << char(250);
+                break;
+            }
+            case SqrType::WALL: {
+                goToXY(_x, _y + distacneFromStart);
+                if (isWithColor)
+                    changeColor(5);
+                cout << char(219);
+                break;
+            }
+            case SqrType::PACMAN: {
+                goToXY(_x, _y + distacneFromStart);
+                if (isWithColor)
+                    changeColor(6);
+                cout << "@";
+                break;
+            }
+            case SqrType::GHOST: {
+                goToXY(_x, _y + distacneFromStart);
+                if (isWithColor)
+                    changeColor(12);
+                cout << "$";
+                break;
+            }        
+            case SqrType::FRUIT: {
+                goToXY(_x, _y + distacneFromStart);
+                if (isWithColor)
+                    changeColor(2);
+                break;
+            }
         }
     }
 }

@@ -25,7 +25,6 @@ struct queSquare {
 class Ghost: public Creature{
 
 	private:
-		int _direction = 0;
 		int _startX = 0;
 		int _startY = 0;
 
@@ -35,8 +34,9 @@ class Ghost: public Creature{
 		Ghost& operator=(Ghost& s);
 		int getStartX() { return _startX; }
 		int getStartY() { return _startY; }
+
+
 		void changeDirection() override;
-		void setDirection(int direction) { _direction = direction; };
 		void Move(char c) override;
 		void changePosition(const int y, const int x);
 		void oneMoveBack(char c) override;
