@@ -16,6 +16,13 @@ class Board {
         Map _screen;
 
     public:
+        virtual ~Board() {
+            for (int i = 0; i < _height; i++) {
+                delete[] _squares[i];
+            }
+            delete[] _squares;
+        };
+
         const int getHeight() const { return _height; }
         const int getWidth() const { return _width; }
         const int getDistantceFromStart() const { return _distanceFromStart; }
