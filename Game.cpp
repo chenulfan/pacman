@@ -77,7 +77,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 			if (_saveToFile) {
 				_resultFile << _totalCounterMoves << ",";
 			}
-			return 1;
+			return GAME_OVER;
 		}
 
 		if (_saveToFile) {
@@ -90,7 +90,7 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 				if (_saveToFile) {
 					_resultFile << _totalCounterMoves << ",";
 				}
-				return 1;
+				return GAME_OVER;
 			}
 
 			if (isGhostsAteFruit()) {
@@ -181,8 +181,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 		if (_saveToFile)
 			_stepsFile << endl;
-
-		_maxPoints = 30; // DELETE
 	}
 
 	if (_saveToFile) {
@@ -190,14 +188,14 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		_resultFile << endl << _totalCounterMoves;
 	}
 
-	return 0;
+	return CONTINUE_TO_NEXT_GAME;
 }
 
 int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string fileName) {
 
 	int maxPoints = 0, result, smartMoveDirection, iterationCounter, counterGhosts;
 	ifstream _stepsFile, _resultFile;
-	string line, deaths, death, winLine, healthPointLine, extraDeath;
+	string line, deaths, death, winLine, extraDeath, pointsLine, healthLine;
 	char* linecopy;
 	Square pacmanStart;
 
@@ -247,7 +245,7 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 					getline(_resultFile, death, ',');
 					if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") {
 						isfinished = true;
-						return -1;
+						return TEST_FAILED;
 					}
 					if (getHealth() == 0)
 						goto finish;
@@ -264,7 +262,7 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 					getline(_resultFile, death, ',');
 					if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") {
 						isfinished = true;
-						return -1;
+						return TEST_FAILED;
 					}
 
 					setHealth();
@@ -318,40 +316,34 @@ int Game::loadGame(bool isWithColor, bool isSilentMode, bool& isfinished, string
 	getline(_resultFile, extraDeath, '\n');
 	if (_isSilentMode && extraDeath != "") {
 		isfinished = true;
-		return -1;
+		return TEST_FAILED;
 	}
 	_resultFile.seekg(0);
 
-	string pointsLine;
-	string healthLine;
 	getline(_resultFile, line, '\n');
 	getline(_resultFile, pointsLine, ',');
 	getline(_resultFile, healthLine, '\n');
 	getline(_resultFile, winLine, '\n');
 
 
-
 	if (winLine == "") {
 		isfinished = true;
 		if (atoi(death.c_str()) != _totalCounterMoves || deaths == "") 
-			return -1;
+			return TEST_FAILED;
 		if (_isSilentMode) 
-			return -2;
-		return 1; // GAME OVER
+			return TEST_PASSED;
+		return GAME_OVER;
 	}
 	else {
 		if (atoi(winLine.c_str()) != _totalCounterMoves || atoi(healthLine.c_str()) != _health || atoi(pointsLine.c_str()) != _allPoints) {
 			isfinished = true;
 			if (_isSilentMode) 
-				return -1; // TODO : cHANGE 
+				return TEST_FAILED;
 		}
 		if (_isSilentMode)
-			return -2;
-		return 0; // CONTINUE
+			return TEST_PASSED;
+		return CONTINUE_TO_NEXT_GAME;
 	}
-
-
-
 }
 
 bool Game::isGhostsAteFruit() {
@@ -566,7 +558,7 @@ void Game::resetGameAfterGhostHit() {
 	_pacman.moveToStartPosition();
 	for (int i = 0; i < _numOfGhosts; i++) {
 		deleteGhostLastMove(_ghosts[i]);
-		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); // TODO: CHNAGE INIT VALUE MAKE START POSITION
+		_ghosts[i].changePosition(_ghosts[i].getStartY(), _ghosts[i].getStartX()); 
 	}
 	if (_saveToFile) {
 		_resultFile << _totalCounterMoves << ",";

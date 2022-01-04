@@ -9,6 +9,11 @@ void clearConsoleRow();
 
 enum class Level { BEST, GOOD, NOVICE };
 
+const static int TEST_FAILED = -1;
+const static int TEST_PASSED = -2;
+const static int GAME_OVER = 1;
+const static int CONTINUE_TO_NEXT_GAME = 0;
+
 char intToDir(int num);
 
 class Game {
