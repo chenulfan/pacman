@@ -53,7 +53,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 
 	while (_health != 0 && _points < _maxPoints) {
-
 		if (saveToFile) {
 			_stepsFile << _totalCounterMoves;
 		}
@@ -62,8 +61,8 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 		Sleep(SPEED);
 
-		if (_kbhit()) { 
-			_playerKey = tolower(getKey());  
+		if (_kbhit()) {
+			_playerKey = tolower(getKey());
 			if (_playerKey != LEFT && _playerKey != UP && _playerKey != DOWN && _playerKey != RIGHT && _playerKey != STAY && _playerKey != ESC) {
 				_playerKey = prevKey;
 			}
@@ -78,6 +77,14 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 				_resultFile << _totalCounterMoves << ",";
 			}
 			return GAME_OVER;
+		}
+
+		if (isPacmanAteFruit(_fruit)) {
+			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+			_allPoints += _fruit.getVal();
+			printBanner();
+			_fruit.resetFruit();
+			_stepsFile << ',' << 'F' << ',' << 0 << ',' << 0 << ',' << 0;
 		}
 
 		if (_saveToFile) {
@@ -106,6 +113,13 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 			if (fruitFlag) {
 				if (!(_fruit.getVal() == 0)) {
 					MoveAndPrintCreature(_fruit, _stepsFile);
+					if (isPacmanAteFruit(_fruit)) {
+						_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
+						_allPoints += _fruit.getVal();
+						printBanner();
+						_fruit.resetFruit();
+						_stepsFile << ',' << 'F' << ',' << 0 << ',' << 0 << ',' << 0;
+					}
 				}
 			}
 			printCreatureFlag = 0;
@@ -161,15 +175,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 				setPoints();
 		}
 
-		if (isPacmanAteFruit(_fruit)) {
-			_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
-			_allPoints += _fruit.getVal();
-			printBanner();
-			_fruit.resetFruit();
-			_stepsFile << ',' << 'F' << ',' << 0 << ',' << 0 << ',' << 0;
-		}
-
-
 		for (int i = 0; i < _numOfGhosts; ++i) {
 			if (isGhostAteFruit(_fruit, _ghosts[i])) {
 				_board.getSquare(_fruit.getY(), _fruit.getX()).print(isWithColor, _board.getDistantceFromStart());
@@ -178,7 +183,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 
 		fruitCounterMoves++;
 		_totalCounterMoves++;
-
 		if (_saveToFile)
 			_stepsFile << endl;
 	}
@@ -187,7 +191,6 @@ int Game::startGame(bool isWithColor, string filename, Level type, bool saveToFi
 		_resultFile << endl << _allPoints << "," << _health;
 		_resultFile << endl << _totalCounterMoves;
 	}
-
 	return CONTINUE_TO_NEXT_GAME;
 }
 
@@ -454,8 +457,8 @@ void Game::isParallelTunnelIsFood(int yPos, int xPos) {
 }
 
 void Game::movePacmanThruTunnel() {
-	const int xPos = _pacman.getPosition().getX();
-	const int yPos = _pacman.getPosition().getY();
+	int xPos = _pacman.getPosition().getX();
+	int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) {
 		_pacman.setX(getWidth() - 2);
 		isParallelTunnelIsFood(yPos, getWidth() - 1);
@@ -472,6 +475,11 @@ void Game::movePacmanThruTunnel() {
 		_pacman.setY(1);
 		isParallelTunnelIsFood(0, xPos);
 	}
+	xPos = _pacman.getX();
+	yPos = _pacman.getY();
+	if (_board.getSquare(yPos, xPos).getSqrType()==SqrType::FOOD) 
+		setPoints();
+	_board.setSqrType(yPos, xPos, SqrType::EMPTY);
 }
 
 const bool Game::isTunnel() {
