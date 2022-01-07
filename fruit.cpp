@@ -105,8 +105,8 @@ void Fruit::resetFruit() {
 }
 
 bool Fruit::isLegend(const Square& legend,int y,int x) {
-	if (y >= legend.getY() &&y <= legend.getY() + 2) {
-		if (x >= legend.getX() && x <= legend.getX() + 19)
+	if (y >= legend.getY() &&y <= legend.getY() + 3) {
+		if (x >= legend.getX() && x <= legend.getX() + 20)
 			return true;
 	}
 	return false;

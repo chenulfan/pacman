@@ -485,9 +485,10 @@ void Game::isParallelTunnelIsFood(int yPos, int xPos) {
 	}
 }
 
+
 void Game::movePacmanThruTunnel() {
-	const int xPos = _pacman.getPosition().getX();
-	const int yPos = _pacman.getPosition().getY();
+	int xPos = _pacman.getPosition().getX();
+	int yPos = _pacman.getPosition().getY();
 	if (xPos == 0) {
 		_pacman.setX(getWidth() - 2);
 		isParallelTunnelIsFood(yPos, getWidth() - 1);
@@ -504,6 +505,11 @@ void Game::movePacmanThruTunnel() {
 		_pacman.setY(1);
 		isParallelTunnelIsFood(0, xPos);
 	}
+	xPos = _pacman.getX();
+	yPos = _pacman.getY();
+	if (_board.getSquare(yPos, xPos).getSqrType() == SqrType::FOOD)
+		setPoints();
+	_board.setSqrType(yPos, xPos, SqrType::EMPTY);
 }
 
 const bool Game::isTunnel() {
