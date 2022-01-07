@@ -214,39 +214,38 @@ void Menu::getScreensFileName() {
 }
 
 
-
 void Menu::gameOver(int result) {
 	string msg;
 	clear(); // clears the console;
-	switch (result) {
-	case -1:
-		cout << "Test Failed" << endl;
-		break;
-	case -2:
+	switch ((Message)result) {
+	case Message::TEST_PASSED:
 		cout << "Test Passed" << endl;
 		break;
-	case 0:
+	case Message::TEST_FAILED:
+		cout << "Test Failed" << endl;
+		break;
+	case Message::WON:
 		cout << "You WON!!" << endl;
 		break;
-	case 1:
+	case Message::GAME_OVER:
 		cout << "GAME OVER" << endl;
 		break;
-	case 2:
+	case Message::MANY_PACMAN:
 		cout << "BOARD INVALID TOO MANY PACMANS" << endl;
 		break;
-	case 3:
+	case Message::MANY_LEGENDS:
 		cout << "BOARD INVALID TOO MANY LEGENDS" << endl;
 		break;
-	case 4:
+	case Message::MANY_GHOSTS:
 		cout << "BOARD INVALID TOO MANY GHOSTS" << endl;
 		break;
-	case 5:
+	case Message::HEIGHT_BIG:
 		cout << "BOARD INVALID HEIGHT IS TOO BIG" << endl;
 		break;
-	case 6:
+	case Message::WIDTH_BIG:
 		cout << "BOARD INVALID WIDTH IS TOO BIG" << endl;
 		break;
-	case 7:
+	case Message::NO_PACMAN:
 		cout << "BOARD INVALID NO PACMAN FOUND" << endl;
 		break;
 	}

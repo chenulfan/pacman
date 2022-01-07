@@ -11,6 +11,8 @@ static const int INSTRUCTIONS = 8;
 static const int EXIT = 9;
 static const int WHITE = 15;
 
+enum class Message { TEST_PASSED = -2, TEST_FAILED = -1, WON = 0, GAME_OVER, MANY_PACMAN, MANY_LEGENDS, MANY_GHOSTS, HEIGHT_BIG, WIDTH_BIG, NO_PACMAN };
+
 class Menu
 {
 private:

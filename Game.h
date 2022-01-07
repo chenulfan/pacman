@@ -3,7 +3,7 @@
 #include "fruit.h"
 #include "Ghost.h"
 
-static const int SPEED = 150;
+static const int SPEED = 20;
 
 void clearConsoleRow();
 

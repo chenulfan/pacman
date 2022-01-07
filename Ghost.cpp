@@ -118,13 +118,22 @@ void Ghost::SmartMove(const Pacman& pacman, Square** b,const int height,const in
 			}
 		}
 		if (counter2 >= 20000) {
-			notSmartMove(pacman,b,height,width);
+			notSmartMove(pacman, b, height, width);
+			freeInitArr(visited, height);
 			return;
 		}
 		firstIteration++;
 	}
-	
+
 	_direction = (int)nodeFront.move;
+	freeInitArr(visited, height);
+}
+
+void Ghost::freeInitArr(int** arr, int height) {
+	for (int i = 0; i < height; ++i) {
+		delete[] arr[i];
+	}
+	delete[] arr;
 }
 
 const bool Ghost::isTunnel(Square& position,const int height,const int width) const {

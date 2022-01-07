@@ -35,7 +35,6 @@ class Ghost: public Creature{
 		int getStartX() { return _startX; }
 		int getStartY() { return _startY; }
 
-
 		void changeDirection() override;
 		void Move(char c) override;
 		void changePosition(const int y, const int x);
@@ -44,6 +43,7 @@ class Ghost: public Creature{
 		void SmartMove(const Pacman& pacman, Square** b, const int height, const int width);
 		int** initArr(const int height,const int width);
 		void notSmartMove(const Pacman& pacman, Square** b, const int height, const int width);
+		void freeInitArr(int** arr, int height);
 
 	private:
 		void printArr(const int height, const int width, int** arr);
